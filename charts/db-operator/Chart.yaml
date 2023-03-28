@@ -5,4 +5,4 @@ kubeVersion: ">= 1.21-prerelease"
 appVersion: "1.10.0"
 description: A Database Operator
 name: db-operator
-version: 1.7.0
+version: 1.7.1
