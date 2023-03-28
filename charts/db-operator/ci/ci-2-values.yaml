@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/kloeckner-i/db-operator
+  repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
 
 reconcileInterval: "60"
@@ -39,7 +39,7 @@ config:
     google:
       proxy:
         nodeSelector: {}
-        image: kloeckneri/db-auth-gateway:0.1.7
+        image: db-operator/db-auth-gateway:0.1.7
         metricsPort: 9090
     generic: {}
     percona:

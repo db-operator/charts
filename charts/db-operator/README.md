@@ -24,7 +24,7 @@ metadata:
 ## Installing Chart
 To install the chart with the release name my-release:
 ```
-$ helm install --name my-release kloeckneri/db-operator
+$ helm install --name my-release db-operator/db-operator
 ```
 The command deploys DB Operator on Kubernetes with default configuration. For the configuration options see details [Parameters](#Parameters)
 
@@ -41,7 +41,7 @@ The following table lists the configurable parameters of the db-operator chart a
 | Parameter             | Description                           | Default                   |
 |-------------------    |-----------------------                |---------------            |
 | `appVersion`          | Application Version (DB Operator)     | TODO                      |
-| `image.repository`    | Container image name                  | `kloeckneri/db-operator`  |
+| `image.repository`    | Container image name                  | `db-operator/db-operator`  |
 | `image.tag`           | Container image tag                   | `latest`                  |
 | `image.pullPolicy`    | Container pull policy                 | `Always`                  |
 | `imagePullSecrets`    | Reference to secret to be used when pulling images | "" |
@@ -52,7 +52,7 @@ The following table lists the configurable parameters of the db-operator chart a
 | `affinity`            | Node affinity for pod assignment      | `{}`                      |
 | `annotations`         | Annotations to add to the db-operator pod | `{}`                  |
 | `podLabels`           | Labels to add to the db-operator pod  | `{}`                      |
-| `config.instance.google.proxy.image` | Container image of db-auth-gateway | `kloeckneri/db-auth-gateway:0.1.7` |
+| `config.instance.google.proxy.image` | Container image of db-auth-gateway | `db-operator/db-auth-gateway:0.1.7` |
 | `config.instance.google.proxy.nodeSelector` | Node labels for google cloud proxy pod assignment | `{}` |
 | `config.backup.nodeSelector` | Node labels for backup pod assignment | `{}` |
 | `config.backup.resources` | Resource configuration for running backup container same as https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits | `{}` |

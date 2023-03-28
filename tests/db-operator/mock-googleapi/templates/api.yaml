@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: ghcr.io/kloeckner-i/cloudish-sql:v1.0.0
+          image: ghcr.io/db-operator/cloudish-sql:v1.0.0
           ports:
           - containerPort: 8080
             name: http
