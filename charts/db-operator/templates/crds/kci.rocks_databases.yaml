@@ -17,7 +17,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
   creationTimestamp: null
-  name: databases.kci.rocks
+  name: databases.kinda.rocks
 spec:
   conversion:
     strategy: Webhook
@@ -30,7 +30,7 @@ spec:
       conversionReviewVersions:
         - v1alpha1
         - v1beta1
-  group: kci.rocks
+  group: kinda.rocks
   names:
     kind: Database
     listKind: DatabaseList

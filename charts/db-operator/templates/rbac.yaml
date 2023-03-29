@@ -11,7 +11,7 @@ metadata:
     heritage: {{ .Release.Service }}
 rules:
 - apiGroups:
-  - kci.rocks
+  - kinda.rocks
   resources:
   - "*"
   verbs:

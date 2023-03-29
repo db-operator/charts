@@ -15,7 +15,7 @@ metadata:
     {{- with .Values.crds.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  name: dbinstances.kci.rocks
+  name: dbinstances.kinda.rocks
 spec:
   conversion:
     strategy: Webhook
@@ -28,7 +28,7 @@ spec:
       conversionReviewVersions:
         - v1alpha1
         - v1beta1
-  group: kci.rocks
+  group: kinda.rocks
   names:
     kind: DbInstance
     listKind: DbInstanceList
