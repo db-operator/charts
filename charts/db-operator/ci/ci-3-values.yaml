@@ -51,7 +51,7 @@ config:
       proxy:
         nodeSelector:
           nodetype: database
-        image: db-operator/db-auth-gateway:0.1.7
+        image: ghcr.io/db-operator/db-auth-gateway:latest
         metricsPort: 9090
     generic: {}
     percona:
