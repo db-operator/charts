@@ -52,7 +52,7 @@ The following table lists the configurable parameters of the db-operator chart a
 | `affinity`            | Node affinity for pod assignment      | `{}`                      |
 | `annotations`         | Annotations to add to the db-operator pod | `{}`                  |
 | `podLabels`           | Labels to add to the db-operator pod  | `{}`                      |
-| `config.instance.google.proxy.image` | Container image of db-auth-gateway | `db-operator/db-auth-gateway:0.1.7` |
+| `config.instance.google.proxy.image` | Container image of db-auth-gateway | `ghcr.io/db-operator/db-auth-gateway:v0.1.10` |
 | `config.instance.google.proxy.nodeSelector` | Node labels for google cloud proxy pod assignment | `{}` |
 | `config.backup.nodeSelector` | Node labels for backup pod assignment | `{}` |
 | `config.backup.resources` | Resource configuration for running backup container same as https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits | `{}` |
