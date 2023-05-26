@@ -52,3 +52,25 @@ webhooks:
     resources:
     - dbinstances
   sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ .Values.webhook.serviceName }}
+      namespace: {{ .Release.Namespace }}
+      path: /validate-kinda-rocks-v1beta1-dbuser
+  failurePolicy: Fail
+  name: vdbuser.kb.io
+  rules:
+  - apiGroups:
+    - kinda.rocks
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - dbusers
+  sideEffects: None
+
+
