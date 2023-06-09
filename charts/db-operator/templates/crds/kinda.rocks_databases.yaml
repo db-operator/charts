@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.12.0
     {{- if .Values.webhook.certificate.create }}
     cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ .Values.webhook.certificate.name}}
     {{ else }}
@@ -437,6 +437,8 @@ spec:
           status:
             description: DatabaseStatus defines the observed state of Database
             properties:
+              engine:
+                type: string
               database:
                 type: string
               instanceRef:
@@ -637,10 +639,4 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 {{- end }}
