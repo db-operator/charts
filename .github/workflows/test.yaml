@@ -1,3 +1,4 @@
+---
 name: Test
 
 on:
@@ -9,11 +10,11 @@ on:
       - main
 
 jobs:
-  get-chart: 
+  get-chart:
     runs-on: ubuntu-latest
     outputs:
       changed_charts: ${{ steps.get-chart.outputs.changed_charts }}
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -21,7 +22,7 @@ jobs:
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
 
       - id: get-chart
-        name: 'Get modified charts'
+        name: "Get modified charts"
         run: |
           cd charts
           files_changed="$(git diff --name-only HEAD^ HEAD)"
@@ -29,9 +30,9 @@ jobs:
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "charts/[^/]*" | sed "s|charts/||g" | uniq | tr '\n' ' ' || true)"
           echo "changed:${charts_dirs_changed}"
           echo "::set-output name=changed_charts::${charts_dirs_changed}"
-  lint: 
+  lint:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -58,11 +59,11 @@ jobs:
     if: ${{ contains(needs.get-chart.outputs.changed_charts, 'db-operator') || contains(needs.get-chart.outputs.changed_charts, 'db-instances') }}
     strategy:
       matrix:
-        k8s_version: ['v1.21.6', 'v1.22.3', 'v1.23.1', 'v1.24.3']
+        k8s_version: ["v1.21.6", "v1.22.3", "v1.23.1", "v1.24.3"]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       # The existing apparmor profile for mysql needs to be removed.
       # https://github.com/actions/virtual-environments/issues/181
       # https://github.com/moby/moby/issues/7512#issuecomment-51845976
@@ -73,17 +74,17 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install apparmor-profiles
           sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
-      
+
       - name: Create k3d cluster
         env:
           K8S_VERSION: ${{ matrix.k8s_version }}
         run: make k3d
-      
+
       - name: Install Cert Manager
         run: make cert-manager
 
       - name: Install Helm chart
         run: make db-operator
-      
+
       - name: Integration test
         run: ./tests/db-operator/integration.sh
