@@ -379,4 +379,4 @@ spec:
     storage: true
     subresources:
       status: {}
-{{- if .Values.crds.install }}
+{{- end }}
