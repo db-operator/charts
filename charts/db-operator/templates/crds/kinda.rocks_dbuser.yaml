@@ -36,14 +36,14 @@ spec:
       name: Phase
       type: string
     - description: To which database user should have access
-      jsonPath: .spec.database
+      jsonPath: .spec.databaseRef
       name: DatabaseName
       type: string
-    - description: If the user is already created, it can only be updated
-      jsonPath: .spec.created
-      name: Created
-      type: boolean
-    - description: time since creation of resource
+    - description: A type of access the user has
+      jsonPath: .spec.accessType
+      name: AccessType
+      type: string
+    - description: time since creation of resosurce
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -106,6 +106,4 @@ spec:
     storage: true
     subresources:
       status: {}
-
-
 {{- end }}
