@@ -27,18 +27,18 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: current dbuser phase
-      jsonPath: .status.phase
-      name: Phase
-      type: string
     - description: current dbuser status
       jsonPath: .status.status
       name: Status
       type: boolean
+    - description: current dbuser phase
+      jsonPath: .status.phase
+      name: Phase
+      type: string
     - description: To which database user should have access
       jsonPath: .spec.database
       name: DatabaseName
-      type: boolean
+      type: string
     - description: If the user is already created, it can only be updated
       jsonPath: .spec.created
       name: Created
@@ -106,4 +106,6 @@ spec:
     storage: true
     subresources:
       status: {}
+
+
 {{- end }}
