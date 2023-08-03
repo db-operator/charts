@@ -1,0 +1,14 @@
+values: |
+  crds:
+    install: false
+files:
+  - Certificate-db-operator-webhook.yml
+  - ConfigMap-db-operator-config.yml
+  - Deployment-db-operator.yml
+  - ServiceAccount-db-operator-sa.yml
+  - ClusterRoleBinding-db-operator-sa.yml
+  - Issuer-db-operator-issuer.yml
+  - Service-db-operator-webhook.yml
+  - ClusterRole-db-operator.yml
+  - MutatingWebhookConfiguration-db-operator-mutating-webhook-configuration.yml
+  - ValidatingWebhookConfiguration-db-operator-validating-webhook-configuration.yml

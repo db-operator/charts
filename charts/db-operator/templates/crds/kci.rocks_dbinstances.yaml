@@ -18,6 +18,7 @@ metadata:
     {{- end }}
   name: dbinstances.kinda.rocks
 spec:
+  {{- if .Values.webhook.enabled }}
   conversion:
     strategy: Webhook
     webhook:
@@ -29,6 +30,7 @@ spec:
       conversionReviewVersions:
         - v1alpha1
         - v1beta1
+  {{- end }}
   group: kinda.rocks
   names:
     kind: DbInstance

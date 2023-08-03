@@ -1,0 +1,13 @@
+values: |
+  webhook:
+    enabled: false
+files:
+  - Certificate-db-operator-webhook.yml
+  - ConfigMap-db-operator-config.yml
+  - Deployment-db-operator.yml
+  - ServiceAccount-db-operator-sa.yml
+  - ClusterRoleBinding-db-operator-sa.yml
+  - CustomResourceDefinition-databases.kinda.rocks
+  - Issuer-db-operator-issuer.yml
+  - ClusterRole-db-operator.yml
+  - CustomResourceDefinition-dbinstances.kinda.rocks

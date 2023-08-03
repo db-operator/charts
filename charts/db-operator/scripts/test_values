@@ -1,0 +1,61 @@
+#! /usr/bin/env bash
+set -e
+
+# -----------------------------------------------------------------------
+# -- It's a script that should check if values are working correctly
+# -- 
+# -- It's not checking the content of generated files, but only checks 
+# --  which files are generated (currently)
+# --
+# -- This scripts requires go-yq and helm
+# -----------------------------------------------------------------------
+
+function usage() {
+    cat <<EOF
+    Please provide 1 arguments 
+    	- -p | a path to the dir with tests files
+    EG:
+      ./scripts/test_values -p ./ci/unit-test
+
+EOF
+    exit 2
+}
+
+while getopts :p: FOUND
+do
+    case $FOUND in
+        p)  VALUES_PATH="${OPTARG}"
+            ;;
+        \:) usage
+            ;;
+        \?) usage 
+            ;;
+        esac >&2
+    done
+shift $(($OPTIND - 1))
+
+if [ -z "${VALUES_PATH}" ]; then
+    echo VALUES_PATH is not set
+    usage
+fi
+
+
+CURRENT_DIR=$(pwd)
+for FILE in $(find $VALUES_PATH -type f); do
+    WORKDIR=$(mktemp -d)
+    echo "Checking $FILE"
+    cd $WORKDIR
+    yq '.values' "$CURRENT_DIR/$FILE" > values.yaml
+    helm template db-operator $CURRENT_DIR -f values.yaml | yq -s '.kind + "-" + .metadata.name'
+    rm -f values.yaml
+    ACTUAL_FILES=($(ls $WORKDIR))
+    EXPECTED_FILES=($(yq '.files[]' $CURRENT_DIR/$FILE))
+    DIFF=($(echo ${ACTUAL_FILES[@]} ${EXPECTED_FILES[@]} | tr ' ' '\n' | sort | uniq -u))
+    if [ ${#DIFF[@]} -eq 0 ]; then
+        echo "PASSED"
+        rm -rf "${WORKDIR}"
+    else
+        echo "FAILED: Please check unexpected files -> ${DIFF[*]}"
+    fi
+
+done

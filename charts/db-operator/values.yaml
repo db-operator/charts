@@ -24,6 +24,7 @@ crds:
   annotations: {}
 
 webhook:
+  enabled: true
   serviceName: db-operator-webhook
   names:
     mutating: db-operator-mutating-webhook-configuration

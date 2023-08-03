@@ -1,8 +1,116 @@
 # db-operator
-DB Operator is Kubernetes operator
 
-## Upgrading to `v1.10.0`
-CRDs are moved to the `templates` folder, so now they are part of the release. It means that when migration you will get errors about resource ownership. Thow errors will contain messages about missing `labels` and `annotations`, and the easiest way to fix it, will be just to add the `metadata` that helm can't find. So you can follow those messages one by one and when all the `CRDs` are patched, you'll be able to install the release.
+![Version: 1.9.1](https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.12.0](https://img.shields.io/badge/AppVersion-1.12.0-informational?style=flat-square)
+
+DB Operator is Kubernetes operator
+The source of the operator can be found here: https://github.com/db-operator/db-operator
+
+## Installing Chart
+To install the chart with the release name my-release:
+```
+$ helm install --name my-release db-operator/db-operator
+```
+The command deploys DB Operator on Kubernetes with default configuration. For the configuration options see details [Parameters](#Parameters)
+
+## Uninstalling Chart
+To uninstall the `my-release` deployment:
+```
+$ helm delete my-release
+```
+
+## Webhooks
+
+You can disable webhooks if you don't need them, by providing this value
+```yaml
+webhook:
+  create: false
+```
+
+## Requirements
+
+Kubernetes: `>= 1.22-prerelease`
+
+If you use webhooks, you also might need to have cert-manager
+
+## Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| annotations | object | `{}` |  |
+| config.backup.activeDeadlineSeconds | int | `600` |  |
+| config.backup.mysql.image | string | `"kloeckneri/mydump-gcs:latest"` |  |
+| config.backup.nodeSelector | object | `{}` |  |
+| config.backup.postgres.image | string | `"kloeckneri/pgdump-gcs:latest"` |  |
+| config.backup.resources.requests.cpu | float | `0.2` |  |
+| config.backup.resources.requests.memory | string | `"64Mi"` |  |
+| config.instance.generic | object | `{}` |  |
+| config.instance.google.proxy.image | string | `"ghcr.io/db-operator/db-auth-gateway:v0.1.10"` |  |
+| config.instance.google.proxy.metricsPort | int | `9090` |  |
+| config.instance.google.proxy.nodeSelector | object | `{}` |  |
+| config.instance.percona.proxy.image | string | `"severalnines/proxysql:2.0"` |  |
+| config.instance.percona.proxy.metricsPort | int | `9090` |  |
+| config.monitoring.nodeSelector | object | `{}` |  |
+| config.monitoring.postgres.image | string | `"wrouesnel/postgres_exporter:latest"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.description | string | `"User ID"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.description | string | `"database ID"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.description | string | `"database NAME"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.description | string | `"Query unique Hash Code"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.description | string | `"Query class"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.description | string | `"Number of times executed"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.usage | string | `"COUNTER"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.description | string | `"Total time spent in the statement, in milliseconds"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.usage | string | `"COUNTER"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.description | string | `"Mean time spent in the statement, in milliseconds"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.usage | string | `"GAUGE"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.description | string | `"Total number of rows retrieved or affected by the statement"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.usage | string | `"COUNTER"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.query | string | `"SELECT userid, pgss.dbid, pgdb.datname, queryid, query, calls, total_time, mean_time, rows FROM pg_stat_statements pgss LEFT JOIN (select oid as dbid, datname from pg_database) as pgdb on pgdb.dbid = pgss.dbid WHERE not queryid isnull ORDER BY mean_time desc limit 20"` |  |
+| config.monitoring.promPushGateway | string | `""` |  |
+| crds.annotations | object | `{}` |  |
+| crds.install | bool | `true` |  |
+| crds.keep | bool | `true` |  |
+| image.logLevel | string | `"info"` |  |
+| image.pullPolicy | string | `"Always"` |  |
+| image.repository | string | `"ghcr.io/db-operator/db-operator"` |  |
+| nameOverride | string | `""` |  |
+| nodeSelector | object | `{}` |  |
+| podLabels | object | `{}` |  |
+| rbac.create | bool | `true` |  |
+| reconcileInterval | string | `"60"` |  |
+| resources | object | `{}` |  |
+| secrets.gsql | object | `{}` |  |
+| security | object | `{}` |  |
+| service.annotations | object | `{}` |  |
+| service.port | int | `8080` |  |
+| service.type | string | `"ClusterIP"` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceMonitor.enabled | bool | `false` |  |
+| tolerations | list | `[]` |  |
+| watchNamespace | string | `""` |  |
+| webhook.certificate.create | bool | `true` | ------------------------------------------ |
+| webhook.certificate.issuer.create | bool | `true` |  |
+| webhook.certificate.issuer.kind | string | `"Issuer"` | --------------------------------------- |
+| webhook.certificate.issuer.name | string | `"db-operator-issuer"` |  |
+| webhook.certificate.name | string | `"db-operator-webhook"` |  |
+| webhook.certificate.secretName | string | `"db-operator-webhook-cert"` |  |
+| webhook.names.mutating | string | `"db-operator-mutating-webhook-configuration"` |  |
+| webhook.names.validating | string | `"db-operator-validating-webhook-configuration"` |  |
+| webhook.serviceName | string | `"db-operator-webhook"` |  |
+
+## Upgrading
+
+If there is an breaking change, or something that might make the upgrade complcated, it should be decsribed here
+
+<details>
+  <summary>To `v1.10.0`</summary>
+
+CRDs are moved to the `templates` folder, so now they are part of the release. It means that after the upgrade, you will get errors about resource ownerships. Thow errors will contain messages about missing `labels` and `annotations`, and the easiest way to fix it, will be just to add the `metadata` that helm can't find. So you can follow those messages one by one and when all the `CRDs` are patched, you'll be able to install the release.
 
 For example:
 
@@ -20,47 +128,4 @@ metadata:
     "meta.helm.sh/release-name": my-release
     "meta.helm.sh/release-namespace": default
 ```
-
-## Installing Chart
-To install the chart with the release name my-release:
-```
-$ helm install --name my-release db-operator/db-operator
-```
-The command deploys DB Operator on Kubernetes with default configuration. For the configuration options see details [Parameters](#Parameters)
-
-## Uninstalling Chart
-To uninstall the `my-release` deployment:
-```
-$ helm delete my-release
-```
-
-## Parameters
-
-The following table lists the configurable parameters of the db-operator chart and their default values.
-
-| Parameter             | Description                           | Default                   |
-|-------------------    |-----------------------                |---------------            |
-| `appVersion`          | Application Version (DB Operator)     | TODO                      |
-| `image.repository`    | Container image name                  | `db-operator/db-operator`  |
-| `image.tag`           | Container image tag                   | `latest`                  |
-| `image.pullPolicy`    | Container pull policy                 | `Always`                  |
-| `imagePullSecrets`    | Reference to secret to be used when pulling images | "" |
-| `rbac.create`         | Create RBAC resources                 | `true`                    |
-| `serviceAccount.create` | If `true`, create a new service account | `true`                |
-| `resources`           | CPU/memory resource requests/limits   | `{}`                      |
-| `nodeSelector`        | Node labels for pod assignment        | `{}`                      |
-| `affinity`            | Node affinity for pod assignment      | `{}`                      |
-| `annotations`         | Annotations to add to the db-operator pod | `{}`                  |
-| `podLabels`           | Labels to add to the db-operator pod  | `{}`                      |
-| `config.instance.google.proxy.image` | Container image of db-auth-gateway | `ghcr.io/db-operator/db-auth-gateway:v0.1.10` |
-| `config.instance.google.proxy.nodeSelector` | Node labels for google cloud proxy pod assignment | `{}` |
-| `config.backup.nodeSelector` | Node labels for backup pod assignment | `{}` |
-| `config.backup.resources` | Resource configuration for running backup container same as https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits | `{}` |
-| `config.backup.activeDeadlineSeconds` | activeDeadlineSeconds of backup cronjob | `600` |
-| `config.backup.postgres.image` | Container image of backup cronjob (only for postgres databases) | `kloeckneri/pgdump-gcs:latest` |
-| `config.monitoring.nodeSelector` | Node labels for monitoring pod assignment | `{}` |
-| `config.monitoring.postgres.image` | Container image of prometheus exporter (only for postgres databases) | `wrouesnel/postgres_exporter:latest` |
-| `config.monitoring.postgres.queries` | Queries executed by prometheus exporter (only for postgres databases) | see `values.yaml` for defaults |
-| `secrets.gsql.admin`  |  Service account json used by operator to create Cloud SQL instance in GCE(**Cloud SQL Admin**) | `{}` |
-| `secrets.gsql.readonly`   |  Service account json will be used by application to access database Cloud SQL in GCE(**Cloud SQL Client** role) | `{}` |
-| `serviceMonitor.enabled`   |  Enabling ServiceMonitor for prometheus operator monitoring | `false` |
+</details>
