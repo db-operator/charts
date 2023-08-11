@@ -11,3 +11,4 @@ files:
   - Issuer-db-operator-issuer.yml
   - ClusterRole-db-operator.yml
   - CustomResourceDefinition-dbinstances.kinda.rocks
+  - CustomResourceDefinition-dbusers.kinda.rocks

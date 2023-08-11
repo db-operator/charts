@@ -14,3 +14,4 @@ files:
   - CustomResourceDefinition-dbinstances.kinda.rocks
   - MutatingWebhookConfiguration-db-operator-mutating-webhook-configuration.yml
   - ValidatingWebhookConfiguration-db-operator-validating-webhook-configuration.yml
+  - CustomResourceDefinition-dbusers.kinda.rocks

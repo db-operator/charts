@@ -11,5 +11,6 @@ files:
   - Service-db-operator-webhook.yml
   - ClusterRole-db-operator.yml
   - CustomResourceDefinition-dbinstances.kinda.rocks
+  - CustomResourceDefinition-dbusers.kinda.rocks
   - MutatingWebhookConfiguration-db-operator-mutating-webhook-configuration.yml
   - ValidatingWebhookConfiguration-db-operator-validating-webhook-configuration.yml

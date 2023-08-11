@@ -75,3 +75,15 @@ Selector labels
 app.kubernetes.io/name: {{ include "db-operator.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
+
+{{/*
+Arguments builder
+*/}}
+{{- define "db-operator.args" -}}
+{{- $args := list -}}
+{{- if .Values.checkForChanges -}}
+{{- $args = append $args "--check-for-changes" -}}
+{{- end -}}
+{{ join "," $args }}
+{{- end -}}
+

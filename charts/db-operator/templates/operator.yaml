@@ -42,6 +42,12 @@ spec:
             protocol: TCP
           command:
           - db-operator
+          {{- if (include "db-operator.args" . ) }}
+          args:
+            {{- range include "db-operator.args" $ | split "," }}
+            - {{ . }}
+            {{- end }}
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: LOG_LEVEL

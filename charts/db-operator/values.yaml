@@ -11,6 +11,16 @@ image:
 reconcileInterval: "60"
 # watchNamespace value is comma-separated list of namespace names. It's necessary to set "" to watch cluster wide.
 watchNamespace: ""
+# ------------------------------------------------------------
+# -- If set to true, db-operator will check if a Kubernetes
+# --   objects were changes before running database queries.
+# -- It might reduce the amount of queries, because otherwise
+# --  db-operator will try to update database and users every
+# --  ${RECONCILE_INTERVAL} seconds.
+# ------------------------------------------------------------
+# -- NOTE: Currently, it's only working with Database Users
+# ------------------------------------------------------------
+checkForChanges: false
 
 rbac:
   create: true
