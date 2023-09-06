@@ -57,8 +57,8 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
-      namespace: system
+      name: {{ .Values.webhook.serviceName }}
+      namespace: {{ .Release.Namespace }}
       path: /validate-kinda-rocks-v1beta1-dbuser
   failurePolicy: Fail
   name: vdbuser.kb.io
