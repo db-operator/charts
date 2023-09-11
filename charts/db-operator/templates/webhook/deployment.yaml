@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.webhook.name }}
+  labels:
+    app: {{ include "webhook.name" . }}
+    app.kubernetes.io/name: {{ include "webhook.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "webhook"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "webhook.name" . }}
+      app.kubernetes.io/name: {{ include "webhook.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "webhook"
+  template:
+    metadata:
+      labels:
+        app: {{ include "webhook.name" . }}
+        app.kubernetes.io/name: {{ include "webhook.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "webhook"
+      annotations:
+        {{- if .Values.annotations }}
+        {{ toYaml .Values.annotations | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.webhook.serviceAccount.create }}
+      serviceAccountName: {{ .Values.webhook.name }}-sa
+      {{- end }}
+     {{- if .Values.security }}
+      securityContext:
+        runAsUser: {{ .Values.security.runAsUser }}
+        fsGroup: {{ .Values.security.fsGroup }}
+     {{- end }}
+      containers:
+        - name: webhook
+          image: "{{ .Values.image.repository }}:{{ template "db-operator.github_packages_image_version" . }}"
+          ports:
+          - containerPort: 9443
+            name: webhook-server
+            protocol: TCP
+          command:
+          - db-operator
+          args: ["--webhook"]
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: LOG_LEVEL
+              value: {{ .Values.image.logLevel }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+          resources:
+            {{ toYaml .Values.resources | nindent 12 }}
+      nodeSelector:
+        {{ toYaml .Values.nodeSelector | nindent 8 }}
+      affinity:
+        {{ toYaml .Values.affinity  | nindent 8 }}
+      tolerations:
+        {{ toYaml .Values.tolerations | nindent 8 }}
+    {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+    {{- end }}
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: {{ .Values.webhook.certificate.secretName }}
