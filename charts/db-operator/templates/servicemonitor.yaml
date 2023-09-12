@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ template "db-operator.name" . }}
   labels:
-    {{- include "db-operator.labels" . | nindent 4 }}
+    {{- include "labels" . | nindent 4 }}
   {{- with .Values.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -27,7 +27,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "db-operator.name" . }}
   labels:
-    {{- include "db-operator.labels" . | nindent 4 }}
+    {{- include "labels" . | nindent 4 }}
     {{- with .Values.serviceMonitor.selector }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

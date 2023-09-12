@@ -6,7 +6,7 @@ metadata:
   name: {{ template "db-operator.name" . }}
   labels:
     app: {{ template "db-operator.name" . }}
-    chart: {{ template "db-operator.chart" . }}
+    chart: {{ template "chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 rules:
@@ -89,7 +89,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "db-operator.name" . }}-sa
   labels:
-    {{- include "db-operator.labels" . | nindent 4 }}
+    {{- include "labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
   name: {{ template "db-operator.serviceAccountName" . }}

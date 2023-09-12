@@ -10,7 +10,7 @@ metadata:
     cert-manager.io/inject-ca-from-secret: {{ .Release.Namespace }}/{{ .Values.webhook.certificate.secretName}}
     {{- end }}
   labels:
-    {{- include "db-operator.labels" . | nindent 4 }}
+    {{- include "labels" . | nindent 4 }}
   name: {{ .Values.webhook.names.validating }}
 webhooks:
 - admissionReviewVersions:

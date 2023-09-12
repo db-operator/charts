@@ -4,16 +4,26 @@ kind: Deployment
 metadata:
   name: {{ template "db-operator.name" . }}
   labels:
-    {{- include "db-operator.labels" . | nindent 4 }}
+    app: {{ template "db-operator.name" . }}
+    app.kubernetes.io/name: {{ template "db-operator.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "controller"
+    {{- include "labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "db-operator.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ template "db-operator.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "controller"
   template:
     metadata:
       labels:
-        {{- include "db-operator.labels" . | nindent 8 }}
+        app: {{ template "db-operator.name" . }}
+        app.kubernetes.io/name: {{ template "db-operator.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "controller"
+        {{- include "labels" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{ toYaml .Values.podLabels | trim | nindent 8 }}
         {{- end }}
@@ -33,7 +43,7 @@ spec:
      {{- end }}
       containers:
         - name: operator
-          image: "{{ .Values.image.repository }}:{{ template "db-operator.github_packages_image_version" . }}"
+          image: "{{ .Values.image.repository }}:{{ template "github_packages_image_version" . }}"
           ports:
           - containerPort: 60000
             name: metrics

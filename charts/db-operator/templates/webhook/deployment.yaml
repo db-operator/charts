@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,7 +12,6 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "webhook.name" . }}
       app.kubernetes.io/name: {{ include "webhook.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
       app.kubernetes.io/component: "webhook"
@@ -22,6 +22,10 @@ spec:
         app.kubernetes.io/name: {{ include "webhook.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "webhook"
+        {{- include "labels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{ toYaml .Values.podLabels | trim | nindent 8 }}
+        {{- end }}
       annotations:
         {{- if .Values.annotations }}
         {{ toYaml .Values.annotations | nindent 8 }}
@@ -37,7 +41,7 @@ spec:
      {{- end }}
       containers:
         - name: webhook
-          image: "{{ .Values.image.repository }}:{{ template "db-operator.github_packages_image_version" . }}"
+          image: "{{ .Values.image.repository }}:{{ template "github_packages_image_version" . }}"
           ports:
           - containerPort: 9443
             name: webhook-server
