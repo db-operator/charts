@@ -1,3 +1,4 @@
+{{- if .Values.webhook.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -82,3 +83,4 @@ spec:
           secret:
             defaultMode: 420
             secretName: {{ .Values.webhook.certificate.secretName }}
+{{- end }}
