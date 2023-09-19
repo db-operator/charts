@@ -4,7 +4,6 @@ kind: Deployment
 metadata:
   name: {{ template "db-operator.name" . }}
   labels:
-    app: {{ template "db-operator.name" . }}
     app.kubernetes.io/name: {{ template "db-operator.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: "controller"
@@ -19,7 +18,6 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "db-operator.name" . }}
         app.kubernetes.io/name: {{ template "db-operator.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "controller"

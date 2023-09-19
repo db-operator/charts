@@ -3,9 +3,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.webhook.name }}
+  name: {{ include "webhook.name" . }}
   labels:
-    app: {{ include "webhook.name" . }}
     app.kubernetes.io/name: {{ include "webhook.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: "webhook"
@@ -19,7 +18,6 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ include "webhook.name" . }}
         app.kubernetes.io/name: {{ include "webhook.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "webhook"

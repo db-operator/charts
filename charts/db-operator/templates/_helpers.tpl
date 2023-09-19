@@ -80,9 +80,9 @@ Create the name of the service account to use
 */}}
 {{- define "webhook.serviceAccountName" -}}
 {{- if .Values.webhook.serviceAccount.create -}}
-    {{ default (include "webhook.fullname" .) .Values.webhook.serviceAccount.name }}
+{{- printf "%s-sa" (include "webhook.name" .) -}}
 {{- else -}}
-    {{ default "default" .Values.webhook.serviceAccount.name }}
+{{ default "default" .Values.webhook.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
