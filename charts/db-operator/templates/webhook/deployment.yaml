@@ -25,10 +25,10 @@ spec:
         {{- if .Values.podLabels }}
         {{ toYaml .Values.podLabels | trim | nindent 8 }}
         {{- end }}
+      {{- if .Values.annotations }}
       annotations:
-        {{- if .Values.annotations }}
         {{ toYaml .Values.annotations | nindent 8 }}
-        {{- end }}
+      {{- end }}
     spec:
       {{- if .Values.webhook.serviceAccount.create }}
       serviceAccountName: {{ .Values.webhook.name }}-sa
