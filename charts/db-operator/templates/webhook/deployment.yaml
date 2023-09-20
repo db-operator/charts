@@ -31,7 +31,7 @@ spec:
       {{- end }}
     spec:
       {{- if .Values.webhook.serviceAccount.create }}
-      serviceAccountName: {{ .Values.webhook.name }}-sa
+      serviceAccountName: {{ template "webhook.serviceAccountName" . }}
       {{- end }}
      {{- if .Values.security }}
       securityContext:

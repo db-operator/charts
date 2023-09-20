@@ -32,7 +32,7 @@ spec:
         {{- end }}
     spec:
       {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ template "db-operator.name" . }}-sa
+      serviceAccountName: {{ template "db-operator.serviceAccountName" . }}
       {{- end }}
      {{- if .Values.security }}
       securityContext:

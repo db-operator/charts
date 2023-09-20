@@ -29,9 +29,9 @@ Create the name of the service account to use
 */}}
 {{- define "db-operator.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{- printf "%s-sa" (include "db-operator.name" .) -}}
+    {{ default (include "db-operator.name" .) .Values.serviceAccount.name }}
 {{- else -}}
-{{ default "default" .Values.serviceAccount.name }}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -80,9 +80,9 @@ Create the name of the service account to use
 */}}
 {{- define "webhook.serviceAccountName" -}}
 {{- if .Values.webhook.serviceAccount.create -}}
-{{- printf "%s-sa" (include "webhook.name" .) -}}
+    {{ default (include "webhook.name" .) .Values.webhook.serviceAccount.name }}
 {{- else -}}
-{{ default "default" .Values.webhook.serviceAccount.name }}
+    {{ default "default" .Values.webhook.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

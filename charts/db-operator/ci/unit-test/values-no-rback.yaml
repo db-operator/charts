@@ -8,7 +8,7 @@ files:
   - CustomResourceDefinition-databases.kinda.rocks
   - Issuer-db-operator-issuer.yml
   - Service-db-operator-webhook.yml
-  - ServiceAccount-db-operator-sa.yml
+  - ServiceAccount-db-operator.yml
   - CustomResourceDefinition-dbusers.kinda.rocks
   - CustomResourceDefinition-dbinstances.kinda.rocks
   - MutatingWebhookConfiguration-db-operator-mutating-webhook-configuration.yml

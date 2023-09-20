@@ -5,7 +5,7 @@ files:
   - Certificate-db-operator-webhook.yml
   - ConfigMap-db-operator-config.yml
   - Deployment-db-operator.yml
-  - ClusterRoleBinding-db-operator-sa.yml
+  - ClusterRoleBinding-db-operator.yml
   - CustomResourceDefinition-databases.kinda.rocks
   - Issuer-db-operator-issuer.yml
   - Service-db-operator-webhook.yml
