@@ -35,8 +35,6 @@ crds:
 
 webhook:
   enabled: true
-  name: db-operator-webhook
-  serviceName: db-operator-webhook
   serviceAccount:
     create: true
   names:
