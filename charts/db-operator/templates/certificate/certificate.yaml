@@ -6,8 +6,8 @@ metadata:
   name: {{ .Values.webhook.certificate.name }}
 spec:
   dnsNames:
-  - {{ .Values.webhook.serviceName }}.{{ .Release.Namespace }}.svc
-  - {{ .Values.webhook.serviceName }}.{{ .Release.Namespace }}.svc.cluster.local
+  - {{ include "webhook.name" . }}.{{ .Release.Namespace }}.svc
+  - {{ include "webhook.name" . }}.{{ .Release.Namespace }}.svc.cluster.local
   issuerRef:
     kind: {{ .Values.webhook.certificate.issuer.kind }}
     name: {{ .Values.webhook.certificate.issuer.name }}

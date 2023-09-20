@@ -17,7 +17,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: {{ .Values.webhook.serviceName }}
+      name: {{ include "webhook.name" . }}
       namespace: {{ .Release.Namespace }}
       path: /mutate-kinda-rocks-v1beta1-database
   failurePolicy: Fail
@@ -37,7 +37,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: {{ .Values.webhook.serviceName }}
+      name: {{ include "webhook.name" . }}
       namespace: {{ .Release.Namespace }}
       path: /mutate-kinda-rocks-v1beta1-dbinstance
   failurePolicy: Fail
