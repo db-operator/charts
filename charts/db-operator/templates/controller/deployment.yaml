@@ -4,24 +4,19 @@ kind: Deployment
 metadata:
   name: {{ template "db-operator.name" . }}
   labels:
-    app.kubernetes.io/name: {{ template "db-operator.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: "controller"
     {{- include "labels" . | nindent 4 }}
+    app.kubernetes.io/component: "controller"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "db-operator.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: "controller"
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ template "db-operator.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/component: "controller"
         {{- include "labels" . | nindent 8 }}
+        app.kubernetes.io/component: "controller"
         {{- if .Values.podLabels }}
         {{ toYaml .Values.podLabels | trim | nindent 8 }}
         {{- end }}

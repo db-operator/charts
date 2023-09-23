@@ -5,6 +5,7 @@ metadata:
   name: {{ template "db-operator.name" . }}
   labels:
     {{- include "labels" . | nindent 4 }}
+    app.kubernetes.io/component: "controller"
   {{- with .Values.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -20,7 +21,8 @@ spec:
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
   selector:
-    {{- include "db-operator.selectorLabels" . | nindent 4 }}
+    {{- include "selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: "controller"
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -28,6 +30,7 @@ metadata:
   name: {{ template "db-operator.name" . }}
   labels:
     {{- include "labels" . | nindent 4 }}
+    app.kubernetes.io/component: "controller"
     {{- with .Values.serviceMonitor.selector }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -60,5 +63,6 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      {{- include "db-operator.selectorLabels" . | nindent 6 }}
+      {{- include "selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: "controller"
 {{- end }}

@@ -4,6 +4,7 @@ metadata:
   name: {{ template "db-operator.name" . }}-config
   labels:
     {{- include "labels" . | nindent 4 }}
+    app.kubernetes.io/component: "controller"
 data:
   config.yaml: |
     instance:

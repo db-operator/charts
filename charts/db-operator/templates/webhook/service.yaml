@@ -10,5 +10,6 @@ spec:
       protocol: TCP
       targetPort: 9443
   selector:
-    app.kubernetes.io/name: {{ include "webhook.name" . }}
+    {{- include "selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: "webhook"
 {{- end }}
