@@ -105,7 +105,22 @@ If you use webhooks, you also might need to have cert-manager
 
 ## Upgrading
 
-If there is an breaking change, or something that might make the upgrade complcated, it should be decsribed here
+If there is an breaking change, or something that might make the upgrade complicated, it should be described here
+
+<details>
+  <summary>To `v1.11.0`</summary>
+Additional selectors were added to the default templates in an attempt to follow the same labelling scheme everywhere, but since selectors are immutable, the upgrade will require removing of the db-operator deployment.
+
+```bash
+$ kubectl get deploy
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+db-operator   1/1     1            1           22s
+$ kubectl delete deploy db-operator
+deployment.apps "db-operator" deleted
+$ helm upgrade db-operator db-operator/db-operator --version 1.11.0
+```
+
+</details>
 
 <details>
   <summary>To `v1.10.0`</summary>
