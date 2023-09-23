@@ -1,6 +1,8 @@
 values: |
   webhook:
     enabled: false
+    serviceAccount:
+      create: false
 files:
   - Certificate-db-operator-webhook.yml
   - ConfigMap-db-operator-config.yml

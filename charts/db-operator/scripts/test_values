@@ -41,6 +41,7 @@ fi
 
 
 CURRENT_DIR=$(pwd)
+ERROR=false
 for FILE in $(find $VALUES_PATH -type f); do
     WORKDIR=$(mktemp -d)
     echo "Checking $FILE"
@@ -55,7 +56,11 @@ for FILE in $(find $VALUES_PATH -type f); do
         echo "PASSED"
         rm -rf "${WORKDIR}"
     else
+        ERROR=true
         echo "FAILED: Please check unexpected files -> ${DIFF[*]}"
     fi
-
 done
+
+if $ERROR; then
+    exit 1
+fi
