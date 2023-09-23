@@ -11,6 +11,7 @@ metadata:
     {{- end }}
   labels:
     {{- include "labels" . | nindent 4 }}
+    app.kubernetes.io/component: "webhook"
   name: {{ .Values.webhook.names.mutating }}
 webhooks:
 - admissionReviewVersions:
