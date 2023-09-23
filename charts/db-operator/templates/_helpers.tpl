@@ -54,7 +54,7 @@ Webhook templates
 Expand the name of the chart.
 */}}
 {{- define "webhook.name" -}}
-{{- printf "webhook" -}}
+{{- printf "db-operator-webhook" -}}
 {{- end -}}
 
 {{/*
