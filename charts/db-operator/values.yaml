@@ -1,13 +1,10 @@
 nameOverride: ""
-
 image:
   repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
   logLevel: info
-
 # imagePullSecrets:
 #   - name: myRegistrySecret
-
 reconcileInterval: "60"
 # watchNamespace value is comma-separated list of namespace names. It's necessary to set "" to watch cluster wide.
 watchNamespace: ""
@@ -21,18 +18,14 @@ watchNamespace: ""
 # -- NOTE: Currently, it's only working with Database Users
 # ------------------------------------------------------------
 checkForChanges: false
-
 rbac:
   create: true
-
 serviceAccount:
   create: true
-
 crds:
   install: true
   keep: true
   annotations: {}
-
 webhook:
   enabled: true
   serviceAccount:
@@ -60,23 +53,16 @@ webhook:
       # -- ClusterIssuer or Issuer
       # -----------------------------------------
       kind: Issuer
-
 security: {}
 #  runAsUser: 1000
 #  fsGroup: 1000
 
 resources: {}
-
 nodeSelector: {}
-
 annotations: {}
-
 podLabels: {}
-
 affinity: {}
-
 tolerations: []
-
 config:
   instance:
     google:
@@ -136,10 +122,8 @@ config:
             - rows:
                 usage: "COUNTER"
                 description: "Total number of rows retrieved or affected by the statement"
-
 secrets:
   gsql: {}
-
 serviceMonitor:
   enabled: false
 #   interval: 10s
@@ -169,3 +153,21 @@ service:
   annotations: {}
   type: ClusterIP
   port: 8080
+# ---------------------------------------------------------------------
+# -- These values are used in tests, they should not affect users
+# ---------------------------------------------------------------------
+tests:
+  scripts:
+    enabled: false
+  gsql:
+    enabled: false
+  mysql:
+    enabled: false
+  postgresql:
+    enabled: false
+  crds:
+    enabled: false
+  attempts:
+    amount: 10
+    timeout: 30
+  cleanup: true

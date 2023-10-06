@@ -1,107 +1,165 @@
 # db-operator
 
-![Version: 1.9.1](https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.12.0](https://img.shields.io/badge/AppVersion-1.12.0-informational?style=flat-square)
+![Version: 1.15.0](https://img.shields.io/badge/Version-1.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.17.0](https://img.shields.io/badge/AppVersion-1.17.0-informational?style=flat-square)
 
-DB Operator is Kubernetes operator
-The source of the operator can be found here: https://github.com/db-operator/db-operator
+The DB Operator creates databases and make them available in the cluster via Custom Resource.
 
-## Installing Chart
-To install the chart with the release name my-release:
-```
-$ helm install --name my-release db-operator/db-operator
-```
-The command deploys DB Operator on Kubernetes with default configuration. For the configuration options see details [Parameters](#Parameters)
+## Source Code
 
-## Uninstalling Chart
-To uninstall the `my-release` deployment:
-```
-$ helm delete my-release
-```
+* <https://github.com/db-operator/db-operator>
+* <https://github.com/db-operator/cloudish-sql>
+* <https://github.com/db-operator/pgdump-gcs>
+* <https://github.com/db-operator/mydump-gcs>
 
-## Webhooks
+## Maintainers
 
-You can disable webhooks if you don't need them, by providing this value
-```yaml
-webhook:
-  create: false
-```
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Nikolai Rodionov | <allanger@zohomail.com> | <https://badhouseplants.net> |
 
 ## Requirements
 
 Kubernetes: `>= 1.22-prerelease`
 
-If you use webhooks, you also might need to have cert-manager
+## Installing the Chart
 
-## Values
+```console
+$ helm repo add db-operator https://db-operator.github.io/charts
+$ helm repo update
+$ helm install db-operator/db-operator
+```
 
+If you want to manage `CRDs` yourself, you need to set `.Values.crds.install` to `false`. In that case they won't be a part of templated manifests.
+
+We don't support this way of `CRD` management officially though, so we can't promise to answer your questions if you choose to go this way. If you want to know more about it, keep reading, we'll talk about it later.
+
+## Upgarding the Chart
+
+If there are breaking changes, they should be described in this README's latest item and in helm-chart notes. So if you run `helm upgrade db-operator db-operator/db-operator --dry-run`, you will see if there are breaking changes there.
+
+## Uninstalling the Chart
+
+To uninstall the operator only, run
+
+```console
+$ helm uninstall db-operator
+```
+
+If you have CRDs installed by the chart, you will also have to run something like:
+
+```console
+$ for crd in $(kubectl get crds | awk '{print $1}' | grep 'kinda.rocks'); do kubectl get crd "${crd}"; done
+```
+
+## Why are we packaging CRDs in templates?
+
+There are several reasons for that. The main one is that we are using webhooks and they require certificates to be created. If you have a look at the `CRDs` templates, you'll see something like that:
+
+```mustache
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.12.1
+    {{- if .Values.webhook.certificate.create }}
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ .Values.webhook.certificate.name}}
+    {{ else }}
+    cert-manager.io/inject-ca-from-secret: {{ .Release.Namespace }}/{{ .Values.webhook.certificate.secretName}}
+    {{- end }}
+    {{- if .Values.crds.keep }}
+    helm.sh/resource-policy: keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+```
+
+So, as you can see they require some information about the release, so they can't be static. Since the webhook is an important part of what we're distributing, we don't want to have it disabled by default.
+
+Also, we do not have `CRs` in the package, so there is no chicken-egg problem here. You don't need to have `CRDs` installed to install the chart. Since `CRDs` are a part of the operator and you can't have one without another, having them packaged and distributed together makes more sense to us.
+
+But it's still possible for users to manage `CRDs` on their own. You need to set `.Values.crds.install` to false and go to the [db-operator rgit repository](https://github.com/db-operator/db-operator). There, in the `config/crd/bases` directory, you'll find `CRD` manifests. But if you decided to go this way and you have problems with `CRDs`, you're most probably on your own, you still can open issues though.
+
+## Why do we need cert-manager?
+
+At the moment, `db-operator` chart requires `cert-manager` to be present in the cluster. It's because webhook related resources are using it to create certificates. It should change one day, since we would like this chart to be self-sufficient, but currently that's what we've got.
+
+## What is `.Values.tests`?
+
+We use helm tests feature for testing the chart in CI. Though we know that this feature should be used by users to test their intsallations, we do not think that it can be very helpful in this particular case. Test resources are creating a powerful `ClusterRoles`, so **please make sure you don't have them enabled**, unless you really know what you're doing and why.
+
+## Chart Values
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| affinity | object | `{}` |  |
-| annotations | object | `{}` |  |
-| config.backup.activeDeadlineSeconds | int | `600` |  |
-| config.backup.mysql.image | string | `"kloeckneri/mydump-gcs:latest"` |  |
-| config.backup.nodeSelector | object | `{}` |  |
-| config.backup.postgres.image | string | `"kloeckneri/pgdump-gcs:latest"` |  |
-| config.backup.resources.requests.cpu | float | `0.2` |  |
-| config.backup.resources.requests.memory | string | `"64Mi"` |  |
-| config.instance.generic | object | `{}` |  |
-| config.instance.google.proxy.image | string | `"ghcr.io/db-operator/db-auth-gateway:v0.1.10"` |  |
-| config.instance.google.proxy.metricsPort | int | `9090` |  |
-| config.instance.google.proxy.nodeSelector | object | `{}` |  |
-| config.instance.percona.proxy.image | string | `"severalnines/proxysql:2.0"` |  |
-| config.instance.percona.proxy.metricsPort | int | `9090` |  |
-| config.monitoring.nodeSelector | object | `{}` |  |
-| config.monitoring.postgres.image | string | `"wrouesnel/postgres_exporter:latest"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.description | string | `"User ID"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.usage | string | `"LABEL"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.description | string | `"database ID"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.usage | string | `"LABEL"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.description | string | `"database NAME"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.usage | string | `"LABEL"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.description | string | `"Query unique Hash Code"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.usage | string | `"LABEL"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.description | string | `"Query class"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.usage | string | `"LABEL"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.description | string | `"Number of times executed"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.usage | string | `"COUNTER"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.description | string | `"Total time spent in the statement, in milliseconds"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.usage | string | `"COUNTER"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.description | string | `"Mean time spent in the statement, in milliseconds"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.usage | string | `"GAUGE"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.description | string | `"Total number of rows retrieved or affected by the statement"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.usage | string | `"COUNTER"` |  |
-| config.monitoring.postgres.queries.pg_stat_statements.query | string | `"SELECT userid, pgss.dbid, pgdb.datname, queryid, query, calls, total_time, mean_time, rows FROM pg_stat_statements pgss LEFT JOIN (select oid as dbid, datname from pg_database) as pgdb on pgdb.dbid = pgss.dbid WHERE not queryid isnull ORDER BY mean_time desc limit 20"` |  |
-| config.monitoring.promPushGateway | string | `""` |  |
-| crds.annotations | object | `{}` |  |
+| nameOverride | string | `""` |  |
+| image.repository | string | `"ghcr.io/db-operator/db-operator"` |  |
+| image.pullPolicy | string | `"Always"` |  |
+| image.logLevel | string | `"info"` |  |
+| reconcileInterval | string | `"60"` |  |
+| watchNamespace | string | `""` |  |
+| checkForChanges | bool | `false` | ---------------------------------------------------------- |
+| rbac.create | bool | `true` |  |
+| serviceAccount.create | bool | `true` |  |
 | crds.install | bool | `true` |  |
 | crds.keep | bool | `true` |  |
-| image.logLevel | string | `"info"` |  |
-| image.pullPolicy | string | `"Always"` |  |
-| image.repository | string | `"ghcr.io/db-operator/db-operator"` |  |
-| nameOverride | string | `""` |  |
-| nodeSelector | object | `{}` |  |
-| podLabels | object | `{}` |  |
-| rbac.create | bool | `true` |  |
-| reconcileInterval | string | `"60"` |  |
-| resources | object | `{}` |  |
-| secrets.gsql | object | `{}` |  |
-| security | object | `{}` |  |
-| service.annotations | object | `{}` |  |
-| service.port | int | `8080` |  |
-| service.type | string | `"ClusterIP"` |  |
-| serviceAccount.create | bool | `true` |  |
-| serviceMonitor.enabled | bool | `false` |  |
-| tolerations | list | `[]` |  |
-| watchNamespace | string | `""` |  |
-| webhook.certificate.create | bool | `true` | ------------------------------------------ |
-| webhook.certificate.issuer.create | bool | `true` |  |
-| webhook.certificate.issuer.kind | string | `"Issuer"` | --------------------------------------- |
-| webhook.certificate.issuer.name | string | `"db-operator-issuer"` |  |
-| webhook.certificate.name | string | `"db-operator-webhook"` |  |
-| webhook.certificate.secretName | string | `"db-operator-webhook-cert"` |  |
+| crds.annotations | object | `{}` |  |
+| webhook.enabled | bool | `true` |  |
+| webhook.serviceAccount.create | bool | `true` |  |
 | webhook.names.mutating | string | `"db-operator-mutating-webhook-configuration"` |  |
 | webhook.names.validating | string | `"db-operator-validating-webhook-configuration"` |  |
-| webhook.serviceName | string | `"db-operator-webhook"` |  |
+| webhook.certificate.create | bool | `true` | ------------------------------------------ |
+| webhook.certificate.name | string | `"db-operator-webhook"` |  |
+| webhook.certificate.secretName | string | `"db-operator-webhook-cert"` |  |
+| webhook.certificate.issuer.create | bool | `true` |  |
+| webhook.certificate.issuer.name | string | `"db-operator-issuer"` |  |
+| webhook.certificate.issuer.kind | string | `"Issuer"` | --------------------------------------- |
+| security | object | `{}` |  |
+| resources | object | `{}` |  |
+| nodeSelector | object | `{}` |  |
+| annotations | object | `{}` |  |
+| podLabels | object | `{}` |  |
+| affinity | object | `{}` |  |
+| tolerations | list | `[]` |  |
+| config.instance.google.proxy.nodeSelector | object | `{}` |  |
+| config.instance.google.proxy.image | string | `"ghcr.io/db-operator/db-auth-gateway:v0.1.10"` |  |
+| config.instance.google.proxy.metricsPort | int | `9090` |  |
+| config.instance.generic | object | `{}` |  |
+| config.instance.percona.proxy.image | string | `"severalnines/proxysql:2.0"` |  |
+| config.instance.percona.proxy.metricsPort | int | `9090` |  |
+| config.backup.activeDeadlineSeconds | int | `600` |  |
+| config.backup.nodeSelector | object | `{}` |  |
+| config.backup.postgres.image | string | `"kloeckneri/pgdump-gcs:latest"` |  |
+| config.backup.mysql.image | string | `"kloeckneri/mydump-gcs:latest"` |  |
+| config.backup.resources.requests.memory | string | `"64Mi"` |  |
+| config.backup.resources.requests.cpu | float | `0.2` |  |
+| config.monitoring.promPushGateway | string | `""` |  |
+| config.monitoring.nodeSelector | object | `{}` |  |
+| config.monitoring.postgres.image | string | `"wrouesnel/postgres_exporter:latest"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.query | string | `"SELECT userid, pgss.dbid, pgdb.datname, queryid, query, calls, total_time, mean_time, rows FROM pg_stat_statements pgss LEFT JOIN (select oid as dbid, datname from pg_database) as pgdb on pgdb.dbid = pgss.dbid WHERE not queryid isnull ORDER BY mean_time desc limit 20"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.description | string | `"User ID"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.description | string | `"database ID"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.description | string | `"database NAME"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.description | string | `"Query unique Hash Code"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.usage | string | `"LABEL"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.description | string | `"Query class"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.usage | string | `"COUNTER"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.description | string | `"Number of times executed"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.usage | string | `"COUNTER"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.description | string | `"Total time spent in the statement, in milliseconds"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.usage | string | `"GAUGE"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.description | string | `"Mean time spent in the statement, in milliseconds"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.usage | string | `"COUNTER"` |  |
+| config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.description | string | `"Total number of rows retrieved or affected by the statement"` |  |
+| secrets.gsql | object | `{}` |  |
+| serviceMonitor.enabled | bool | `false` |  |
+| service.annotations | object | `{}` |  |
+| service.type | string | `"ClusterIP"` |  |
+| service.port | int | `8080` |  |
+| tests | object | `{"attempts":{"amount":10,"timeout":30},"cleanup":true,"crds":{"enabled":false},"gsql":{"enabled":false},"mysql":{"enabled":false},"postgresql":{"enabled":false},"scripts":{"enabled":false}}` | ------------------------------------------------------------------- |
+## Dev Notes
+
+After changing default `Values`, please execute `make gen_docs` to update the `README.md` file. Readme file is generated by the `helm-docs` tool, so make sure not to edit it manually.
 
 ## Upgrading
 

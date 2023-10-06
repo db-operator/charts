@@ -1,0 +1,21 @@
+dbinstances:
+  instance1:
+    serviceMonitor:
+      enabled: true
+    engine: postgres
+    monitoring:
+      autodiscovery: true
+      enabled: true
+    generic:
+      host: postgres-instance-postgresql.postgres
+      port: 5432
+    secrets:
+      adminUser: postgres
+      adminPassword: 123123!!
+tests:
+  helmfile:
+    enabled: true
+    gitBranch: ${GIT_BRANCH}
+  serviceMonitor:
+    enabled: true
+    instance: instance1

@@ -1,0 +1,102 @@
+-----------------------------------------------------------------------
+                                 .-"``"-.
+                                /______; \
+                               {_______}\|
+                               (/ a a \)(_)
+                               (.-.).-.)
+  _______________________ooo__(    ^    )___________________________
+ /                             '-.___.-'                            \
+| Please read these notes, they might be usefull and we will try to  |
+| make them as short as possible                                     |
+ \________________________________________ooo_______________________/
+                               |_  |  _|  jgs
+                               \___|___/
+                               {___|___}
+                                |_ | _|
+                                /-'Y'-\
+                               (__/ \__)
+
+-----------------------------------------------------------------------
+Release information
+The Chart name: {{ .Chart.Name }}.
+The Repo URL: https://db-operator.github.io/charts
+The Release name {{ .Release.Name }}.
+-----------------------------------------------------------------------
+Breaking changes and migration paths
+
+{{ .Chart.Version }} is not breaking, you don't have to worry 
+
+{{- if not .Values.crds.install }}
+-----------------------------------------------------------------------
+You've chosen not to install CRDs with this release.
+
+We officially do not distribute CRDs outside of this helm chart, so 
+you will have to deal with that on your own. 
+
+If it was a mistake, update the values so they contain the following:
+
+".Values.crds.install: true"
+
+{{- end }}
+{{- if not .Values.webhook.enabled }}
+-----------------------------------------------------------------------
+You've chosen not to install and configure the webhook.
+Your "kinda.rocks" manifests won't be validated and converted when 
+the API version is upgraded.
+
+It's not required by db-operator to work, but if you want to have the 
+webhook in place, you can set ".Values.webhook.enabled" to "true"
+{{- end }}
+
+{{- if .Values.tests.gsql.enabled }}
+-----------------------------------------------------------------------
+You seem to have the gsql test set to true, usually, 
+it shouldn't be done.
+
+Make sure that you want to run tests, and not using this installation
+in production in any form.
+
+Or set '.Values.tests.gsql.enabled' to 'false'
+{{- end }}
+
+{{- if .Values.tests.postgresql.enabled }}
+-----------------------------------------------------------------------
+You seem to have the postgresql test set to true, usually, 
+it shouldn't be done.
+
+Make sure that you want to run tests, and not using this installation
+in production in any form.
+
+Or set '.Values.tests.postgresql.enabled' to 'false'
+
+Also, if you want to test your postgresql installation, you need to 
+provide a postgres server yourself. Test itself doesn't deploy a server
+{{- end }}
+
+{{- if .Values.tests.mysql.enabled }}
+-----------------------------------------------------------------------
+You seem to have the mysql test set to true, usually, 
+it shouldn't be done.
+
+Make sure that you want to run tests, and not using this installation
+in production in any form.
+
+Or set '.Values.tests.mysql.enabled' to 'false'
+
+Also, if you want to test your mysql installation, you need to 
+provide a mysql server yourself. Test itself doesn't deploy a server
+{{- end }}
+
+{{- if .Values.tests.crds.enabled }}
+-----------------------------------------------------------------------
+You seem to have the crds test set to true, usually, 
+it shouldn't be done.
+
+!! This test uses a ClusterRole that has an access to all the resoucres
+in the cluster, so make sure that you want to run tests, 
+and not using this installation.
+
+Or set '.Values.tests.crds.enabled' to 'false'
+{{- end }}
+
+

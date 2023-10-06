@@ -1,10 +1,10 @@
 {{- if (((.Values.tests).serviceMonitor).enabled) }}
 # ---------------------------------------------------------------------
-# -- A config map with a script to test ServiceMonitor
+# -- a config map with a script to test servicemonitor
 # ---------------------------------------------------------------------
 --- 
-apiVersion: v1
-kind: ConfigMap
+apiversion: v1
+kind: configmap
 metadata:
   name: {{ include "db-instances.fullname" . }}-test-prom-script
   labels:
@@ -14,14 +14,11 @@ metadata:
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 data:
-  test.sh: |-
-{{ range .Files.Lines "files/test_service_monitor" }}
-    {{ . }}
-{{- end }}
+{{ (.Files.Glob "files/*").AsConfig | indent 2 }}
 
 ---
-apiVersion: v1
-kind: Pod
+apiversion: v1
+kind: pod
 metadata:
   name: "{{ include "db-instances.fullname" . }}-test-prom"
   labels:
@@ -33,19 +30,19 @@ metadata:
 spec:
   volumes:
     - name: test-script
-      configMap:
+      configmap:
         name: "{{ include "db-instances.fullname" . }}-test-prom-script"
   containers:
     - name: check-metrics-endpoint
       image: alpine/curl
       command:
         - sh
-      volumeMounts:
+      volumemounts:
         - name: test-script
-          readOnly: true
-          mountPath: /test.sh
-          subPath: test.sh
+          readonly: true
+          mountpath: /test_service_monitor
+          subpath: test_service_monitor
       args:
         - /test.sh
-  restartPolicy: Never
+  restartpolicy: never
 {{- end}}

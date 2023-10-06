@@ -1,0 +1,38 @@
+#! /usr/bin/env bash
+set -e
+# ---------------------------------------------------------------------
+# -- This script is checking whether CRDS are installed or not
+# ---------------------------------------------------------------------
+ATTEMPTS_AMOUNT="${TEST_ATTEMPTS_AMOUNT:-10}" 
+ATTEMPTS_TIMEOUT="${TEST_ATTEMPTS_TIMEOUT:-30}" 
+INSTALLED="${TEST_INSTALLED:-true}" 
+CRDS=("databases.kinda.rocks" "dbinstances.kinda.rocks" "dbusers.kinda.rocks")
+EXPECTED_STATUS=1
+TEST_PASSED=false
+x=1
+
+while [ $x -le "${ATTEMPTS_AMOUNT}" ]; do
+  for CRD in "${CRDS[@]}"; do
+    SUCCESS=true
+    if ! kubectl get crd $CRD; then
+      SUCCESS=false
+      INSTALLED="false"
+      echo "[ERROR]: CRS ${CRS} is not in the wished state"
+      break;
+    fi;
+  done
+  if [ "${INSTALLED}" == "${INSTALLED}" ]; then  
+    echo "[INFO]: Test is passed, CRDs installed -> ${INSTALLED}"
+    TEST_PASSED=true;
+    break;
+  fi
+  echo "[INFO]: Sleeping ${ATTEMPTS_TIMEOUT} seconds"
+  sleep $ATTEMPTS_TIMEOUT
+  x=$(( $x + 1 ));
+done
+
+if [ "${TEST_PASSED}" != "true" ]; then
+  echo "[ERROR]: Test is failed, check the kubectl get crds output"
+  echo $(kubectl get crds)
+  exit 1;
+fi

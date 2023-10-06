@@ -1,0 +1,69 @@
+reconcileInterval: "10"
+crds:
+  keep: false
+
+secrets:
+  gsql:
+    admin: |
+      {
+        "type": "service_account",
+        "project_id": "integration-project",
+        "private_key_id": "",
+        "private_key": "",
+        "client_email": "",
+        "client_id": "admin",
+        "auth_uri": "",
+        "token_uri": "",
+        "auth_provider_x509_cert_url": "",
+        "client_x509_cert_url": ""
+      }
+    readonly: |
+      {
+        "type": "service_account",
+        "project_id": "integration-project",
+        "private_key_id": "",
+        "private_key": "",
+        "client_email": "",
+        "client_id": "readonly",
+        "auth_uri": "",
+        "token_uri": "",
+        "auth_provider_x509_cert_url": "",
+        "client_x509_cert_url": ""
+      }
+
+tests:
+  scripts:
+    enabled: true
+  gsql:
+    enabled: true
+    cloudishSQL:
+      image:
+        repository: ghcr.io/db-operator/cloudish-sql
+        tag: v1.0.1
+    dbin:
+      adminUser: postgres
+      adminPassword: Passw0rd
+      instanceConfig:
+        data: |
+          {
+            "databaseVersion": "POSTGRES_11",
+            "settings": {
+              "tier": "db-f1-micro",
+              "availabilityType": "ZONAL",
+              "pricingPlan": "PER_USE",
+              "replicationType": "SYNCHRONOUS",
+              "activationPolicy": "ALWAYS",
+              "ipConfiguration": {
+                "authorizedNetworks": [],
+                "ipv4Enabled": true
+              },
+              "dataDiskType": "PD_SSD",
+              "backupConfiguration": {
+                "enabled": false
+              },
+              "storageAutoResizeLimit": "0",
+              "storageAutoResize": true
+            },
+            "backendType": "SECOND_GEN",
+            "region": "somewhere"
+          }

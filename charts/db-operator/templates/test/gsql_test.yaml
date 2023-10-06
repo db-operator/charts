@@ -1,0 +1,237 @@
+{{- $version := semver .Capabilities.KubeVersion.Version }}
+{{- if .Values.tests.gsql.enabled }}
+# ---------------------------------------------------------------------
+# -- Test Google API requests with cloudish-sql
+# -- https://github.com/db-operator/cloudish-sql
+# -- 
+# -- The script that is running checks is added to a configmap, and 
+# --  later exexuted in pod. If you want to see the logic of this test,
+# --  please, go to the bottom of the file and find a configmap with
+# --  with a bash script
+# ---------------------------------------------------------------------
+# -- Prepare clousdish sql and dependencies
+# ---------------------------------------------------------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ template "db-operator.name" . }}-mock-google-api
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: googleAPI
+      role: test
+  template:
+    metadata:
+      labels:
+        app: googleAPI
+        role: test
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.tests.gsql.cloudishSQL.image.repository }}:{{ .Values.tests.gsql.cloudishSQL.image.tag }}"
+          ports:
+          - containerPort: 8080
+            name: http
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LOG_LEVEL
+              value: "DEBUG"
+          command:
+            - /usr/local/bin/cloudish-sql
+            - --db-address=pg-test-db:5432
+            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ template "db-operator.name" . }}-mock-google-api
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: googleAPI
+    role: test
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name:  {{ template "db-operator.name" . }}-gsql-admin-creds
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+type: Opaque
+data:
+  password: {{ .Values.tests.gsql.dbin.adminPassword | b64enc }}
+  user: {{ .Values.tests.gsql.dbin.adminUser | b64enc }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ template "db-operator.name" . }}-gsql-instance-config
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+data:
+  config: |
+{{ .Values.tests.gsql.dbin.instanceConfig.data | indent 4 }}
+
+--- 
+# ---------------------------------------------------------------------
+# -- Prepare roles and bindings to access k8s resources from the test
+# ---------------------------------------------------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "db-operator.name" . }}-gsql-dbin-role
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+rules:
+- apiGroups: ["kinda.rocks", "apps"]
+  resources: ["*"]
+  verbs: ["get", "watch", "list", "delete"]
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+automountServiceAccountToken: true
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "db-operator.name" . }}-gsql-dbin-rb
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+subjects:
+- kind: ServiceAccount
+  name: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ template "db-operator.name" . }}-gsql-dbin-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: kinda.rocks/v1beta1
+kind: DbInstance
+metadata:
+  name: {{ template "db-operator.name" . }}-gsql-instance
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "2"
+spec:
+  adminSecretRef:
+    Name: {{ template "db-operator.name" . }}-gsql-admin-creds
+    Namespace: {{ .Release.Namespace }}
+  engine: postgres
+  google:
+    configmapRef:
+      Name: {{ template "db-operator.name" . }}-gsql-instance-config
+      Namespace: {{ .Release.Namespace }}
+    clientSecretRef:
+      Name: cloudsql-admin-serviceaccount
+      Namespace: {{ .Release.Namespace }}
+    instance: gsql-local-postgres
+    apiEndpoint: http://{{ template "db-operator.name" . }}-mock-google-api
+  monitoring:
+    enabled: true
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ template "db-operator.name" . }}-test
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "7"
+spec:
+  serviceAccountName: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  automountServiceAccountToken: true
+  volumes:
+    - name: test-script
+      configMap:
+        name: {{ template "db-operator.name" . }}-test-script
+  containers:
+    - name: tester
+      image: alpine/k8s:{{ $version.Major }}.{{ $version.Minor }}.{{ $version.Patch }}
+      volumeMounts:
+        - name: test-script
+          readOnly: true
+          mountPath: /test_gsql
+          subPath: test_gsql
+      env: 
+        - name: TEST_DB_INSTANCE_NAME
+          value: {{ template "db-operator.name" . }}-gsql-instance 
+      command: 
+        - bash
+      args:
+        - -e
+        - /test_gsql
+  restartPolicy: Never
+{{- end }}

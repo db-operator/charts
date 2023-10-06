@@ -1,0 +1,101 @@
+{{- $version := semver .Capabilities.KubeVersion.Version }}
+{{- if .Values.tests.crds.enabled }}
+# ---------------------------------------------------------------------
+# -- Test that CRDs are installed
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# -- Prepare roles and bindings to access k8s resources from the test
+# ---------------------------------------------------------------------
+--- 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "db-operator.name" . }}-gsql-dbin-role
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list",]
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+automountServiceAccountToken: true
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "db-operator.name" . }}-db-rb
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "1"
+subjects:
+- kind: ServiceAccount
+  name: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ template "db-operator.name" . }}-gsql-dbin-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ template "db-operator.name" . }}-test
+  labels:
+    {{- include "labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    {{- if .Values.tests.cleanup }}
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- end }}
+    "helm.sh/hook-weight": "7"
+spec:
+  serviceAccountName: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  automountServiceAccountToken: true
+  volumes:
+    - name: test-script
+      configMap:
+        name: {{ template "db-operator.name" . }}-test-script
+  containers:
+    - name: tester
+      image: alpine/k8s:{{ $version.Major }}.{{ $version.Minor }}.{{ $version.Patch }}
+      volumeMounts:
+        - name: test-script
+          readOnly: true
+          mountPath: /test_crds
+          subPath: test_crds
+      env: 
+        - name: TEST_INSTALLED
+          value: "{{ .Values.tests.crds.installed }}"
+      command: 
+        - bash
+      args:
+        - -e
+        - /test_crds
+  restartPolicy: Never
+{{- end }}

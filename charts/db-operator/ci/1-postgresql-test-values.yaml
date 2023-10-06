@@ -1,0 +1,14 @@
+reconcileInterval: "10"
+
+crds:
+  keep: false
+
+tests:
+  postgresql:
+    enabled: true
+    admin:
+      password: 123123!!
+      user: postgres
+    service:
+      name: postgres-instance-postgresql
+      namespace: databases
