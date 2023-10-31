@@ -8,7 +8,7 @@ version: 1.13.0
 # --  https://github.com/db-operator/charts/blob/main/.github/workflows/test.yaml
 # ---------------------------------------------------------------------------------
 kubeVersion: ">= 1.22-prerelease"
-appVersion: "1.16.0"
+appVersion: "1.16.1"
 description: The DB Operator creates databases and make them available in the cluster via Custom Resource.
 home: https://github.com/db-operator/db-operator
 
