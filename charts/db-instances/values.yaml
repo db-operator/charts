@@ -7,7 +7,7 @@ nodeSelector: {}
 exporter:
   postgres:
     image: wrouesnel/postgres_exporter:latest
-    query: |
+    query:
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
         metrics:
