@@ -49,10 +49,16 @@ spec:
           description: DbUser is the Schema for the dbusers API
           properties:
             apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              description:
+                "APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
               type: string
             kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              description:
+                "Kind is a string value representing the REST resource this
+                object represents. Servers may infer this from the endpoint the client
+                submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
               type: string
             metadata:
               type: object
@@ -60,10 +66,14 @@ spec:
               description: DbUserSpec defines the desired state of DbUser
               properties:
                 accessType:
-                  description: AccessType that should be given to a user Currently only readOnly and readWrite are supported by the operator
+                  description:
+                    AccessType that should be given to a user Currently only
+                    readOnly and readWrite are supported by the operator
                   type: string
                 databaseRef:
-                  description: DatabaseRef should contain a name of a Database to create a user there Database should be in the same namespace with the user
+                  description:
+                    DatabaseRef should contain a name of a Database to create
+                    a user there Database should be in the same namespace with the user
                   type: string
                 secretName:
                   description: SecretName name that should be used to save user's credentials

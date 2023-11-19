@@ -68,10 +68,16 @@ spec:
           description: Database is the Schema for the databases API
           properties:
             apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              description:
+                "APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
               type: string
             kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              description:
+                "Kind is a string value representing the REST resource this
+                object represents. Servers may infer this from the endpoint the client
+                submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
               type: string
             metadata:
               type: object
@@ -79,7 +85,9 @@ spec:
               description: DatabaseSpec defines the desired state of Database
               properties:
                 backup:
-                  description: DatabaseBackup defines the desired state of backup and schedule
+                  description:
+                    DatabaseBackup defines the desired state of backup and
+                    schedule
                   properties:
                     cron:
                       type: string
@@ -92,7 +100,13 @@ spec:
                 cleanup:
                   type: boolean
                 connectionStringTemplate:
-                  description: 'ConnectionStringTemplate field can be used to pass a custom template for generating a db connection string. These keywords can be used: Protocol, DatabaseHost, DatabasePort, UserName, Password, DatabaseName. Default template looks like this: "{{ .Protocol }}://{{ .UserName }}:{{ .Password }}@{{ .DatabaseHost }}:{{ .DatabasePort }}/{{ .DatabaseName }}"'
+                  description:
+                    'ConnectionStringTemplate field can be used to pass a
+                    custom template for generating a db connection string. These keywords
+                    can be used: Protocol, DatabaseHost, DatabasePort, UserName, Password,
+                    DatabaseName. Default template looks like this: "{{ .Protocol }}://{{
+                    .UserName }}:{{ .Password }}@{{ .DatabaseHost }}:{{ .DatabasePort
+                    }}/{{ .DatabaseName }}"'
                   type: string
                 deletionProtected:
                   type: boolean
@@ -103,13 +117,19 @@ spec:
                 instance:
                   type: string
                 postgres:
-                  description: Postgres struct should be used to provide resource that only applicable to postgres
+                  description:
+                    Postgres struct should be used to provide resource that
+                    only applicable to postgres
                   properties:
                     dropPublicSchema:
-                      description: If set to true, the public schema will be dropped after the database creation
+                      description:
+                        If set to true, the public schema will be dropped
+                        after the database creation
                       type: boolean
                     schemas:
-                      description: Specify schemas to be created. The user created by db-operator will have all access on them.
+                      description:
+                        Specify schemas to be created. The user created by
+                        db-operator will have all access on them.
                       items:
                         type: string
                       type: array
@@ -135,10 +155,18 @@ spec:
                   description: DbInstance is the Schema for the dbinstances API
                   properties:
                     apiVersion:
-                      description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+                      description:
+                        "APIVersion defines the versioned schema of this
+                        representation of an object. Servers should convert recognized
+                        schemas to the latest internal value, and may reject unrecognized
+                        values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
                       type: string
                     kind:
-                      description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                      description:
+                        "Kind is a string value representing the REST resource
+                        this object represents. Servers may infer this from the endpoint
+                        the client submits requests to. Cannot be updated. In CamelCase.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
                       type: string
                     metadata:
                       type: object
@@ -146,7 +174,11 @@ spec:
                       description: DbInstanceSpec defines the desired state of DbInstance
                       properties:
                         adminSecretRef:
-                          description: NamespacedName is a fork of the kubernetes api type of the same name. Sadly this is required because CRD structs must have all fields json tagged and the kubernetes type is not tagged.
+                          description:
+                            NamespacedName is a fork of the kubernetes api
+                            type of the same name. Sadly this is required because CRD
+                            structs must have all fields json tagged and the kubernetes
+                            type is not tagged.
                           properties:
                             Name:
                               type: string
@@ -157,7 +189,10 @@ spec:
                             - Namespace
                           type: object
                         backup:
-                          description: DbInstanceBackup defines name of google bucket to use for storing database dumps for backup when backup is enabled
+                          description:
+                            DbInstanceBackup defines name of google bucket
+                            to use for storing database dumps for backup when backup
+                            is enabled
                           properties:
                             bucket:
                               type: string
@@ -165,13 +200,23 @@ spec:
                             - bucket
                           type: object
                         engine:
-                          description: 'Important: Run "make generate" to regenerate code after modifying this file'
+                          description:
+                            'Important: Run "make generate" to regenerate
+                            code after modifying this file'
                           type: string
                         generic:
-                          description: GenericInstance is used when instance type is generic and describes necessary informations to use instance generic instance can be any backend, it must be reachable by described address and port
+                          description:
+                            GenericInstance is used when instance type is
+                            generic and describes necessary informations to use instance
+                            generic instance can be any backend, it must be reachable
+                            by described address and port
                           properties:
                             backupHost:
-                              description: BackupHost address will be used for dumping database for backup Usually secondary address for primary-secondary setup or cluster lb address If it's not defined, above Host will be used as backup host address.
+                              description:
+                                BackupHost address will be used for dumping
+                                database for backup Usually secondary address for primary-secondary
+                                setup or cluster lb address If it's not defined, above
+                                Host will be used as backup host address.
                               type: string
                             host:
                               type: string
@@ -184,12 +229,19 @@ spec:
                             - port
                           type: object
                         google:
-                          description: GoogleInstance is used when instance type is Google Cloud SQL and describes necessary informations to use google API to create sql instances
+                          description:
+                            GoogleInstance is used when instance type is
+                            Google Cloud SQL and describes necessary informations to
+                            use google API to create sql instances
                           properties:
                             apiEndpoint:
                               type: string
                             clientSecretRef:
-                              description: NamespacedName is a fork of the kubernetes api type of the same name. Sadly this is required because CRD structs must have all fields json tagged and the kubernetes type is not tagged.
+                              description:
+                                NamespacedName is a fork of the kubernetes
+                                api type of the same name. Sadly this is required because
+                                CRD structs must have all fields json tagged and the
+                                kubernetes type is not tagged.
                               properties:
                                 Name:
                                   type: string
@@ -200,7 +252,11 @@ spec:
                                 - Namespace
                               type: object
                             configmapRef:
-                              description: NamespacedName is a fork of the kubernetes api type of the same name. Sadly this is required because CRD structs must have all fields json tagged and the kubernetes type is not tagged.
+                              description:
+                                NamespacedName is a fork of the kubernetes
+                                api type of the same name. Sadly this is required because
+                                CRD structs must have all fields json tagged and the
+                                kubernetes type is not tagged.
                               properties:
                                 Name:
                                   type: string
@@ -225,12 +281,16 @@ spec:
                             - enabled
                           type: object
                         sslConnection:
-                          description: DbInstanceSSLConnection defines weather connection from db-operator to instance has to be ssl or not
+                          description:
+                            DbInstanceSSLConnection defines weather connection
+                            from db-operator to instance has to be ssl or not
                           properties:
                             enabled:
                               type: boolean
                             skip-verify:
-                              description: SkipVerity use SSL connection, but don't check against a CA
+                              description:
+                                SkipVerity use SSL connection, but don't
+                                check against a CA
                               type: boolean
                           required:
                             - enabled
@@ -252,7 +312,9 @@ spec:
                             type: string
                           type: object
                         phase:
-                          description: 'Important: Run "make generate" to regenerate code after modifying this file'
+                          description:
+                            'Important: Run "make generate" to regenerate
+                            code after modifying this file'
                           type: string
                         status:
                           type: boolean
@@ -264,10 +326,15 @@ spec:
                 monitorUserSecret:
                   type: string
                 phase:
-                  description: 'Important: Run "make generate" to regenerate code after modifying this file Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html'
+                  description:
+                    'Important: Run "make generate" to regenerate code after
+                    modifying this file Add custom validation using kubebuilder tags:
+                    https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html'
                   type: string
                 proxyStatus:
-                  description: DatabaseProxyStatus defines whether proxy for database is enabled or not if so, provide information
+                  description:
+                    DatabaseProxyStatus defines whether proxy for database
+                    is enabled or not if so, provide information
                   properties:
                     serviceName:
                       type: string
@@ -324,10 +391,16 @@ spec:
           description: Database is the Schema for the databases API
           properties:
             apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              description:
+                "APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the latest
+                internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
               type: string
             kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              description:
+                "Kind is a string value representing the REST resource this
+                object represents. Servers may infer this from the endpoint the client
+                submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
               type: string
             metadata:
               type: object
@@ -335,7 +408,9 @@ spec:
               description: DatabaseSpec defines the desired state of Database
               properties:
                 backup:
-                  description: DatabaseBackup defines the desired state of backup and schedule
+                  description:
+                    DatabaseBackup defines the desired state of backup and
+                    schedule
                   properties:
                     cron:
                       type: string
@@ -348,12 +423,19 @@ spec:
                 cleanup:
                   type: boolean
                 credentials:
-                  description: 'Credentials should be used to setup everything relates to k8s secrets and configmaps TODO(@allanger): Field .spec.secretName should be moved here in the v1beta2 version'
+                  description:
+                    "Credentials should be used to setup everything relates
+                    to k8s secrets and configmaps TODO(@allanger): Field .spec.secretName
+                    should be moved here in the v1beta2 version"
                   properties:
                     templates:
-                      description: Templates to add custom entries to ConfigMaps and Secrets
+                      description:
+                        Templates to add custom entries to ConfigMaps and
+                        Secrets
                       items:
-                        description: Tempaltes to add custom entries to comfigmaps and secrets
+                        description:
+                          Tempaltes to add custom entries to comfigmaps and
+                          secrets
                         properties:
                           name:
                             type: string
@@ -373,17 +455,23 @@ spec:
                 instance:
                   type: string
                 postgres:
-                  description: Postgres struct should be used to provide resource that only applicable to postgres
+                  description:
+                    Postgres struct should be used to provide resource that
+                    only applicable to postgres
                   properties:
                     dropPublicSchema:
-                      description: If set to true, the public schema will be dropped after the database creation
+                      description:
+                        If set to true, the public schema will be dropped
+                        after the database creation
                       type: boolean
                     extensions:
                       items:
                         type: string
                       type: array
                     schemas:
-                      description: Specify schemas to be created. The user created by db-operator will have all access on them.
+                      description:
+                        Specify schemas to be created. The user created by
+                        db-operator will have all access on them.
                       items:
                         type: string
                       type: array
@@ -408,143 +496,20 @@ spec:
               properties:
                 database:
                   type: string
-                instanceRef:
-                  description: DbInstance is the Schema for the dbinstances API
-                  properties:
-                    apiVersion:
-                      description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-                      type: string
-                    kind:
-                      description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-                      type: string
-                    metadata:
-                      type: object
-                    spec:
-                      description: DbInstanceSpec defines the desired state of DbInstance
-                      properties:
-                        adminSecretRef:
-                          description: NamespacedName is a fork of the kubernetes api type of the same name. Sadly this is required because CRD structs must have all fields json tagged and the kubernetes type is not tagged.
-                          properties:
-                            Name:
-                              type: string
-                            Namespace:
-                              type: string
-                          required:
-                            - Name
-                            - Namespace
-                          type: object
-                        backup:
-                          description: DbInstanceBackup defines name of google bucket to use for storing database dumps for backup when backup is enabled
-                          properties:
-                            bucket:
-                              type: string
-                          required:
-                            - bucket
-                          type: object
-                        engine:
-                          description: 'Important: Run "make generate" to regenerate code after modifying this file'
-                          type: string
-                        generic:
-                          description: GenericInstance is used when instance type is generic and describes necessary informations to use instance generic instance can be any backend, it must be reachable by described address and port
-                          properties:
-                            backupHost:
-                              description: BackupHost address will be used for dumping database for backup Usually secondary address for primary-secondary setup or cluster lb address If it's not defined, above Host will be used as backup host address.
-                              type: string
-                            host:
-                              type: string
-                            port:
-                              type: integer
-                            publicIp:
-                              type: string
-                          required:
-                            - host
-                            - port
-                          type: object
-                        google:
-                          description: GoogleInstance is used when instance type is Google Cloud SQL and describes necessary informations to use google API to create sql instances
-                          properties:
-                            apiEndpoint:
-                              type: string
-                            clientSecretRef:
-                              description: NamespacedName is a fork of the kubernetes api type of the same name. Sadly this is required because CRD structs must have all fields json tagged and the kubernetes type is not tagged.
-                              properties:
-                                Name:
-                                  type: string
-                                Namespace:
-                                  type: string
-                              required:
-                                - Name
-                                - Namespace
-                              type: object
-                            configmapRef:
-                              description: NamespacedName is a fork of the kubernetes api type of the same name. Sadly this is required because CRD structs must have all fields json tagged and the kubernetes type is not tagged.
-                              properties:
-                                Name:
-                                  type: string
-                                Namespace:
-                                  type: string
-                              required:
-                                - Name
-                                - Namespace
-                              type: object
-                            instance:
-                              type: string
-                          required:
-                            - configmapRef
-                            - instance
-                          type: object
-                        monitoring:
-                          description: DbInstanceMonitoring defines if exporter
-                          properties:
-                            enabled:
-                              type: boolean
-                          required:
-                            - enabled
-                          type: object
-                        sslConnection:
-                          description: DbInstanceSSLConnection defines weather connection from db-operator to instance has to be ssl or not
-                          properties:
-                            enabled:
-                              type: boolean
-                            skip-verify:
-                              description: SkipVerity use SSL connection, but don't check against a CA
-                              type: boolean
-                          required:
-                            - enabled
-                            - skip-verify
-                          type: object
-                      required:
-                        - adminSecretRef
-                        - engine
-                      type: object
-                    status:
-                      description: DbInstanceStatus defines the observed state of DbInstance
-                      properties:
-                        checksums:
-                          additionalProperties:
-                            type: string
-                          type: object
-                        info:
-                          additionalProperties:
-                            type: string
-                          type: object
-                        phase:
-                          description: 'Important: Run "make generate" to regenerate code after modifying this file'
-                          type: string
-                        status:
-                          type: boolean
-                      required:
-                        - phase
-                        - status
-                      type: object
-                  type: object
+                engine:
+                  type: string
                 monitorUserSecret:
                   type: string
                 phase:
-                  description: 'Important: Run "make generate" to regenerate code after modifying this file Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html'
+                  description:
+                    'Important: Run "make generate" to regenerate code after
+                    modifying this file Add custom validation using kubebuilder tags:
+                    https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html'
                   type: string
                 proxyStatus:
-                  description: DatabaseProxyStatus defines whether proxy for database is enabled or not if so, provide information
+                  description:
+                    DatabaseProxyStatus defines whether proxy for database
+                    is enabled or not if so, provide information
                   properties:
                     serviceName:
                       type: string
@@ -564,7 +529,7 @@ spec:
                   type: string
               required:
                 - database
-                - instanceRef
+                - engine
                 - phase
                 - status
                 - user
