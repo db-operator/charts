@@ -1,0 +1,60 @@
+{{- if (((.Values.tests).serviceMonitor).enabled) }}
+# ---------------------------------------------------------------------
+# -- A config map with a script to test ServiceMonitor
+# ---------------------------------------------------------------------
+--- 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "db-instances.fullname" . }}-test-prom-script
+  labels:
+    {{- include "db-instances.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+data:
+  test.sh: |-
+{{ range .Files.Lines "files/test_service_monitor" }}
+    {{ . }}
+{{- end }}
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "db-instances.fullname" . }}-test-prom"
+  labels:
+    {{- include "db-instances.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  volumes:
+    - name: test-script
+      configMap:
+        name: "{{ include "db-instances.fullname" . }}-test-prom-script"
+  containers:
+    - name: check-metrics-endpoint
+      image: alpine/curl
+      command:
+        - sh
+      volumeMounts:
+        - name: test-script
+          readOnly: true
+          mountPath: /test.sh
+          subPath: test.sh
+      env:
+        - name: TEST_INSTALL_DEPS
+          value: 'true'
+        - name: TEST_SCRAPE_INTERVAL
+          value: '{{ .Values.tests.serviceMonitor.scrapeInterval }}'
+        - name: TEST_PROM_URL
+          value: '{{ .Values.tests.serviceMonitor.promURL }}'
+        - name: TEST_QUERY
+          value: '{{ .Values.tests.serviceMonitor.query }}'
+      args:
+        - /test.sh
+  restartPolicy: Never
+{{- end}}

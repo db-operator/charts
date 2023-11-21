@@ -1,5 +1,3 @@
-serviceMonitorName: ""
-
 dbinstances: {}
 
 nodeSelector: {}
@@ -169,8 +167,15 @@ mysql:
 postgresql:
   enabled: false
 
-serviceMonitor:
-  enabled: false
-
 # Overwrite Namespace if secrets get created and release namespace != operator ns
 # operatorNamespace:
+
+# ---------------------------------------------------------------------
+# -- Internal values, used for testing, please don't set them if you
+# --  don't have an intention of testing the helm chart
+# ---------------------------------------------------------------------
+tests:
+  # Test that service monitor can be created
+  # and metrics can be scraped by Prometheus
+  serviceMonitor:
+    enabled: false

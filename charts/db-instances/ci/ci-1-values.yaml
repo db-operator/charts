@@ -1,5 +1,7 @@
 dbinstances:
   instance1:
+    serviceMonitor:
+      enabled: true
     engine: postgres
     monitoring:
       enabled: true
@@ -13,6 +15,3 @@ dbinstances:
     secrets:
       adminUser: adminUser
       adminPassword: adminAdmin
-
-serviceMonitor:
-  enabled: true

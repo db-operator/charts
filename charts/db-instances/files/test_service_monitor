@@ -1,0 +1,48 @@
+#!/bin/sh
+# ---------------------------------------------------------------------
+# -- This test should wait for the pg_exporter to be available
+# --  and then try to get the metrics from Prometheus
+# ---------------------------------------------------------------------
+INSTALL_DEPS="${TEST_INSTALL_DEPS}" 
+SCRAPE_INTERVAL="${TEST_SCRAPE_INTERVAL:-30}"
+PROM_URL="${TEST_PROM_URL}"
+QUERY="${TEST_QUERY}"
+ATTEMPTS_AMOUNT="${TEST_ATTEMPTS_AMOUNT:-10}"
+ATTEMPTS_PAUSE="${TEST_ATTEMPTS_PAUSE:-10}"
+if [ -n "${INSTALL_DEPS}" ]
+then 
+  apk update && apk add jq
+fi
+sleep "${SCRAPE_INTERVAL}"
+x=1
+TEST_PASSED=false
+while [ "$x" -le "${ATTEMPTS_AMOUNT}" ]
+do
+  QUERY_URL="http://${PROM_URL}:9090/api/v1/query?query=${QUERY}"
+  CURL_RES=$(curl -q "${QUERY_URL}")
+  STATUS=$(echo "$CURL_RES" | jq -r '.status')
+  if [ "$STATUS" != "success" ]
+  then
+    echo "metric doesn't have a status 'success' in the prometheus"
+    echo "curl output is: $CURL_RES"
+    exit 1
+  fi
+  # -- for some reasont this jq query only works with pips in the pod
+  METRIC_NAME=$(curl -q "${QUERY_URL}" | jq -r '.data.result | .[] | .metric.__name__')
+  if [ "${METRIC_NAME}" != "${QUERY}" ]
+  then
+    echo "query didn't return expected name"
+    echo "${METRIC_NAME}"
+    exit 1
+  else 
+    TEST_PASSED=true
+    break
+  fi
+  x=$(( $x + 1 ));
+  sleep "${ATTEMPTS_PAUSE}"
+done
+
+if [ "${TEST_PASSED}" != "true" ]; then
+  echo "[ERROR]: Test is failed, please check the logsd"
+  exit 1;
+fi

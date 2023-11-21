@@ -1,0 +1,20 @@
+dbinstances:
+  instance1:
+    serviceMonitor:
+      enabled: true
+    engine: postgres
+    monitoring:
+      enabled: true
+    generic:
+      host: postgres-instance-postgresql.postgres
+      port: 5432
+    secrets:
+      adminUser: postgres
+      adminPassword: 123123!!
+tests:
+  serviceMonitor:
+    enabled: true
+    instance: instance1
+    scrapeInterval: 30
+    promURL: prometheus-operated.monitoring
+    query: pg_up
