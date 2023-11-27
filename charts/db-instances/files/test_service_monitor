@@ -17,8 +17,6 @@ fi
 
 sleep "${SCRAPE_INTERVAL}"
 
-TEST_PASSED=false
-
 for x in $(seq 1 "${ATTEMPTS_AMOUNT}")
 do
   echo "attempt: ${x}"
@@ -39,13 +37,12 @@ do
     echo "${METRIC_NAME}"
     exit 1
   else 
-    TEST_PASSED=true
-    break
+    exit 0
   fi
   sleep "${ATTEMPTS_PAUSE}"
 done
 
 if [ "${TEST_PASSED}" != "true" ]; then
-  echo "[ERROR]: Test is failed, please check the logsd"
+  echo "[ERROR]: Test is failed, please check the logs"
   exit 1;
 fi
