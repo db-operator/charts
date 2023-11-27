@@ -45,15 +45,6 @@ spec:
           readOnly: true
           mountPath: /test.sh
           subPath: test.sh
-      env:
-        - name: TEST_INSTALL_DEPS
-          value: 'true'
-        - name: TEST_SCRAPE_INTERVAL
-          value: '{{ .Values.tests.serviceMonitor.scrapeInterval }}'
-        - name: TEST_PROM_URL
-          value: '{{ .Values.tests.serviceMonitor.promURL }}'
-        - name: TEST_QUERY
-          value: '{{ .Values.tests.serviceMonitor.query }}'
       args:
         - /test.sh
   restartPolicy: Never

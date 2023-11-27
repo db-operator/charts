@@ -15,6 +15,3 @@ tests:
   serviceMonitor:
     enabled: true
     instance: instance1
-    scrapeInterval: 30
-    promURL: prometheus-operated.monitoring
-    query: pg_up

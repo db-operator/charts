@@ -3,21 +3,25 @@
 # -- This test should wait for the pg_exporter to be available
 # --  and then try to get the metrics from Prometheus
 # ---------------------------------------------------------------------
-INSTALL_DEPS="${TEST_INSTALL_DEPS}" 
+SKIP_INSTALL_DEPS="${TEST_SKIP_INSTALL_DEPS}"
 SCRAPE_INTERVAL="${TEST_SCRAPE_INTERVAL:-30}"
-PROM_URL="${TEST_PROM_URL}"
-QUERY="${TEST_QUERY}"
+PROM_URL="${TEST_PROM_URL:-prometheus-operated.monitoring}"
+QUERY="${TEST_QUERY:-pg_up}"
 ATTEMPTS_AMOUNT="${TEST_ATTEMPTS_AMOUNT:-10}"
 ATTEMPTS_PAUSE="${TEST_ATTEMPTS_PAUSE:-10}"
-if [ -n "${INSTALL_DEPS}" ]
+
+if [ -n "${SKIP_INSTALL_DEPS+x}" ]
 then 
   apk update && apk add jq
 fi
+
 sleep "${SCRAPE_INTERVAL}"
-x=1
+
 TEST_PASSED=false
-while [ "$x" -le "${ATTEMPTS_AMOUNT}" ]
+
+for x in $(seq 1 "${ATTEMPTS_AMOUNT}")
 do
+  echo "attempt: ${x}"
   QUERY_URL="http://${PROM_URL}:9090/api/v1/query?query=${QUERY}"
   CURL_RES=$(curl -q "${QUERY_URL}")
   STATUS=$(echo "$CURL_RES" | jq -r '.status')
@@ -27,7 +31,7 @@ do
     echo "curl output is: $CURL_RES"
     exit 1
   fi
-  # -- for some reasont this jq query only works with pips in the pod
+  # -- for some reason this jq query only works with pips in the pod
   METRIC_NAME=$(curl -q "${QUERY_URL}" | jq -r '.data.result | .[] | .metric.__name__')
   if [ "${METRIC_NAME}" != "${QUERY}" ]
   then
@@ -38,7 +42,6 @@ do
     TEST_PASSED=true
     break
   fi
-  x=$(( $x + 1 ));
   sleep "${ATTEMPTS_PAUSE}"
 done
 
