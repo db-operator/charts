@@ -44,8 +44,10 @@ spec:
           value: /run/cm/queries/queries.yaml
         - name: PG_EXPORTER_CONSTANT_LABELS
           value: dbinstance={{ $name }}
+        {{- if $value.monitoring.autodiscovery }}
         - name: PG_EXPORTER_AUTO_DISCOVERY
           value: "true"
+        {{- end }}
         image: {{ $exporter.image }}
         imagePullPolicy: Always
         name: exporter

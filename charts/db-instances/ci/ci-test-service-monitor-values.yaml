@@ -4,6 +4,7 @@ dbinstances:
       enabled: true
     engine: postgres
     monitoring:
+      autodiscovery: true
       enabled: true
     generic:
       host: postgres-instance-postgresql.postgres
