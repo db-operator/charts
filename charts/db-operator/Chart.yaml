@@ -2,13 +2,13 @@
 apiVersion: v2
 type: application
 name: db-operator
-version: 1.15.0
+version: 1.16.0
 # ---------------------------------------------------------------------------------
 # -- All supported k8s versions are in the test:
 # --  https://github.com/db-operator/charts/blob/main/.github/workflows/test.yaml
 # ---------------------------------------------------------------------------------
 kubeVersion: ">= 1.22-prerelease"
-appVersion: "2.0.0"
+appVersion: "2.1.0"
 description: The DB Operator creates databases and make them available in the cluster via Custom Resource.
 home: https://github.com/db-operator/db-operator
 
