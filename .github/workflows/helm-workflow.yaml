@@ -26,6 +26,7 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --target-branch main --validate-maintainers=false
   test-values:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,7 +36,7 @@ jobs:
           cd charts/db-operator
           ./scripts/test_values -p ./ci/unit-test
   test:
-    needs: lint
+    needs: test-values
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -115,6 +116,7 @@ jobs:
         #   run: make test-upgrade-instances
   release:
     runs-on: ubuntu-latest
+    needs: test
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
