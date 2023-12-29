@@ -81,6 +81,8 @@ rules:
   - get
   - create
   - update
+  - list
+  - watch
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
