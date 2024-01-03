@@ -1,0 +1,32 @@
+#!/bin/env bash
+
+# Get the current db-operator version
+VERSION=$(yq .appVersion Chart.yaml)
+echo $VERSION
+
+CURRENT_DIR=${PWD}
+CRD_DIR="${PWD}/templates/crds"
+mkdir "${CRD_DIR}"
+
+# Prepare the db-operator repo 
+cd /tmp
+git clone git@github.com:db-operator/db-operator.git dbo
+cd dbo
+git checkout "v${VERSION}"
+
+# Generate CRDs
+for crd in $(find config/crd/bases -type f); do
+	export CRD_SPEC=$(yq '.spec' $crd | yamlfmt - | sed -e 's/^/  /')
+	export CRD_NAME=$(yq '.metadata.name' $crd)
+	export CRD_CONTROLLER_GEN_VERSION=$(yq '.metadata.annotations."controller-gen.kubebuilder.io/version"' $crd)
+	CRD_PLURAL_NAME=$(yq '.spec.names.plural' $crd)
+	export CRD_CONVERSION_VERSIONS=$(yq '.spec.conversion.webhook.conversionReviewVersions' \
+		./config/crd/patches/webhook_in_$CRD_PLURAL_NAME.yaml | sed -e 's/^/        /')
+	WEBHOOK_FILE_NAME="webhook_in_${CRD_PLURAL_NAME}.yaml"
+	envsubst < $CURRENT_DIR/scripts/crd.tmpl > $CRD_DIR/$CRD_NAME.yaml
+done
+
+# Cleanup
+rm -rf /tmp/dbo
+
+
