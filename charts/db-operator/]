@@ -17,13 +17,16 @@ while [ $x -le "${ATTEMPTS_AMOUNT}" ]; do
     if ! kubectl get crd $CRD; then
       SUCCESS=false
     fi;
-    if [ "${SUCCESS}" == "${INSTALLED}" ]; then
-      echo "[INFO]: Test is passed, ${CRD} installed -> ${INSTALLED}"
+    echo "${INSTALLED}"
+    echo "${SUCCESS}"
+    if [ "${SUCCESS}" == "${INSTALLED}" ]; then  
+      echo "[INFO]: Test is passed, CRDs installed -> ${INSTALLED}"
       TEST_PASSED=true;
     else
       TEST_PASSED=false
       break
     fi
+    echo $TEST_PASSED
   done
   if [ "${TEST_PASSED}" == "true" ]; then
     exit 1
