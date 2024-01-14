@@ -65,6 +65,7 @@ jobs:
           check-latest: true
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
+      # It's not used anymore, but it's a small step, maybe we'll need it in the future, so let it be here
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
@@ -75,7 +76,6 @@ jobs:
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v1.2.0
       - name: Prepare a config for the kind cluster
-        if: steps.list-changed.outputs.changed == 'true'
         run: |
           cat > kind-config.yaml <<EOF
           # three node (two workers) cluster config
@@ -87,13 +87,11 @@ jobs:
             - role: worker
           EOF
       - name: Create kind cluster
-        if: steps.list-changed.outputs.changed == 'true'
         uses: helm/kind-action@v1.7.0
         with:
           node_image: kindest/node:${{ matrix.k8s_version }}
           config: ./kind-config.yaml
       - name: Test db-operator charts install
-        if: steps.list-changed.outputs.changed == 'true'
         run: |
           helmfile -l name=prometheus-stack sync
           helmfile sync
@@ -103,7 +101,6 @@ jobs:
       # - name: Test db-operator charts upgrade
       #   run: make test-upgrade
       - name: Test db-instances charts install
-        if: steps.list-changed.outputs.changed == 'true'
         run: |
           helmfile -l name=prometheus-stack sync
           helmfile sync -e instances
