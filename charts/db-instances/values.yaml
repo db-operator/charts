@@ -175,9 +175,6 @@ postgresql:
 # --  don't have an intention of testing the helm chart
 # ---------------------------------------------------------------------
 tests:
-  helmfile:
-    enabled: false
-    version: v0.150.0
   # Test that service monitor can be created
   # and metrics can be scraped by Prometheus
   serviceMonitor:

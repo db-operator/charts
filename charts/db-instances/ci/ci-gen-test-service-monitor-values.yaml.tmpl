@@ -13,9 +13,6 @@ dbinstances:
       adminUser: postgres
       adminPassword: 123123!!
 tests:
-  helmfile:
-    enabled: true
-    gitBranch: ${GIT_BRANCH}
   serviceMonitor:
     enabled: true
     instance: instance1
