@@ -1,10 +1,10 @@
 {{- if (((.Values.tests).serviceMonitor).enabled) }}
 # ---------------------------------------------------------------------
-# -- a config map with a script to test servicemonitor
+# -- A config map with a script to test serviceMonitor
 # ---------------------------------------------------------------------
 --- 
-apiversion: v1
-kind: configmap
+apiVersion: v1
+kind: ConfigMap
 metadata:
   name: {{ include "db-instances.fullname" . }}-test-prom-script
   labels:
@@ -17,8 +17,8 @@ data:
 {{ (.Files.Glob "files/*").AsConfig | indent 2 }}
 
 ---
-apiversion: v1
-kind: pod
+apiVersion: v1
+kind: Pod
 metadata:
   name: "{{ include "db-instances.fullname" . }}-test-prom"
   labels:
@@ -30,19 +30,19 @@ metadata:
 spec:
   volumes:
     - name: test-script
-      configmap:
+      configMap:
         name: "{{ include "db-instances.fullname" . }}-test-prom-script"
   containers:
     - name: check-metrics-endpoint
       image: alpine/curl
       command:
         - sh
-      volumemounts:
+      volumeMounts:
         - name: test-script
-          readonly: true
-          mountpath: /test_service_monitor
-          subpath: test_service_monitor
+          readOnly: true
+          mountPath: /test_service_monitor
+          subPath: test_service_monitor
       args:
         - /test.sh
-  restartpolicy: never
+  restartPolicy: Never
 {{- end}}
