@@ -1,4 +1,4 @@
-{{- if .Values.tests.postgresql.enabled }}
+{{- if has "postgresql" .Values.tests.enabled }} 
 ---
 apiVersion: v1
 kind: Secret

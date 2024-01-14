@@ -2,8 +2,7 @@ reconcileInterval: "10"
 crds:
   keep: false
 tests:
-  scripts:
-    enabled: true
+  enabled:
+    - crds
   crds:
-    enabled: true
     installed: true

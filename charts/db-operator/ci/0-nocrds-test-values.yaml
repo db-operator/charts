@@ -3,8 +3,7 @@ crds:
   keep: false
   install: false
 tests:
-  scripts:
-    enabled: true
+  enabled:
+    - crds
   crds:
-    enabled: true
     installed: false

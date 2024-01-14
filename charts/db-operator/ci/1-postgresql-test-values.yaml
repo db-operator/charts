@@ -4,8 +4,9 @@ crds:
   keep: false
 
 tests:
+  enabled: 
+    - postgresql
   postgresql:
-    enabled: true
     admin:
       password: 123123!!
       user: postgres

@@ -32,10 +32,9 @@ secrets:
       }
 
 tests:
-  scripts:
-    enabled: true
+  enabled:
+    - gsql
   gsql:
-    enabled: true
     cloudishSQL:
       image:
         repository: ghcr.io/db-operator/cloudish-sql

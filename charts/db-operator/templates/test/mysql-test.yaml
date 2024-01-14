@@ -1,4 +1,4 @@
-{{- if .Values.tests.mysql.enabled }}
+{{- if has "mysql" .Values.tests.enabled }} 
 ---
 apiVersion: v1
 kind: Secret

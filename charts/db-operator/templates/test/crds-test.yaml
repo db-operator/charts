@@ -1,5 +1,5 @@
 {{- $version := semver .Capabilities.KubeVersion.Version }}
-{{- if .Values.tests.crds.enabled }}
+{{- if has "crds" .Values.tests.enabled }} 
 # ---------------------------------------------------------------------
 # -- Test that CRDs are installed
 # ---------------------------------------------------------------------

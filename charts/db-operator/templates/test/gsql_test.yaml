@@ -1,5 +1,5 @@
 {{- $version := semver .Capabilities.KubeVersion.Version }}
-{{- if .Values.tests.gsql.enabled }}
+{{- if has "gsql" .Values.tests.enabled }} 
 # ---------------------------------------------------------------------
 # -- Test Google API requests with cloudish-sql
 # -- https://github.com/db-operator/cloudish-sql

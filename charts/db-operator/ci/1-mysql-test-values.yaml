@@ -4,8 +4,9 @@ crds:
   keep: false
 
 tests:
+  enabled:
+    - mysql
   mysql:
-    enabled: true
     admin:
       password: 123123!!
       user: root

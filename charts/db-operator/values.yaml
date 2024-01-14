@@ -157,16 +157,7 @@ service:
 # -- These values are used in tests, they should not affect users
 # ---------------------------------------------------------------------
 tests:
-  scripts:
-    enabled: false
-  gsql:
-    enabled: false
-  mysql:
-    enabled: false
-  postgresql:
-    enabled: false
-  crds:
-    enabled: false
+  enabled: [] 
   attempts:
     amount: 10
     timeout: 30
