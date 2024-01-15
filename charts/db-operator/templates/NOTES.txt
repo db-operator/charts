@@ -48,7 +48,7 @@ It's not required by db-operator to work, but if you want to have the
 webhook in place, you can set ".Values.webhook.enabled" to "true"
 {{- end }}
 
-{{- if .Values.tests.gsql.enabled }}
+{{- if has "gsql" .Values.tests.enabled }}
 -----------------------------------------------------------------------
 You seem to have the gsql test set to true, usually, 
 it shouldn't be done.
@@ -56,10 +56,10 @@ it shouldn't be done.
 Make sure that you want to run tests, and not using this installation
 in production in any form.
 
-Or set '.Values.tests.gsql.enabled' to 'false'
+Or remove 'gsql' '.Values.tests.enabled'
 {{- end }}
 
-{{- if .Values.tests.postgresql.enabled }}
+{{- if has "postgresql" .Values.tests.enabled }}
 -----------------------------------------------------------------------
 You seem to have the postgresql test set to true, usually, 
 it shouldn't be done.
@@ -67,13 +67,13 @@ it shouldn't be done.
 Make sure that you want to run tests, and not using this installation
 in production in any form.
 
-Or set '.Values.tests.postgresql.enabled' to 'false'
+Or remove 'postgresql' .Values.tests.enabled'
 
 Also, if you want to test your postgresql installation, you need to 
 provide a postgres server yourself. Test itself doesn't deploy a server
 {{- end }}
 
-{{- if .Values.tests.mysql.enabled }}
+{{- if has "mysql" .Values.tests.enabled }}
 -----------------------------------------------------------------------
 You seem to have the mysql test set to true, usually, 
 it shouldn't be done.
@@ -81,13 +81,13 @@ it shouldn't be done.
 Make sure that you want to run tests, and not using this installation
 in production in any form.
 
-Or set '.Values.tests.mysql.enabled' to 'false'
+Or remove 'mysql' '.Values.tests.enabled'
 
 Also, if you want to test your mysql installation, you need to 
 provide a mysql server yourself. Test itself doesn't deploy a server
 {{- end }}
 
-{{- if .Values.tests.crds.enabled }}
+{{- if has "crds" .Values.tests.enabled }}
 -----------------------------------------------------------------------
 You seem to have the crds test set to true, usually, 
 it shouldn't be done.
@@ -96,7 +96,7 @@ it shouldn't be done.
 in the cluster, so make sure that you want to run tests, 
 and not using this installation.
 
-Or set '.Values.tests.crds.enabled' to 'false'
+Or remove 'crds' '.Values.tests.enabled'
 {{- end }}
 
 
