@@ -39,9 +39,6 @@ test-instances: helmfile-instances ## test helm charts
 test-upgrade-instances: helmfile-instances ## test helm charts
 	ct install --upgrade --target-branch main --charts ./charts/db-instances
 
-yamlfmt:
-	for file in $(shell find charts -type d -name templates -prune -o -name '*.yaml' -print); do yamlfmt $file; done
-
 .PHONY: gen_docs
 gen-docs: ## Generate helm documentation
 	test -s $(LOCALBIN)/setup-envtest || GOBIN=$(LOCALBIN_DIR) go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest

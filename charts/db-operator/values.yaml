@@ -162,8 +162,3 @@ tests:
     amount: 10
     timeout: 30
   cleanup: true
-
-
-
-
-
