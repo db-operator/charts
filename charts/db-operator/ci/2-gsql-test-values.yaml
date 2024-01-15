@@ -1,7 +1,6 @@
 reconcileInterval: "10"
 crds:
   keep: false
-
 secrets:
   gsql:
     admin: |
@@ -30,7 +29,6 @@ secrets:
         "auth_provider_x509_cert_url": "",
         "client_x509_cert_url": ""
       }
-
 tests:
   enabled:
     - gsql

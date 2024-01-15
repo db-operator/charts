@@ -1,8 +1,6 @@
 reconcileInterval: "10"
-
 crds:
   keep: false
-
 tests:
   enabled:
     - mysql

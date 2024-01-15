@@ -1,6 +1,5 @@
 crds:
   keep: false
-
 resources:
   limits:
     cpu: 10m
@@ -8,14 +7,11 @@ resources:
   requests:
     cpu: 10m
     memory: 32Mi
-
 annotations:
   some.custom.annotation: "*"
-
 podLabels:
   key1: value-one
   key2: value-two
-
 config:
   instance:
     google:
@@ -40,10 +36,8 @@ config:
       image: wrouesnel/postgres_exporter:latest
       queries:
         pg_stat_statements: {}
-
 secrets:
   gsql: {}
-
 serviceMonitor:
   enabled: false
   interval: 10s
@@ -64,7 +58,6 @@ relabelings:
     targetLabel: nodename
     replacement: $1
     action: replace
-
 service:
   annotations: {}
   type: ClusterIP

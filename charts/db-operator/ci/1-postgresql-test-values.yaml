@@ -1,10 +1,8 @@
 reconcileInterval: "10"
-
 crds:
   keep: false
-
 tests:
-  enabled: 
+  enabled:
     - postgresql
   postgresql:
     admin:

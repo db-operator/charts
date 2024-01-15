@@ -39,7 +39,9 @@ $ helm uninstall db-operator
 If you have CRDs installed by the chart, you will also have to run something like:
 
 ```console
-$ for crd in $(kubectl get crds | awk '{print $1}' | grep 'kinda.rocks'); do kubectl get crd "${crd}"; done
+# !!! This command will remove all kinda.rocks CRDs from the cluster,
+#     so please make sure that you really want to run it
+$ for crd in $(kubectl get crds | awk '{print $1}' | grep 'kinda.rocks'); do kubectl delete crd "${crd}"; done
 ```
 
 ## Why are we packaging CRDs in templates?

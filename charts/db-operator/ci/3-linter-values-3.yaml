@@ -1,18 +1,13 @@
 crds:
   keep: false
-
 image:
   repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
-
 reconcileInterval: "60"
-
 rbac:
   create: true
-
 serviceAccount:
   create: true
-
 resources:
   limits:
     cpu: 10m
@@ -20,14 +15,11 @@ resources:
   requests:
     cpu: 10m
     memory: 32Mi
-
 annotations:
   some.custom.annotation: "*"
-
 podLabels:
   key1: value-one
   key2: value-two
-
 config:
   instance:
     google:
@@ -80,7 +72,6 @@ config:
             - rows:
                 usage: "COUNTER"
                 description: "Total number of rows retrieved or affected by the statement"
-
 secrets:
   gsql:
     admin: |
@@ -109,7 +100,6 @@ secrets:
         "auth_provider_x509_cert_url": "",
         "client_x509_cert_url": ""
       }
-
 serviceMonitor:
   enabled: false
   interval: 10s
@@ -130,7 +120,6 @@ relabelings:
     targetLabel: nodename
     replacement: $1
     action: replace
-
 service:
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp

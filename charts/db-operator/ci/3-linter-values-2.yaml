@@ -1,22 +1,14 @@
 crds:
   keep: false
-
 image:
   repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
-
 reconcileInterval: "60"
-
 rbac: {}
-
 serviceAccount: {}
-
 resources: {}
-
 nodeSelector: {}
-
 annotations: {}
-
 config:
   instance:
     google:
@@ -70,12 +62,10 @@ config:
             - rows:
                 usage: "COUNTER"
                 description: "Total number of rows retrieved or affected by the statement"
-
 secrets:
   gsql:
     admin: "sa-json"
     readonly: "sa-json"
-
 serviceMonitor:
   enabled: false
   interval: 10s
@@ -96,7 +86,6 @@ relabelings:
     targetLabel: nodename
     replacement: $1
     action: replace
-
 service:
   annotations: {}
   type: ClusterIP
