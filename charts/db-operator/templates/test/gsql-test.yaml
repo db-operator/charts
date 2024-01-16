@@ -1,10 +1,10 @@
 {{- $version := semver .Capabilities.KubeVersion.Version }}
-{{- if has "gsql" .Values.tests.enabled }} 
+{{- if has "gsql" .Values.tests.enabled }}
 # ---------------------------------------------------------------------
 # -- Test Google API requests with cloudish-sql
 # -- https://github.com/db-operator/cloudish-sql
-# -- 
-# -- The script that is running checks is added to a configmap, and 
+# --
+# -- The script that is running checks is added to a configmap, and
 # --  later exexuted in pod. If you want to see the logic of this test,
 # --  please, go to the bottom of the file and find a configmap with
 # --  with a bash script
@@ -49,7 +49,7 @@ spec:
           command:
             - /usr/local/bin/cloudish-sql
             - --db-address=pg-test-db:5432
-            
+
 ---
 apiVersion: v1
 kind: Service
@@ -109,7 +109,7 @@ data:
   config: |
 {{ .Values.tests.gsql.dbin.instanceConfig.data | indent 4 }}
 
---- 
+---
 # ---------------------------------------------------------------------
 # -- Prepare roles and bindings to access k8s resources from the test
 # ---------------------------------------------------------------------
@@ -225,10 +225,10 @@ spec:
           readOnly: true
           mountPath: /test_gsql
           subPath: test_gsql
-      env: 
+      env:
         - name: TEST_DB_INSTANCE_NAME
-          value: {{ template "db-operator.name" . }}-gsql-instance 
-      command: 
+          value: {{ template "db-operator.name" . }}-gsql-instance
+      command:
         - bash
       args:
         - -e
