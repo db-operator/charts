@@ -3,18 +3,16 @@ set -e
 # ---------------------------------------------------------------------
 # -- This script is checking whether CRDS are installed or not
 # ---------------------------------------------------------------------
-ATTEMPTS_AMOUNT="${TEST_ATTEMPTS_AMOUNT:-10}" 
-ATTEMPTS_TIMEOUT="${TEST_ATTEMPTS_TIMEOUT:-30}" 
-INSTALLED="${TEST_INSTALLED:-true}" 
+ATTEMPTS_AMOUNT="${TEST_ATTEMPTS_AMOUNT:-10}"
+ATTEMPTS_TIMEOUT="${TEST_ATTEMPTS_TIMEOUT:-30}"
+INSTALLED="${TEST_INSTALLED:-true}"
 CRDS=("databases.kinda.rocks" "dbinstances.kinda.rocks" "dbusers.kinda.rocks")
-EXPECTED_STATUS=1
 TEST_PASSED=false
-x=1
 
-while [ $x -le "${ATTEMPTS_AMOUNT}" ]; do
+for _ in $(seq 1 "${ATTEMPTS_AMOUNT}"); do
   for CRD in "${CRDS[@]}"; do
     SUCCESS=true
-    if ! kubectl get crd $CRD; then
+    if ! kubectl get crd "$CRD"; then
       SUCCESS=false
     fi;
     if [ "${SUCCESS}" == "${INSTALLED}" ]; then
@@ -29,10 +27,9 @@ while [ $x -le "${ATTEMPTS_AMOUNT}" ]; do
     exit 0
   fi
   echo "[INFO]: Sleeping ${ATTEMPTS_TIMEOUT} seconds"
-  sleep $ATTEMPTS_TIMEOUT
-  x=$(( $x + 1 ));
+  sleep "$ATTEMPTS_TIMEOUT"
 done
 
 echo "[ERROR]: Test is failed, check the kubectl get crds output"
-echo $(kubectl get crds)
+kubectl get crds
 exit 1;

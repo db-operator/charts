@@ -1,16 +1,16 @@
 {{- $version := semver .Capabilities.KubeVersion.Version }}
-{{- if has "crds" .Values.tests.enabled }} 
+{{- if has "crds" .Values.tests.enabled }}
 # ---------------------------------------------------------------------
 # -- Test that CRDs are installed
 # ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
 # -- Prepare roles and bindings to access k8s resources from the test
 # ---------------------------------------------------------------------
---- 
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "db-operator.name" . }}-gsql-dbin-role
+  name: {{ template "db-operator.name" . }}-dbin-role
   labels:
     {{- include "labels" . | nindent 4 }}
   annotations:
@@ -28,7 +28,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  name: {{ template "db-operator.name" . }}-dbin-sa
   labels:
     {{- include "labels" . | nindent 4 }}
   annotations:
@@ -54,11 +54,11 @@ metadata:
     "helm.sh/hook-weight": "1"
 subjects:
 - kind: ServiceAccount
-  name: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  name: {{ template "db-operator.name" . }}-dbin-sa
   namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ template "db-operator.name" . }}-gsql-dbin-role
+  name: {{ template "db-operator.name" . }}-dbin-role
   apiGroup: rbac.authorization.k8s.io
 
 ---
@@ -75,7 +75,7 @@ metadata:
     {{- end }}
     "helm.sh/hook-weight": "7"
 spec:
-  serviceAccountName: {{ template "db-operator.name" . }}-gsql-dbin-sa
+  serviceAccountName: {{ template "db-operator.name" . }}-dbin-sa
   automountServiceAccountToken: true
   volumes:
     - name: test-script
@@ -89,10 +89,10 @@ spec:
           readOnly: true
           mountPath: /test_crds
           subPath: test_crds
-      env: 
+      env:
         - name: TEST_INSTALLED
           value: "{{ .Values.tests.crds.installed }}"
-      command: 
+      command:
         - bash
       args:
         - -e

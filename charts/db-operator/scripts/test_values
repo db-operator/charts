@@ -3,8 +3,8 @@ set -e
 
 # -----------------------------------------------------------------------
 # -- It's a script that should check if values are working correctly
-# -- 
-# -- It's not checking the content of generated files, but only checks 
+# --
+# -- It's not checking the content of generated files, but only checks
 # --  which files are generated (currently)
 # --
 # -- This scripts requires go-yq and helm
@@ -12,7 +12,7 @@ set -e
 
 function usage() {
     cat <<EOF
-    Please provide 1 arguments 
+    Please provide 1 arguments
     	- -p | a path to the dir with tests files
     EG:
       ./scripts/test_values -p ./ci/unit-test
@@ -28,11 +28,11 @@ do
             ;;
         \:) usage
             ;;
-        \?) usage 
+        \?) usage
             ;;
         esac >&2
     done
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 if [ -z "${VALUES_PATH}" ]; then
     echo VALUES_PATH is not set
@@ -41,13 +41,12 @@ fi
 
 
 CURRENT_DIR=$(pwd)
-ERROR=false
-for FILE in $(find $VALUES_PATH -type f); do
+find "$VALUES_PATH" -type f | while read -r FILE; do
     WORKDIR=$(mktemp -d)
     echo "Checking $FILE"
-    cd $WORKDIR
+    cd "$WORKDIR"
     yq '.values' "$CURRENT_DIR/$FILE" > values.yaml
-    helm template db-operator $CURRENT_DIR -f values.yaml | yq -s '.kind + "-" + .metadata.name'
+    helm template db-operator "$CURRENT_DIR" -f values.yaml | yq -s '.kind + "-" + .metadata.name'
     rm -f values.yaml
     ACTUAL_FILES=($(ls $WORKDIR))
     EXPECTED_FILES=($(yq '.files[]' $CURRENT_DIR/$FILE))
@@ -56,11 +55,7 @@ for FILE in $(find $VALUES_PATH -type f); do
         echo "PASSED"
         rm -rf "${WORKDIR}"
     else
-        ERROR=true
         echo "FAILED: Please check unexpected files -> ${DIFF[*]}"
+        exit 1
     fi
 done
-
-if $ERROR; then
-    exit 1
-fi
