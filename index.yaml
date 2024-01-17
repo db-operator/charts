@@ -3,15 +3,6 @@ entries:
   db-instances:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2023-12-16T21:49:16.079255037Z"
-    description: Database Instances for db operator
-    digest: 6422190aa104deb74167795acf518bf7b6437c051e9c1aaa3bc218006b236fc4
-    name: db-instances
-    urls:
-    - https://github.com/db-operator/charts/releases/download/db-instances-2.2.0/db-instances-2.2.0.tgz
-    version: 2.2.0
-  - apiVersion: v1
-    appVersion: "1.0"
     created: "2023-11-29T15:39:52.948518426Z"
     description: Database Instances for db operator
     digest: c700eeb6ff8151ed96775c20cf804f7afe4f7aa3191063c9655e74ba6910156a
