@@ -1,7 +1,7 @@
 apiVersion: v2
 type: application
 name: db-operator
-version: 1.17.0
+version: 1.17.1
 # ---------------------------------------------------------------------------------
 # -- All supported k8s versions are in the test:
 # --  https://github.com/db-operator/charts/blob/main/.github/workflows/test.yaml
