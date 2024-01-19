@@ -1,5 +1,11 @@
 name: Helm
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 env:
   HELM_VERSION: v3.12.1
   PYTHON_VERSION: 3.9
