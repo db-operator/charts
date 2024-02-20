@@ -22,16 +22,31 @@ The Chart name: {{ .Chart.Name }}.
 The Repo URL: https://db-operator.github.io/charts
 The Release name {{ .Release.Name }}.
 -----------------------------------------------------------------------
-Breaking changes and migration paths
+Breaking changes and migration paths:
 
-{{ .Chart.Version }} is not breaking, you don't have to worry 
+{{ .Chart.Version }} is not breaking, you don't have to worry
+
+Noticeable and important changes:
+
+In {{ .Chart.Version }} google instances are deprecated, they will be
+removed in the next API version (v1beta2)
+
+Please see this issue:
+  https://github.com/db-operator/db-operator/issues/96
+
+We will not remove google instances support within next 6 months after
+{{ .Release.Version }} is released, so users should have enough time
+for migration.
+
+If you have questions, please feel free to create issues here:
+  https://github.com/db-operator/db-operator/issues/96
 
 {{- if not .Values.crds.install }}
 -----------------------------------------------------------------------
 You've chosen not to install CRDs with this release.
 
-We officially do not distribute CRDs outside of this helm chart, so 
-you will have to deal with that on your own. 
+We officially do not distribute CRDs outside of this helm chart, so
+you will have to deal with that on your own.
 
 If it was a mistake, update the values so they contain the following:
 
@@ -41,16 +56,16 @@ If it was a mistake, update the values so they contain the following:
 {{- if not .Values.webhook.enabled }}
 -----------------------------------------------------------------------
 You've chosen not to install and configure the webhook.
-Your "kinda.rocks" manifests won't be validated and converted when 
+Your "kinda.rocks" manifests won't be validated and converted when
 the API version is upgraded.
 
-It's not required by db-operator to work, but if you want to have the 
+It's not required by db-operator to work, but if you want to have the
 webhook in place, you can set ".Values.webhook.enabled" to "true"
 {{- end }}
 
 {{- if has "gsql" .Values.tests.enabled }}
 -----------------------------------------------------------------------
-You seem to have the gsql test set to true, usually, 
+You seem to have the gsql test set to true, usually,
 it shouldn't be done.
 
 Make sure that you want to run tests, and not using this installation
@@ -61,7 +76,7 @@ Or remove 'gsql' '.Values.tests.enabled'
 
 {{- if has "postgresql" .Values.tests.enabled }}
 -----------------------------------------------------------------------
-You seem to have the postgresql test set to true, usually, 
+You seem to have the postgresql test set to true, usually,
 it shouldn't be done.
 
 Make sure that you want to run tests, and not using this installation
@@ -69,13 +84,13 @@ in production in any form.
 
 Or remove 'postgresql' .Values.tests.enabled'
 
-Also, if you want to test your postgresql installation, you need to 
+Also, if you want to test your postgresql installation, you need to
 provide a postgres server yourself. Test itself doesn't deploy a server
 {{- end }}
 
 {{- if has "mysql" .Values.tests.enabled }}
 -----------------------------------------------------------------------
-You seem to have the mysql test set to true, usually, 
+You seem to have the mysql test set to true, usually,
 it shouldn't be done.
 
 Make sure that you want to run tests, and not using this installation
@@ -83,17 +98,17 @@ in production in any form.
 
 Or remove 'mysql' '.Values.tests.enabled'
 
-Also, if you want to test your mysql installation, you need to 
+Also, if you want to test your mysql installation, you need to
 provide a mysql server yourself. Test itself doesn't deploy a server
 {{- end }}
 
 {{- if has "crds" .Values.tests.enabled }}
 -----------------------------------------------------------------------
-You seem to have the crds test set to true, usually, 
+You seem to have the crds test set to true, usually,
 it shouldn't be done.
 
 !! This test uses a ClusterRole that has an access to all the resoucres
-in the cluster, so make sure that you want to run tests, 
+in the cluster, so make sure that you want to run tests,
 and not using this installation.
 
 Or remove 'crds' '.Values.tests.enabled'
