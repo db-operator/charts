@@ -52,10 +52,22 @@ spec:
   {{- end }}
   {{- if $value.generic }}
   generic:
-    host: {{ $value.generic.host }}
-    port: {{ $value.generic.port }}
+    hostFrom:
+      kind: ConfigMap
+      name: {{ $name }}-config
+      namespace {{ $.Release.Namespace }}
+      key: host
+    portFrom:
+      kind: ConfigMap
+      name: {{ $name }}-config
+      namespace {{ $.Release.Namespace }}
+      key: port
   {{- if $value.generic.publicIp }}
-    publicIp: {{ $value.generic.publicIp }}
+    publicIpFrom:
+      kind: ConfigMap
+      name: {{ $name }}-config
+      namespace {{ $.Release.Namespace }}
+      key: publicIp
   {{- end }}
   {{- if $value.generic.backupHost }}
     backupHost: {{ $value.generic.backupHost }}
@@ -76,7 +88,6 @@ data:
   password: {{ $value.secrets.adminPassword | b64enc }}
 {{- end }}
 ---
-{{- if $value.google }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -85,8 +96,19 @@ metadata:
   labels:
     {{- include "db-instances.labels" $ | nindent 4 }}
 data:
+{{- if $value.google }}
   config: |
     {{ $value.google.configMap.data | nindent 4 }}
+{{- end }}
+{{- if $value.generic }}
+  host: {{ $value.generic.host }}
+  port: {{ $value.generic.port }}
+  {{- if $value.generic.publicIp }}
+  publicIp: {{ $value.generic.publicIp }}
+  {{- end }}
+{{- end }}
+
+{{- if $value.google }}
 {{- if $value.google.clientSecret }}
 ---
 apiVersion: v1
