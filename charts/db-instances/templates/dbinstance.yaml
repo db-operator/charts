@@ -55,18 +55,18 @@ spec:
     hostFrom:
       kind: ConfigMap
       name: {{ $name }}-config
-      namespace {{ $.Release.Namespace }}
+      namespace: {{ $.Release.Namespace }}
       key: host
     portFrom:
       kind: ConfigMap
       name: {{ $name }}-config
-      namespace {{ $.Release.Namespace }}
+      namespace: {{ $.Release.Namespace }}
       key: port
   {{- if $value.generic.publicIp }}
     publicIpFrom:
       kind: ConfigMap
       name: {{ $name }}-config
-      namespace {{ $.Release.Namespace }}
+      namespace: {{ $.Release.Namespace }}
       key: publicIp
   {{- end }}
   {{- if $value.generic.backupHost }}
