@@ -102,7 +102,7 @@ data:
 {{- end }}
 {{- if $value.generic }}
   host: {{ $value.generic.host }}
-  port: {{ $value.generic.port }}
+  port: {{ $value.generic.port | quote }}
   {{- if $value.generic.publicIp }}
   publicIp: {{ $value.generic.publicIp }}
   {{- end }}
