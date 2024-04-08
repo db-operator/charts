@@ -103,9 +103,12 @@ jobs:
           helmfile sync
           ct install --target-branch main --charts ./charts/db-operator
           helmfile destroy
-      # -- TODO: Enable it when new tests are used in main
-      # - name: Test db-operator charts upgrade
-      #   run: make test-upgrade
+      - name: Test db-operator charts upgrade
+        run: |
+          helmfile -l name=prometheus-stack sync
+          helmfile sync
+          ct install --target-branch main --charts ./charts/db-operator --upgrade
+          helmfile destroy
       - name: Test db-instances charts install
         run: |
           helmfile -l name=prometheus-stack sync
@@ -114,9 +117,14 @@ jobs:
           kubectl rollout status deploy/db-operator-webhook -n db-operator
           ct install --target-branch main --charts ./charts/db-instances
           helmfile destroy
-        # -- TODO: Enable it when new tests are used in main
-        # - name: Test db-instances charts upgrade
-        #   run: make test-upgrade-instances
+      - name: Test db-instances charts install
+        run: |
+          helmfile -l name=prometheus-stack sync
+          helmfile sync -e instances
+          kubectl rollout status deploy/db-operator -n db-operator
+          kubectl rollout status deploy/db-operator-webhook -n db-operator
+          ct install --target-branch main --charts ./charts/db-instances --upgrade
+          helmfile destroy
   release:
     runs-on: ubuntu-latest
     needs: test
