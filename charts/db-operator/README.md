@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 1.18.0](https://img.shields.io/badge/Version-1.18.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.2.0](https://img.shields.io/badge/AppVersion-2.2.0-informational?style=flat-square)
+![Version: 1.22.0](https://img.shields.io/badge/Version-1.22.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.5.0](https://img.shields.io/badge/AppVersion-2.5.0-informational?style=flat-square)
 
 The DB Operator creates databases and make them available in the cluster via Custom Resource.
 
@@ -112,7 +112,8 @@ We use helm tests feature for testing the chart in CI. Though we know that this 
 | webhook.certificate.issuer.create | bool | `true` |  |
 | webhook.certificate.issuer.name | string | `"db-operator-issuer"` |  |
 | webhook.certificate.issuer.kind | string | `"Issuer"` | --------------------------------------- |
-| security | object | `{}` |  |
+| podSecurityContext | object | `{"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | Configure the security context for the operator pods |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}` | Configure the security context for the operator container |
 | resources | object | `{}` |  |
 | nodeSelector | object | `{}` |  |
 | annotations | object | `{}` |  |
