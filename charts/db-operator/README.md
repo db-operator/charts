@@ -169,6 +169,13 @@ After changing default `Values`, please execute `make gen_docs` to update the `R
 If there is an breaking change, or something that might make the upgrade complicated, it should be described here
 
 <details>
+  <summary>To `v1.24.0`</summary>
+
+The `Database` CRD now includes the version of the db-operator that ran the last full reconciliation in the required status field `operatorVersion`. This change can help with debugging problems with the db-operator, as previously it wasn't always clear whether an expected fix from a db-operator upgrade had been applied to the databases. If you manage CRDs outside the chart, make sure you update them, otherwise your deployment may break.
+
+</details>
+
+<details>
   <summary>To `v1.11.0`</summary>
 Additional selectors were added to the default templates in an attempt to follow the same labelling scheme everywhere, but since selectors are immutable, the upgrade will require removing of the db-operator deployment.
 
