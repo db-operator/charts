@@ -24,22 +24,12 @@ The Release name {{ .Release.Name }}.
 -----------------------------------------------------------------------
 Breaking changes and migration paths:
 
-{{ .Chart.Version }} is not breaking, you don't have to worry
+{{ .Chart.Version }} introduces a new status field "operatorVersion" 
+to the Database CRD. This change is not breaking if your CRDs are
+managed by this Helm chart. Otherwise if you're deploying them separately, 
+please read the migration plan below:
 
-Noticeable and important changes:
-
-In {{ .Chart.Version }} google instances are deprecated, they will be
-removed in the next API version (v1beta2)
-
-Please see this issue:
-  https://github.com/db-operator/db-operator/issues/96
-
-We will not remove google instances support within next 6 months after
-{{ .Release.Version }} is released, so users should have enough time
-for migration.
-
-If you have questions, please feel free to create issues here:
-  https://github.com/db-operator/db-operator/issues/96
+https://github.com/db-operator/charts/tree/main/charts/db-operator#upgrading
 
 {{- if not .Values.crds.install }}
 -----------------------------------------------------------------------
