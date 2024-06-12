@@ -89,8 +89,7 @@ spec:
                     - Namespace
                   type: object
                 backup:
-                  description: DbInstanceBackup defines name of google bucket to use
-                    for storing database dumps for backup when backup is enabled
+                  description: DbInstanceBackup defines name of google bucket to use for storing database dumps for backup when backup is enabled
                   properties:
                     bucket:
                       type: string
@@ -98,8 +97,7 @@ spec:
                     - bucket
                   type: object
                 engine:
-                  description: 'Important: Run "make generate" to regenerate code after
-                  modifying this file'
+                  description: 'Important: Run "make generate" to regenerate code after modifying this file'
                   type: string
                 generic:
                   description: |-
@@ -171,14 +169,12 @@ spec:
                     - enabled
                   type: object
                 sslConnection:
-                  description: DbInstanceSSLConnection defines weather connection from
-                    db-operator to instance has to be ssl or not
+                  description: DbInstanceSSLConnection defines weather connection from db-operator to instance has to be ssl or not
                   properties:
                     enabled:
                       type: boolean
                     skip-verify:
-                      description: SkipVerity use SSL connection, but don't check against
-                        a CA
+                      description: SkipVerity use SSL connection, but don't check against a CA
                       type: boolean
                   required:
                     - enabled
@@ -200,8 +196,7 @@ spec:
                     type: string
                   type: object
                 phase:
-                  description: 'Important: Run "make generate" to regenerate code after
-                  modifying this file'
+                  description: 'Important: Run "make generate" to regenerate code after modifying this file'
                   type: string
                 status:
                   type: boolean
@@ -213,7 +208,7 @@ spec:
       served: true
       storage: false
       subresources:
-        status: { }
+        status: {}
     - additionalPrinterColumns:
         - description: current phase
           jsonPath: .status.phase
@@ -261,9 +256,13 @@ spec:
                     - Name
                     - Namespace
                   type: object
+                allowedPriveleges:
+                  description: A list of priveleges that are allowed to be set as Dbuser's extra priveleges
+                  items:
+                    type: string
+                  type: array
                 backup:
-                  description: DbInstanceBackup defines name of google bucket to use
-                    for storing database dumps for backup when backup is enabled
+                  description: DbInstanceBackup defines name of google bucket to use for storing database dumps for backup when backup is enabled
                   properties:
                     bucket:
                       type: string
@@ -271,8 +270,7 @@ spec:
                     - bucket
                   type: object
                 engine:
-                  description: 'Important: Run "make generate" to regenerate code after
-                  modifying this file'
+                  description: 'Important: Run "make generate" to regenerate code after modifying this file'
                   type: string
                 generic:
                   description: |-
@@ -389,14 +387,12 @@ spec:
                     - enabled
                   type: object
                 sslConnection:
-                  description: DbInstanceSSLConnection defines weather connection from
-                    db-operator to instance has to be ssl or not
+                  description: DbInstanceSSLConnection defines weather connection from db-operator to instance has to be ssl or not
                   properties:
                     enabled:
                       type: boolean
                     skip-verify:
-                      description: SkipVerity use SSL connection, but don't check against
-                        a CA
+                      description: SkipVerity use SSL connection, but don't check against a CA
                       type: boolean
                   required:
                     - enabled
@@ -418,8 +414,7 @@ spec:
                     type: string
                   type: object
                 phase:
-                  description: 'Important: Run "make generate" to regenerate code after
-                  modifying this file'
+                  description: 'Important: Run "make generate" to regenerate code after modifying this file'
                   type: string
                 status:
                   type: boolean
@@ -431,5 +426,5 @@ spec:
       served: true
       storage: true
       subresources:
-        status: { }
+        status: {}
 {{- end }}
