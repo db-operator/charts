@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 1.27.0](https://img.shields.io/badge/Version-1.27.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.0](https://img.shields.io/badge/AppVersion-2.8.0-informational?style=flat-square)
+![Version: 1.27.2](https://img.shields.io/badge/Version-1.27.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.8.1](https://img.shields.io/badge/AppVersion-2.8.1-informational?style=flat-square)
 
 The DB Operator creates databases and make them available in the cluster via Custom Resource.
 
@@ -103,6 +103,7 @@ We use helm tests feature for testing the chart in CI. Though we know that this 
 | crds.keep | bool | `true` |  |
 | crds.annotations | object | `{}` |  |
 | webhook.enabled | bool | `true` |  |
+| webhook.podLabels | object | `{}` |  |
 | webhook.serviceAccount.create | bool | `true` |  |
 | webhook.names.mutating | string | `"db-operator-mutating-webhook-configuration"` |  |
 | webhook.names.validating | string | `"db-operator-validating-webhook-configuration"` |  |
