@@ -29,6 +29,9 @@ spec:
       labels:
         {{- include "db-instances.labels" $ | nindent 8 }}
         db-instance: {{ $name }}
+        {{- with $value.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       containers:
       - env:

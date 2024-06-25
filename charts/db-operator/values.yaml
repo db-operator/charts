@@ -31,6 +31,7 @@ crds:
   annotations: {}
 webhook:
   enabled: true
+  podLabels: {}
   serviceAccount:
     create: true
   names:
