@@ -3,7 +3,7 @@ image:
   repository: ghcr.io/db-operator/db-operator-dev
   pullPolicy: Always
   logLevel: info
-  tag: d9b4fad6a579214a49ecb8cf40f31b3463ceb7f2
+  tag: fd7fd5c0181816637cc0ac426f6503aace95a921
 # imagePullSecrets:
 #   - name: myRegistrySecret
 
