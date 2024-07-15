@@ -1,8 +1,9 @@
 nameOverride: ""
 image:
-  repository: ghcr.io/db-operator/db-operator
+  repository: ghcr.io/db-operator/db-operator-dev
   pullPolicy: Always
   logLevel: info
+  tag: fd7fd5c0181816637cc0ac426f6503aace95a921
 # imagePullSecrets:
 #   - name: myRegistrySecret
 
