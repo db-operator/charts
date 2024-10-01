@@ -1,6 +1,5 @@
 {{- $root := . }}
 {{- $nodeSelector := .Values.nodeSelector }}
-{{- $configSha := include (print $.Template.BasePath "/postgres_exporter_query.yaml") . | sha256sum }}
 {{- $exporter := .Values.exporter.postgres }}
 {{- $fullName := include "db-instances.fullname" . }}
 {{- if .Values.dbinstances }}
@@ -25,7 +24,6 @@ spec:
       annotations:
         prometheus.io/port: "60000"
         prometheus.io/scrape: "true"
-        checksum/config: {{ $configSha }}
       labels:
         {{- include "db-instances.labels" $ | nindent 8 }}
         db-instance: {{ $name }}
@@ -60,9 +58,6 @@ spec:
         volumeMounts:
         - mountPath: /run/secrets/db-secrets
           name: db-secrets
-        - mountPath: /run/cm/queries/queries.yaml
-          name: queries
-          subPath: queries.yaml
       nodeSelector:
         {{ toYaml $nodeSelector | nindent 8 }}
       volumes:
@@ -74,10 +69,6 @@ spec:
   {{- else }}
           secretName: {{ $name }}-admin-secret
   {{- end }}
-      - configMap:
-          defaultMode: 420
-          name: {{ $fullName }}-pgexporter-query
-        name: queries
 {{- if $value.serviceMonitor.enabled }}
 ---
 apiVersion: v1
