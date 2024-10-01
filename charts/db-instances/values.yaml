@@ -15,7 +15,6 @@ postgresql:
 # --  don't have an intention of testing the helm chart
 # ---------------------------------------------------------------------
 tests:
-  # Test that service monitor can be created
-  # and metrics can be scraped by Prometheus
-  serviceMonitor:
+  # Test that the metrics can be scraped by Prometheus
+  monitoring:
     enabled: false

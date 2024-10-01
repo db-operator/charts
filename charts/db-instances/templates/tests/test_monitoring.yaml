@@ -1,6 +1,6 @@
-{{- if (((.Values.tests).serviceMonitor).enabled) }}
+{{- if .Values.tests.monitoring.enabled }}
 # ---------------------------------------------------------------------
-# -- A config map with a script to test serviceMonitor
+# -- A config map with a script to test monitoring
 # ---------------------------------------------------------------------
 --- 
 apiVersion: v1
@@ -40,9 +40,9 @@ spec:
       volumeMounts:
         - name: test-script
           readOnly: true
-          mountPath: /test_service_monitor
-          subPath: test_service_monitor
+          mountPath: /test_monitoring
+          subPath: test_monitoring
       args:
-        - /test.sh
+        - /test_monitoring
   restartPolicy: Never
 {{- end}}
