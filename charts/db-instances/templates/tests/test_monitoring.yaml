@@ -1,4 +1,4 @@
-{{- if and $.Values.tests.monitoring .Values.tests.monitoring.enabled }}
+{{- if (.Values.tests.monitoring).enabled }}
 # ---------------------------------------------------------------------
 # -- A config map with a script to test monitoring
 # ---------------------------------------------------------------------
