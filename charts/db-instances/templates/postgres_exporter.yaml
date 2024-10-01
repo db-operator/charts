@@ -74,9 +74,9 @@ spec:
   selector:
     {{- include "db-instances.selectorLabels" $ | nindent 4 }}
     db-instance: {{ $name }}
----
 {{- if $.Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
 {{- if and $value.serviceMonitor $value.serviceMonitor.enabled }}
+---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -125,9 +125,9 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
----
 {{- if $.Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
 {{- if and $value.podMonitor $value.podMonitor.enabled }}
+---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
