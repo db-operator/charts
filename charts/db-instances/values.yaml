@@ -2,7 +2,6 @@ dbinstances: {}
 nodeSelector: {}
 exporter:
   postgres:
-    image: wrouesnel/postgres_exporter:latest
     query:
       pg_postmaster:
         query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
@@ -154,6 +153,7 @@ exporter:
           - rows:
               usage: "COUNTER"
               description: "Total number of rows retrieved or affected by the statement"
+    image: prometheuscommunity/postgres-exporter:v0.15.0
 mysql:
   enabled: false
 postgresql:
