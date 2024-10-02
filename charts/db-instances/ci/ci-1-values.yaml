@@ -2,6 +2,8 @@ dbinstances:
   instance1:
     serviceMonitor:
       enabled: true
+    podMonitor:
+      enabled: true
     engine: postgres
     monitoring:
       enabled: true

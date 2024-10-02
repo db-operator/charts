@@ -2,6 +2,8 @@ dbinstances:
   instance1:
     serviceMonitor:
       enabled: true
+    podMonitor:
+      enabled: true
     engine: postgres
     monitoring:
       autodiscovery: true
@@ -13,6 +15,5 @@ dbinstances:
       adminUser: postgres
       adminPassword: 123123!!
 tests:
-  serviceMonitor:
+  monitoring:
     enabled: true
-    instance: instance1

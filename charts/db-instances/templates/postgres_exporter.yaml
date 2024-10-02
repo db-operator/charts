@@ -1,6 +1,5 @@
 {{- $root := . }}
 {{- $nodeSelector := .Values.nodeSelector }}
-{{- $configSha := include (print $.Template.BasePath "/postgres_exporter_query.yaml") . | sha256sum }}
 {{- $exporter := .Values.exporter.postgres }}
 {{- $fullName := include "db-instances.fullname" . }}
 {{- if .Values.dbinstances }}
@@ -16,16 +15,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "db-instances.selectorLabels" $ | nindent 6 }}
       db-instance: {{ $name }}
+      {{- include "db-instances.selectorLabels" $ | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
-      annotations:
-        prometheus.io/port: "60000"
-        prometheus.io/scrape: "true"
-        checksum/config: {{ $configSha }}
       labels:
         {{- include "db-instances.labels" $ | nindent 8 }}
         db-instance: {{ $name }}
@@ -41,28 +36,15 @@ spec:
           value: /run/secrets/db-secrets/{{ $value.monitoring.passwordKey | default "password" }}
         - name: DATA_SOURCE_USER_FILE
           value: /run/secrets/db-secrets/{{ $value.monitoring.usernameKey | default "user" }}
-        - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
-          value: :60000
-        - name: PG_EXPORTER_EXTEND_QUERY_PATH
-          value: /run/cm/queries/queries.yaml
-        - name: PG_EXPORTER_CONSTANT_LABELS
-          value: dbinstance={{ $name }}
-        {{- if $value.monitoring.autodiscovery }}
-        - name: PG_EXPORTER_AUTO_DISCOVERY
-          value: "true"
-        {{- end }}
         image: {{ $exporter.image }}
         imagePullPolicy: Always
         name: exporter
         ports:
-        - name: metrics
-          containerPort: 60000
+        - name: http
+          containerPort: 9187
         volumeMounts:
         - mountPath: /run/secrets/db-secrets
           name: db-secrets
-        - mountPath: /run/cm/queries/queries.yaml
-          name: queries
-          subPath: queries.yaml
       nodeSelector:
         {{ toYaml $nodeSelector | nindent 8 }}
       volumes:
@@ -74,35 +56,33 @@ spec:
   {{- else }}
           secretName: {{ $name }}-admin-secret
   {{- end }}
-      - configMap:
-          defaultMode: 420
-          name: {{ $fullName }}-pgexporter-query
-        name: queries
-{{- if $value.serviceMonitor.enabled }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: dbinstance-{{ $name }}-pgexporter
   labels:
+    db-instance: {{ $name }}
     {{- include "db-instances.labels" $ | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
-      targetPort: metrics
+    - port: 80
+      targetPort: http
       protocol: TCP
-      name: metrics
+      name: http
   selector:
     {{- include "db-instances.selectorLabels" $ | nindent 4 }}
     db-instance: {{ $name }}
----
 {{- if $.Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
+{{- if ($value.serviceMonitor).enabled }}
+---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: dbinstance-{{ $name }}-sm
   labels:
+    db-instance: {{ $name }}
     {{- include "db-instances.labels" $ | nindent 4 }}
     {{- with $value.serviceMonitor.selector }}
     {{- toYaml . | nindent 4 }}
@@ -112,7 +92,7 @@ spec:
   jobLabel: {{ $value.serviceMonitor.jobLabel }}
   {{- end }}
   endpoints:
-    - port: metrics
+    - port: http
       {{- with $value.serviceMonitor.interval }}
       interval: {{ . }}
       {{- end }}
@@ -136,7 +116,64 @@ spec:
       - {{ $.Release.Namespace }}
   selector:
     matchLabels:
-{{- include "db-instances.selectorLabels" $ | nindent 6 }}
+      db-instance: {{ $name }}
+{{- if $value.serviceMonitor.targetLabels }}
+  targetLabels:
+  {{- range $value.serviceMonitor.targetLabels }}
+    - {{ . }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if $.Capabilities.APIVersions.Has "monitoring.coreos.com/v1" }}
+{{- if ($value.podMonitor).enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: dbinstance-{{ $name }}-pm
+  labels:
+    db-instance: {{ $name }}
+    {{- include "db-instances.labels" $ | nindent 4 }}
+    {{- with $value.podMonitor.selector }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if $value.podMonitor.jobLabel }}
+  jobLabel: {{ $value.podMonitor.jobLabel }}
+  {{- end }}
+  podMetricsEndpoints:
+    - port: http
+      {{- with $value.podMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with $value.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+      {{- with $value.podMonitor.metricRelabelings }}
+      metricRelabelings:
+      {{- if kindIs "string" . }}
+        {{- tpl . $ | nindent 8 }}
+      {{- else }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with $value.podMonitor.relabelings }}
+      relabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ $.Release.Namespace }}
+  selector:
+    matchLabels:
+      db-instance: {{ $name }}
+{{- if $value.podMonitor.podTargetLabels }}
+  podTargetLabels:
+  {{- range $value.podMonitor.podTargetLabels }}
+    - {{ . }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
