@@ -9,7 +9,6 @@ on:
 env:
   HELM_VERSION: v3.15.4
   HELMFILE_VERSION: v0.167.1 
-  HELM_PLUGINS: >
   PYTHON_VERSION: 3.9
 jobs:
   lint:
