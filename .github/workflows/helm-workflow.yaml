@@ -7,7 +7,9 @@ on:
     branches:
       - main
 env:
-  HELM_VERSION: v3.12.1
+  HELM_VERSION: v3.15.4
+  HELMFILE_VERSION: v0.167.1 
+  HELM_PLUGINS: >
   PYTHON_VERSION: 3.9
 jobs:
   lint:
@@ -79,8 +81,6 @@ jobs:
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Setup helmfile
-        uses: mamezou-tech/setup-helmfile@v1.2.0
       - name: Prepare a config for the kind cluster
         run: |
           cat > kind-config.yaml <<EOF
@@ -97,34 +97,50 @@ jobs:
         with:
           node_image: kindest/node:${{ matrix.k8s_version }}
           config: ./kind-config.yaml
-      - name: Test db-operator charts install
+
+      - uses: helmfile/helmfile-action@v1.0.0
+        with:
+          helmfile-version: ${{ env.HELMFILE_VERSION }}
+          helm-version: ${{ env.HELM_VERSION }}
+          helm-plugins: >
+            https://github.com/databus23/helm-diff, https://github.com/jkroepke/helm-secrets
+          helmfile-args: sync --wait
+
+      - name: Test the db-operator chart install
         run: |
-          helmfile -l name=prometheus-stack sync
-          helmfile sync
           ct install --target-branch main --charts ./charts/db-operator
           helmfile destroy
-          # Test is broken because of the image in the previous version,
-          # so upgrate can't pass
-          #- name: Test db-operator charts upgrade
-          #  run: |
-          #    helmfile -l name=prometheus-stack sync
-          #    helmfile sync
-          #    ct install --target-branch main --charts ./charts/db-operator --upgrade
-          #    helmfile destroy
+      
+      - uses: helmfile/helmfile-action@v1.0.0
+        with:
+          helmfile-version: ${{ env.HELMFILE_VERSION }}
+          helm-version: ${{ env.HELM_VERSION }}
+          helmfile-args: sync --wait
+
+      - name: Test the db-operator chart upgrade
+        run: |
+          ct install --target-branch main --charts ./charts/db-operator --upgrade
+          helmfile destroy
+
+      - uses: helmfile/helmfile-action@v1.0.0
+        with:
+          helmfile-version: ${{ env.HELMFILE_VERSION }}
+          helm-version: ${{ env.HELM_VERSION }}
+          helmfile-args: sync -e instances --wait
+
       - name: Test db-instances charts install
         run: |
-          helmfile -l name=prometheus-stack sync
-          helmfile sync -e instances
-          kubectl rollout status deploy/db-operator -n db-operator
-          kubectl rollout status deploy/db-operator-webhook -n db-operator
           ct install --target-branch main --charts ./charts/db-instances
           helmfile destroy
-      - name: Test db-instances charts install
+
+      - uses: helmfile/helmfile-action@v1.0.0
+        with:
+          helmfile-version: ${{ env.HELMFILE_VERSION }}
+          helm-version: ${{ env.HELM_VERSION }}
+          helmfile-args: sync -e instances --wait
+
+      - name: Test db-instances charts upgrade
         run: |
-          helmfile -l name=prometheus-stack sync
-          helmfile sync -e instances
-          kubectl rollout status deploy/db-operator -n db-operator
-          kubectl rollout status deploy/db-operator-webhook -n db-operator
           ct install --target-branch main --charts ./charts/db-instances --upgrade
           helmfile destroy
   release:
