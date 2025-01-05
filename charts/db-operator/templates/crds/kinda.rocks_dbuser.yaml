@@ -39,7 +39,11 @@ spec:
           jsonPath: .spec.accessType
           name: AccessType
           type: string
-        - description: time since creation of resos¡urce
+        - description: db-operator version of last full reconcile
+          jsonPath: .status.operatorVersion
+          name: OperatorVersion
+          type: string
+        - description: time since creation of resource
           jsonPath: .metadata.creationTimestamp
           name: Age
           type: date
@@ -137,6 +141,8 @@ spec:
                   description: It's required to let the operator update users
                   type: boolean
                 database:
+                  type: string
+                operatorVersion:
                   type: string
                 status:
                   type: boolean
