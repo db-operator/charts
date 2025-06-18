@@ -42,6 +42,13 @@ rules:
   - batch
   resources:
   - cronjobs
+  verbs:
+  - create
+  - update
+  - list
+- apiGroups:
+  - batch
+  resources:
   - jobs
   verbs:
   - create
