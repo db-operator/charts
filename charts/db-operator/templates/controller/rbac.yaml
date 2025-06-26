@@ -46,6 +46,7 @@ rules:
   - create
   - update
   - list
+  - watch
 - apiGroups:
   - batch
   resources:
