@@ -154,7 +154,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v3
         with:
-          version: {{ .env.HELM_VERSION}}
+          version: ${{ env.HELM_VERSION }}
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
         env:
