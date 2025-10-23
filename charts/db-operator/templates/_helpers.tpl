@@ -124,5 +124,5 @@ Image version definition;
 Image version definition using Github Packages format ('v' prefix);
 */}}
 {{- define "github_packages_image_version" -}}
-{{- printf "v%s" (default .Chart.AppVersion .Values.image.tag) }}
+{{- default (printf "v%s" .Chart.AppVersion) .Values.image.tag }}
 {{- end -}}
