@@ -170,7 +170,12 @@ After changing default `Values`, please execute `make gen_docs` to update the `R
 If there is an breaking change, or something that might make the upgrade complicated, it should be described here
 
 <details>
-  <summary>To `v1.11.0`</summary>
+  <summary>To <code>v2.0.0</code></summary>
+From `v2.0.0` onwards, the `v` prefix will not be automatically added to the image tag. If you are overriding the image tag through `.Values.image.tag` and are relying on this behaviour, please add the `v` prefix manually to the Helm value. Otherwise, no action is required from your side!
+</details>
+
+<details>
+  <summary>To <code>v1.11.0</code></summary>
 Additional selectors were added to the default templates in an attempt to follow the same labelling scheme everywhere, but since selectors are immutable, the upgrade will require removing of the db-operator deployment.
 
 ```bash
@@ -185,7 +190,7 @@ $ helm upgrade db-operator db-operator/db-operator --version 1.11.0
 </details>
 
 <details>
-  <summary>To `v1.10.0`</summary>
+  <summary>To <code>v1.10.0</code></summary>
 
 CRDs are moved to the `templates` folder, so now they are part of the release. It means that after the upgrade, you will get errors about resource ownerships. Thow errors will contain messages about missing `labels` and `annotations`, and the easiest way to fix it, will be just to add the `metadata` that helm can't find. So you can follow those messages one by one and when all the `CRDs` are patched, you'll be able to install the release.
 

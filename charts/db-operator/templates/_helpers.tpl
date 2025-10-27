@@ -119,10 +119,3 @@ Image version definition;
 {{- define "image_version" -}}
 {{ default .Chart.AppVersion .Values.image.tag }}
 {{- end -}}
-
-{{/*
-Image version definition using Github Packages format ('v' prefix);
-*/}}
-{{- define "github_packages_image_version" -}}
-{{- default (printf "v%s" .Chart.AppVersion) .Values.image.tag }}
-{{- end -}}
