@@ -26,6 +26,8 @@ releases:
     chart: bitnami/postgresql
     version: 16.0.6
     values:
+    - image:
+        repository: bitnamilegacy/postgresql
     - global: 
         postgresql:
           auth:
@@ -36,6 +38,8 @@ releases:
     chart: bitnami/mysql
     version: 11.1.19
     values:
+      - image:
+          repository: bitnamilegacy/mysql
       - auth:
           rootPassword: 123123!!
           password: 123123!!
