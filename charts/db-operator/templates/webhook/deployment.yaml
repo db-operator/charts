@@ -25,6 +25,9 @@ spec:
         {{ toYaml .Values.annotations | nindent 8 }}
       {{- end }}
     spec:
+      {{- if semverCompare ">=1.33-0" .Capabilities.KubeVersion.Version }}
+      hostUsers: {{ .Values.hostUsers }}
+      {{- end }}
       {{- if .Values.webhook.serviceAccount.create }}
       serviceAccountName: {{ template "webhook.serviceAccountName" . }}
       {{- end }}
