@@ -42,7 +42,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ template "github_packages_image_version" . }}"
+          image: "{{ .Values.image.repository }}:{{ template "image_version" . }}"
           ports:
           - containerPort: 60000
             name: metrics

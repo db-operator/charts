@@ -24,12 +24,11 @@ The Release name {{ .Release.Name }}.
 -----------------------------------------------------------------------
 Breaking changes and migration paths:
 
-{{ .Chart.Version }} introduces a new status field "operatorVersion" 
-to the Database CRD. This change is not breaking if your CRDs are
-managed by this Helm chart. Otherwise if you're deploying them separately, 
-please read the migration plan below:
-
-https://github.com/db-operator/charts/tree/main/charts/db-operator#upgrading
+From {{ .Chart.Version }}, the "v" prefix will not be 
+automatically added to the image tag. If you are overriding the image
+tag through ".Values.image.tag" and are relying on this behaviour,
+please add the "v" prefix manually to the Helm value.
+Otherwise, no action is required from your side!
 
 {{- if not .Values.crds.install }}
 -----------------------------------------------------------------------
