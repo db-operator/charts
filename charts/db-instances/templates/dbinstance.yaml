@@ -38,6 +38,9 @@ spec:
     enabled: {{ $value.sslConnection.enabled }}
     skip-verify: {{ $value.sslConnection.skipVerify }}
   {{- end }}
+  {{- with $value.allowExtraGrants }}
+  allowExtraGrants: {{ . }}
+  {{- end }}
   {{- if $value.google }}
   google:
     instance: {{ $value.google.instanceName }}
