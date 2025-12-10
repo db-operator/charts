@@ -24,7 +24,7 @@ The Release name {{ .Release.Name }}.
 -----------------------------------------------------------------------
 Breaking changes and migration paths:
 
-From {{ .Chart.Version }}, the "v" prefix will not be 
+From 2.0.0, the "v" prefix will not be
 automatically added to the image tag. If you are overriding the image
 tag through ".Values.image.tag" and are relying on this behaviour,
 please add the "v" prefix manually to the Helm value.
