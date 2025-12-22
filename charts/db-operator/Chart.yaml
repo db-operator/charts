@@ -1,7 +1,7 @@
 apiVersion: v2
 type: application
 name: db-operator
-version: 2.1.0
+version: 2.2.0
 
 # ---------------------------------------------------------------------------------
 # -- All supported k8s versions are in the test:
