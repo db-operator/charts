@@ -40,7 +40,7 @@ spec:
   {{- end }}
   {{- with $value.extraTemplateVars }}
   extraTemplateVars:
-    {{ . | toYaml | nindend 4 }}
+    {{ . | toYaml | nindent 4 }}
   {{- end }}
   {{- if $value.google }}
   google:
