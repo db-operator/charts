@@ -38,6 +38,10 @@ spec:
     enabled: {{ $value.sslConnection.enabled }}
     skip-verify: {{ $value.sslConnection.skipVerify }}
   {{- end }}
+  {{- with $value.extraTemplateVars }}
+  extraTemplateVars:
+    {{ . | toYaml | nindend 4 }}
+  {{- end }}
   {{- if $value.google }}
   google:
     instance: {{ $value.google.instanceName }}
