@@ -1,0 +1,7 @@
+mysql:
+  admin:
+    password: 123123!!
+    user: root
+  service:
+    name: mariadb-instance
+    namespace: databases

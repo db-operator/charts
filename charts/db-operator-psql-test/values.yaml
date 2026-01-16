@@ -1,0 +1,7 @@
+postgresql:
+  admin:
+    password: 123123!!
+    user: db-operator
+  service:
+    name: postgres-instance
+    namespace: databases

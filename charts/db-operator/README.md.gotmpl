@@ -20,17 +20,17 @@ $ helm repo update
 $ helm install db-operator/db-operator
 ```
 
-If you want to manage `CRDs` yourself, you need to set `.Values.crds.install` to `false`. In that case they won't be a part of templated manifests. 
+If you want to manage `CRDs` yourself, you need to set `.Values.crds.install` to `false`. In that case they won't be a part of templated manifests.
 
 We don't support this way of `CRD` management officially though, so we can't promise to answer your questions if you choose to go this way. If you want to know more about it, keep reading, we'll talk about it later.
 
 ## Upgarding the Chart
 
-If there are breaking changes, they should be described in this README's latest item and in helm-chart notes. So if you run `helm upgrade db-operator db-operator/db-operator --dry-run`, you will see if there are breaking changes there. 
+If there are breaking changes, they should be described in this README's latest item and in helm-chart notes. So if you run `helm upgrade db-operator db-operator/db-operator --dry-run`, you will see if there are breaking changes there.
 
 ## Uninstalling the Chart
 
-To uninstall the operator only, run 
+To uninstall the operator only, run
 
 ```console
 $ helm uninstall db-operator
@@ -68,7 +68,7 @@ So, as you can see they require some information about the release, so they can'
 
 Also, we do not have `CRs` in the package, so there is no chicken-egg problem here. You don't need to have `CRDs` installed to install the chart. Since `CRDs` are a part of the operator and you can't have one without another, having them packaged and distributed together makes more sense to us.
 
-But it's still possible for users to manage `CRDs` on their own. You need to set `.Values.crds.install` to false and go to the [db-operator rgit repository](https://github.com/db-operator/db-operator). There, in the `config/crd/bases` directory, you'll find `CRD` manifests. But if you decided to go this way and you have problems with `CRDs`, you're most probably on your own, you still can open issues though. 
+But it's still possible for users to manage `CRDs` on their own. You need to set `.Values.crds.install` to false and go to the [db-operator rgit repository](https://github.com/db-operator/db-operator). There, in the `config/crd/bases` directory, you'll find `CRD` manifests. But if you decided to go this way and you have problems with `CRDs`, you're most probably on your own, you still can open issues though.
 
 ## Why do we need cert-manager?
 

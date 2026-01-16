@@ -1,6 +1,6 @@
 # db-instances
 
-![Version: 2.3.3](https://img.shields.io/badge/Version-2.3.3-informational?style=flat-square) ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
+![Version: 2.5.0](https://img.shields.io/badge/Version-2.5.0-informational?style=flat-square) ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
 
 Database Instances for db operator
 
@@ -13,5 +13,5 @@ Database Instances for db operator
 | exporter.postgres.image | string | `"prometheuscommunity/postgres-exporter:v0.15.0"` |  |
 | mysql.enabled | bool | `false` |  |
 | postgresql.enabled | bool | `false` |  |
-| tests | object | `{"serviceMonitor":{"enabled":false}}` | ------------------------------------------------------------------- |
+| tests | object | `{"monitoring":{"enabled":false}}` | ------------------------------------------------------------------- |
 
