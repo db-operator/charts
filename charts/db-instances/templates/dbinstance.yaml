@@ -17,6 +17,10 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
+  {{- with $value.instanceVars }}
+  instanceVars:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   engine: {{ $value.engine }}
   {{- if $value.existingAdminSecret }}
   adminSecretRef:
@@ -72,6 +76,7 @@ spec:
       namespace: {{ $.Release.Namespace }}
       key: publicIp
   {{- end }}
+
   {{- if $value.generic.backupHost }}
     backupHost: {{ $value.generic.backupHost }}
   {{- end }}
