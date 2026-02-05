@@ -10,6 +10,8 @@ dbinstances:
     secrets:
       adminUser: admin
       adminPassword: IamAdmin
+    instanceVars:
+      TEST: TEST
   instance2:
     engine: mysql
     monitoring:
