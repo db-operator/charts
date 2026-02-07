@@ -5,48 +5,28 @@ environments:
 ---
 repositories:
   - name: jetstack
-    url: https://charts.jetstack.io
-  - name: bitnami
-    url: https://charts.bitnami.com/bitnami
+    url: quay.io/jetstack/charts
+    oci: true
   - name: prometheus-community
-    url: https://prometheus-community.github.io/helm-charts
+    url: ghcr.io/prometheus-community/charts
+    oci: true
+  - name: cloudpirates
+    url: registry-1.docker.io/cloudpirates
+    oci: true
 
 releases:
   - name: cert-manager
     chart: jetstack/cert-manager
     namespace: cert-manager
-    version: v1.16.1
+    version: v1.19.2
     createNamespace: true
     values:
       - crds:
           enabled: true
 
-  - name: postgres-instance
-    namespace: databases
-    chart: bitnami/postgresql
-    version: 16.0.6
-    values:
-    - image:
-        repository: bitnamilegacy/postgresql
-    - global: 
-        postgresql:
-          auth:
-            postgresPassword: 123123!!
-
-  - name: mysql-instance
-    namespace: databases
-    chart: bitnami/mysql
-    version: 11.1.19
-    values:
-      - image:
-          repository: bitnamilegacy/mysql
-      - auth:
-          rootPassword: 123123!!
-          password: 123123!!
-  
   - name: prometheus-stack
     namespace: monitoring
-    version: 65.3.2
+    version: 80.14.4
     createNamespace: true
     disableValidation: true
     disableOpenAPIValidation: true
@@ -54,28 +34,65 @@ releases:
     needs:
       - cert-manager/cert-manager
     values:
+      - grafana:
+          enabled: false
+      - kubeStateMetrics:
+          enabled: false
+      - alertmanager:
+          enabled: false
+      - nodeExporter:
+          enabled: false
       - prometheus:
           prometheusSpec:
             enableAdminAPI: true
-            podMonitorNamespaceSelector:
-              any: true
             podMonitorSelector: {}
             podMonitorSelectorNilUsesHelmValues: false
-            ruleNamespaceSelector:
-              any: true
             ruleSelector: {}
             ruleSelectorNilUsesHelmValues: false
-            serviceMonitorNamespaceSelector:
-              any: true
             serviceMonitorSelector: {}
             serviceMonitorSelectorNilUsesHelmValues: false
 
   - name: db-operator
     namespace: db-operator
     createNamespace: true
-    installed: {{ eq .Environment.Name "instances" | toYaml }}
     chart: ./charts/db-operator
+    labels:
+      purpose: db-operator
     needs:
       - monitoring/prometheus-stack
       - cert-manager/cert-manager
-  
+
+  - name: mariadb-instance
+    namespace: databases
+    chart: cloudpirates/mariadb
+    labels:
+      test: mysql
+    version: 0.13.2
+    values:
+      - auth:
+          rootPassword: 123123!!
+
+  - name: mysql-test
+    namespace: mysql-test
+    chart: ./charts/db-operator-mysql-test/
+    labels:
+      test: mysql
+      purpose: test
+
+  - name: postgres-instance
+    namespace: databases
+    chart: cloudpirates/postgres
+    version: 0.15.2
+    labels:
+      test: psql
+    values:
+      - auth:
+          username: db-operator
+          password: 123123!!
+
+  - name: psql-test
+    namespace: psql-test
+    chart: ./charts/db-operator-psql-test/
+    labels:
+      test: psql
+      purpose: test

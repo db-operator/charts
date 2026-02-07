@@ -174,12 +174,3 @@ service:
   annotations: {}
   type: ClusterIP
   port: 8080
-# ---------------------------------------------------------------------
-# -- These values are used in tests, they should not affect users
-# ---------------------------------------------------------------------
-tests:
-  enabled: []
-  attempts:
-    amount: 10
-    timeout: 30
-  cleanup: true

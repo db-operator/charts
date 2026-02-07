@@ -11,7 +11,7 @@ ATTEMPTS_AMOUNT="${TEST_ATTEMPTS_AMOUNT:-10}"
 ATTEMPTS_PAUSE="${TEST_ATTEMPTS_PAUSE:-30}"
 
 if [ -n "${SKIP_INSTALL_DEPS+x}" ]
-then 
+then
   apk update && apk add jq
 fi
 
@@ -34,7 +34,7 @@ do
   then
     echo "query didn't return expected name"
     echo "${METRIC_NAME}"
-  else 
+  else
     exit 0
   fi
   sleep "${ATTEMPTS_PAUSE}"

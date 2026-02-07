@@ -122,5 +122,5 @@ spec:
       {{- end }}
       {{- end }}
         - name: config-volume
-          configMap: 
+          configMap:
             name: {{ template "db-operator.name" . }}-config

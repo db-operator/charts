@@ -23,10 +23,6 @@ helmfile-instances: ## Syncs the helmfile with dependencies for testing dbinstan
 lint: ## lint helm charts
 	ct lint --target-branch main --validate-maintainers=false
 
-test-values: 
-	cd charts/db-operator && \
-		bash ./scripts/test_values -p ./ci/unit-test
-
 test-operator: helmfile-operator ## test helm charts
 	ct install --target-branch main --charts ./charts/db-operator
 
@@ -41,7 +37,7 @@ test-upgrade-instances: helmfile-instances ## test helm charts
 
 .PHONY: gen_docs
 gen-docs: ## Generate helm documentation
-	test -s $(LOCALBIN)/setup-envtest || GOBIN=$(LOCALBIN_DIR) go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
+	test -s $(LOCALBIN)/helm-docs || GOBIN=$(LOCALBIN_DIR) go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
 	./bin/helm-docs --template-files=./charts/db-operator/README.md.gotmpl \
 		--sort-values-order file --chart-to-generate=charts/db-operator
 	./bin/helm-docs --template-files=./charts/db-isntances/README.md.gotmpl --sort-values-order file --chart-to-generate=charts/db-instances
