@@ -56,7 +56,6 @@ jobs:
       - name: Create kind cluster
         uses: helm/kind-action@v1.13.0
         with:
-          node_image: kindest/node:${{ matrix.k8s_version }}
           config: ./ci/kind-config.yaml
       - name: Deploy the helmfile
         uses: helmfile/helmfile-action@v2.1.0
