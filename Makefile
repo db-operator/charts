@@ -12,6 +12,7 @@ unit:
 	@for file in $(DB_OPERATOR_UNIT); do \
 		helm unittest -f $$file ./charts/db-operator; \
 	done
+
 sync-crds: ## Sync crds from the operator repo
 	./scripts/sync_crds.sh
 
