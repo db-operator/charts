@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 2.3.0](https://img.shields.io/badge/Version-2.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.18.0](https://img.shields.io/badge/AppVersion-2.18.0-informational?style=flat-square)
+![Version: 3.0.0](https://img.shields.io/badge/Version-3.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.18.0](https://img.shields.io/badge/AppVersion-2.18.0-informational?style=flat-square)
 
 The DB Operator creates databases and make them available in the cluster via Custom Resource.
 
@@ -33,7 +33,7 @@ If you want to manage `CRDs` yourself, you need to set `.Values.crds.install` to
 
 We don't support this way of `CRD` management officially though, so we can't promise to answer your questions if you choose to go this way. If you want to know more about it, keep reading, we'll talk about it later.
 
-## Upgarding the Chart
+## Upgrading the Chart
 
 If there are breaking changes, they should be described in this README's latest item and in helm-chart notes. So if you run `helm upgrade db-operator db-operator/db-operator --dry-run`, you will see if there are breaking changes there.
 
@@ -85,7 +85,7 @@ At the moment, `db-operator` chart requires `cert-manager` to be present in the 
 
 ## What is `.Values.tests`?
 
-We use helm tests feature for testing the chart in CI. Though we know that this feature should be used by users to test their intsallations, we do not think that it can be very helpful in this particular case. Test resources are creating a powerful `ClusterRoles`, so **please make sure you don't have them enabled**, unless you really know what you're doing and why.
+We use helm tests feature for testing the chart in CI. Though we know that this feature should be used by users to test their installations, we do not think that it can be very helpful in this particular case. Test resources are creating a powerful `ClusterRoles`, so **please make sure you don't have them enabled**, unless you really know what you're doing and why.
 
 ## Chart Values
 | Key | Type | Default | Description |
@@ -192,7 +192,7 @@ $ helm upgrade db-operator db-operator/db-operator --version 1.11.0
 <details>
   <summary>To <code>v1.10.0</code></summary>
 
-CRDs are moved to the `templates` folder, so now they are part of the release. It means that after the upgrade, you will get errors about resource ownerships. Thow errors will contain messages about missing `labels` and `annotations`, and the easiest way to fix it, will be just to add the `metadata` that helm can't find. So you can follow those messages one by one and when all the `CRDs` are patched, you'll be able to install the release.
+CRDs are moved to the `templates` folder, so now they are part of the release. It means that after the upgrade, you will get errors about resource ownerships. Those errors will contain messages about missing `labels` and `annotations`, and the easiest way to fix it, will be just to add the `metadata` that helm can't find. So you can follow those messages one by one and when all the `CRDs` are patched, you'll be able to install the release.
 
 For example:
 

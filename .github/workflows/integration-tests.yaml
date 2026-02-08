@@ -1,0 +1,70 @@
+---
+# -- Long tests against the kubernetes API
+name: Integration tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  chart-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        k8s_version:
+          - v1.35.0
+          - v1.34.3
+          - v1.33.7
+          - v1.32.11
+        chart:
+          - db-operator
+          - db-instances
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v3
+      - uses: actions/setup-go@v6
+      - uses: azure/setup-helm@v4.3.0
+      - uses: helm/chart-testing-action@v2.8.0
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.13.0
+        with:
+          node_image: kindest/node:${{ matrix.k8s_version }}
+          config: ./ci/kind-config.yaml
+      - name: Deploy the helmfile
+        uses: helmfile/helmfile-action@v2.1.0
+        with:
+          helmfile-auto-init: true
+          helmfile-args: sync -e ${{ matrix.chart }} --wait
+          helmfile-workdirectory: ./ci
+      - name: Test the db-operator chart install
+        run: |
+          ct install --target-branch main --charts ./charts/${{ matrix.chart }}
+      - name: Test the db-operator chart upgrade
+        run: |
+          ct install --target-branch main --charts ./charts/${{ matrix.chart }} --upgrade
+
+  logic-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v3
+      - uses: actions/setup-go@v6
+      - uses: azure/setup-helm@v4.3.0
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.13.0
+        with:
+          config: ./ci/kind-config.yaml
+      - name: Deploy the helmfile
+        uses: helmfile/helmfile-action@v2.1.0
+        with:
+          helmfile-auto-init: true
+          helmfile-args: sync -e tests --wait
+          helmfile-workdirectory: ./ci
+      - name: Run tests
+        uses: helmfile/helmfile-action@v2.1.0
+        with:
+          helmfile-args: test -e tests -l purpose=test
+          helmfile-workdirectory: ./ci
