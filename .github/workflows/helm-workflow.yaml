@@ -44,11 +44,13 @@ jobs:
             exit 1
           fi
 
-      - name: Check for changes
-        id: check_changes
+      - name: Check docs
         run: |
+          make gen-docs:w
+
           if [[ -n $(git status --porcelain) ]]; then
-              echo "changes=true" >> "$GITHUB_OUTPUT";
+            echo "Please update docs by running 'make gen-docs' and push the changes"
+            exit 1
           fi
 
       - name: Set up chart-testing
