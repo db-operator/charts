@@ -46,7 +46,7 @@ jobs:
 
       - name: Check docs
         run: |
-          make gen-docs:w
+          make gen-docs
 
           if [[ -n $(git status --porcelain) ]]; then
             echo "Please update docs by running 'make gen-docs' and push the changes"
