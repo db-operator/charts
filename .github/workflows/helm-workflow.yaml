@@ -15,7 +15,7 @@ env:
 
 jobs:
   # -- Quick tests like helm unintest and linters
-  fast-tests:
+  quick-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -68,7 +68,7 @@ jobs:
           done
   # -- Tests that require a real k8s cluster running, should be tested against supported k8s versions
   long-test:
-    needs: fast-tests
+    needs: quick-tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
