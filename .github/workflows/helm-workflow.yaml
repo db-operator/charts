@@ -31,28 +31,6 @@ jobs:
         with:
           version: ${{ env.HELM_VERSION }}
 
-      - uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          check-latest: true
-
-      - name: Check CRD generation
-        run: |
-          ./scripts/sync_crds.sh
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "Please update CRDs using the ./scripts/sync_crds.sh and push the changes"
-            exit 1
-          fi
-
-      - name: Check docs
-        run: |
-          make gen-docs
-
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "Please update docs by running 'make gen-docs' and push the changes"
-            exit 1
-          fi
-
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.8.0
 

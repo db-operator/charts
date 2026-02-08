@@ -1,0 +1,7 @@
+---
+# -- Release to the regular helm repo hosted with Github Pages
+
+on:
+  push:
+    branches:
+      - main
