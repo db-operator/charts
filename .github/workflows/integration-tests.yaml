@@ -33,7 +33,7 @@ jobs:
         with:
           node_image: kindest/node:${{ matrix.k8s_version }}
           config: ./ci/kind-config.yaml
-      - name: Deploy the helmfile (without db-operator)
+      - name: Deploy the helmfile
         uses: helmfile/helmfile-action@v2.1.0
         with:
           helmfile-auto-init: true
@@ -45,3 +45,27 @@ jobs:
       - name: Test the db-operator chart upgrade
         run: |
           ct install --target-branch main --charts ./charts/${{ matrix.chart }} --upgrade
+
+  logic-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v3
+      - uses: actions/setup-go@v6
+      - uses: azure/setup-helm@v4.3.0
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.13.0
+        with:
+          node_image: kindest/node:${{ matrix.k8s_version }}
+          config: ./ci/kind-config.yaml
+      - name: Deploy the helmfile
+        uses: helmfile/helmfile-action@v2.1.0
+        with:
+          helmfile-auto-init: true
+          helmfile-args: sync -e tests --wait
+          helmfile-workdirectory: ./ci
+      - name: Run tests
+        uses: helmfile/helmfile-action@v2.1.0
+        with:
+          helmfile-args: test -e tests -l purpose=test
+          helmfile-workdirectory: ./ci

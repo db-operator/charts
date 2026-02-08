@@ -56,7 +56,7 @@ releases:
     namespace: db-operator
     createNamespace: true
     installed: {{ not (eq .Environment.Name "db-operator") }}
-    chart: ./charts/db-operator
+    chart: ../charts/db-operator
     labels:
       purpose: db-operator
     needs:
@@ -76,7 +76,7 @@ releases:
 
   - name: mysql-test
     namespace: mysql-test
-    chart: ./charts/db-operator-mysql-test/
+    chart: ../charts/db-operator-mysql-test/
     installed: {{ eq .Environment.Name "tests" }}
     labels:
       test: mysql
@@ -97,7 +97,7 @@ releases:
   - name: psql-test
     namespace: psql-test
     installed: {{ eq .Environment.Name "tests" }}
-    chart: ./charts/db-operator-psql-test/
+    chart: ../charts/db-operator-psql-test/
     labels:
       test: psql
       purpose: test
