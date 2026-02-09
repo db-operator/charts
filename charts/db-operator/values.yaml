@@ -94,7 +94,7 @@ config:
     generic: {}
     percona:
       proxy:
-        image: severalnines/proxysql:2.0
+        image: severalnines/proxysql:2.3
         metricsPort: 9090
   backup:
     activeDeadlineSeconds: 600  # 10m
