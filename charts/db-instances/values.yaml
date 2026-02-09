@@ -2,7 +2,7 @@ dbinstances: {}
 nodeSelector: {}
 exporter:
   postgres:
-    image: prometheuscommunity/postgres-exporter:v0.15.0
+    image: prometheuscommunity/postgres-exporter:v0.19.0
 mysql:
   enabled: false
 postgresql:
