@@ -116,7 +116,7 @@ jobs:
           config: ./kind-config.yaml
 
       - name: Deploy the helmfile (without db-operator)
-        uses: helmfile/helmfile-action@v2.1.0
+        uses: helmfile/helmfile-action@v2.2.0
         with:
           helmfile-version: ${{ env.HELMFILE_VERSION }}
           helm-version: ${{ env.HELM_VERSION }}
@@ -133,14 +133,14 @@ jobs:
       #    ct install --target-branch main --charts ./charts/db-operator --upgrade
 
       - name: Deploy the helmfile (with db-operator this time)
-        uses: helmfile/helmfile-action@v2.1.0
+        uses: helmfile/helmfile-action@v2.2.0
         with:
           helmfile-version: ${{ env.HELMFILE_VERSION }}
           helm-version: ${{ env.HELM_VERSION }}
           helmfile-args: sync --wait
 
       - name: Test posgres and mysql database integrations
-        uses: helmfile/helmfile-action@v2.1.0
+        uses: helmfile/helmfile-action@v2.2.0
         with:
           helmfile-version: ${{ env.HELMFILE_VERSION }}
           helm-version: ${{ env.HELM_VERSION }}
