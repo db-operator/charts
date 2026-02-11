@@ -53,6 +53,9 @@ spec:
             {{- range include "db-operator.args" $ | split "," }}
             - {{ . }}
             {{- end }}
+            {{- range .Values.controller.extraArgs }}
+            - {{ . | quote }}
+            {{- end }}
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:

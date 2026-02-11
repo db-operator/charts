@@ -3,6 +3,8 @@ image:
   repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
   logLevel: info
+controller:
+  extraArgs: []
 # imagePullSecrets:
 #   - name: myRegistrySecret
 
