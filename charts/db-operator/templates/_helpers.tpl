@@ -43,6 +43,9 @@ Arguments builder
 {{- if .Values.checkForChanges -}}
 {{- $args = append $args "--check-for-changes" -}}
 {{- end -}}
+{{- range .Values.controller.extraArgs -}}
+{{- $args = append $args . -}}
+{{- end -}}
 {{ join "," $args }}
 {{- end -}}
 
