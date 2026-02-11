@@ -53,7 +53,7 @@ spec:
             {{- range include "db-operator.args" $ | split "," }}
             - {{ . }}
             {{- end }}
-            {{- range .Values.dbOperator.extraArgs }}
+            {{- range .Values.controller.extraArgs }}
             - {{ . | quote }}
             {{- end }}
           {{- end }}
