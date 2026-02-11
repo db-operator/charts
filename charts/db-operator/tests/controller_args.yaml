@@ -1,0 +1,58 @@
+---
+suite: Test controller argument builder
+templates:
+  - controller/*.yaml
+tests:
+  - it: No extraArgs and checkForChanges (default)
+    template: controller/deployment.yaml
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].args
+  - it: Only checkForChanges and no extraArgs
+    template: controller/deployment.yaml
+    set:
+      checkForChanges: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --check-for-changes
+  - it: Only extraArgs and no checkForChanges
+    template: controller/deployment.yaml
+    set:
+      controller:
+        extraArgs:
+          - --test
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --test
+  - it: Only extraArgs (multiple) and no checkForChanges
+    template: controller/deployment.yaml
+    set:
+      controller:
+        extraArgs:
+          - --test
+          - --test2
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --test
+            - --test2
+  - it: extraArgs and checkForChanges
+    template: controller/deployment.yaml
+    set:
+      checkForChanges: true
+      controller:
+        extraArgs:
+          - --test
+          - --test2
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --check-for-changes
+            - --test
+            - --test2
