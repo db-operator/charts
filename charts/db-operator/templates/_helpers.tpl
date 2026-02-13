@@ -96,7 +96,7 @@ Webhook extra args
 {{- define "webhook.args" -}}
 {{- $args := list -}}
 {{- $args = append $args "--webhook" -}}
-{{- / add webhook-specific extraArgs from values */ -}}
+{{- /* add webhook-specific extraArgs from values */ -}}
 {{- with .Values.webhook }}
 {{- range .extraArgs -}}
 {{- $args = append $args . -}}
