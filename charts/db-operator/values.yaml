@@ -5,8 +5,6 @@ image:
   logLevel: info
 controller:
   extraArgs: []
-webhook:
-  extraArgs: []
 # imagePullSecrets:
 #   - name: myRegistrySecret
 
@@ -34,6 +32,7 @@ crds:
   keep: true
   annotations: {}
 webhook:
+  extraArgs: []
   enabled: true
   podLabels: {}
   serviceAccount:
