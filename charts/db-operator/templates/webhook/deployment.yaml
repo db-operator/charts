@@ -49,9 +49,8 @@ spec:
           command:
           - db-operator
           args: 
-            - "--webhook"
-            {{- range include "db-operator.args" $ | split "," }}
-            - {{ . }}
+            {{- range include "webhook.args" $ | split "," }}
+            {{ . }} 
             {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
