@@ -43,8 +43,15 @@ Arguments builder
 {{- if .Values.checkForChanges -}}
 {{- $args = append $args "--check-for-changes" -}}
 {{- end -}}
+{{- /* controller-specific extraArgs */ -}}
 {{- range .Values.controller.extraArgs -}}
 {{- $args = append $args . -}}
+{{- end -}}
+{{- /* webhook-specific extraArgs (if present) */ -}}
+{{- with .Values.webhook }}
+{{- range .extraArgs -}}
+{{- $args = append $args . -}}
+{{- end -}}
 {{- end -}}
 {{ join "," $args }}
 {{- end -}}
