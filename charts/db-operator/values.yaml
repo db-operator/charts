@@ -5,6 +5,8 @@ image:
   logLevel: info
 controller:
   extraArgs: []
+webhook:
+  extraArgs: []
 # imagePullSecrets:
 #   - name: myRegistrySecret
 
