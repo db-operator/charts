@@ -47,12 +47,6 @@ Arguments builder
 {{- range .Values.controller.extraArgs -}}
 {{- $args = append $args . -}}
 {{- end -}}
-{{- /* webhook-specific extraArgs (if present) */ -}}
-{{- with .Values.webhook }}
-{{- range .extraArgs -}}
-{{- $args = append $args . -}}
-{{- end -}}
-{{- end -}}
 {{ join "," $args }}
 {{- end -}}
 
@@ -94,6 +88,21 @@ Create the name of the service account to use
 {{- else -}}
     {{ default "default" .Values.webhook.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/* 
+Webhook extra args 
+*/}}
+{{- define "webhook.args" -}}
+{{- $args := list -}}
+{{- $args = append $args "--webhook" -}}
+{{- / add webhook-specific extraArgs from values */ -}}
+{{- with .Values.webhook }}
+{{- range .extraArgs -}}
+{{- $args = append $args . -}}
+{{- end -}}
+{{- end -}}
+{{ join "," $args }}
 {{- end -}}
 
 {{/*
