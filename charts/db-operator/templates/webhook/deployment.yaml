@@ -50,7 +50,7 @@ spec:
           - db-operator
           args: 
             {{- range include "webhook.args" $ | split "," }}
-            {{ . }} 
+            - {{ . }} 
             {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
