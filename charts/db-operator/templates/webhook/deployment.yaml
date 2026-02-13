@@ -48,7 +48,10 @@ spec:
             protocol: TCP
           command:
           - db-operator
-          args: ["--webhook"]
+          args: 
+            {{- range include "webhook.args" $ | split "," }}
+            - {{ . }} 
+            {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: LOG_LEVEL

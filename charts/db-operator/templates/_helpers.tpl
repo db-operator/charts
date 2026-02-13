@@ -43,6 +43,7 @@ Arguments builder
 {{- if .Values.checkForChanges -}}
 {{- $args = append $args "--check-for-changes" -}}
 {{- end -}}
+{{- /* controller-specific extraArgs */ -}}
 {{- range .Values.controller.extraArgs -}}
 {{- $args = append $args . -}}
 {{- end -}}
@@ -87,6 +88,20 @@ Create the name of the service account to use
 {{- else -}}
     {{ default "default" .Values.webhook.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/* 
+Webhook extra args 
+*/}}
+{{- define "webhook.args" -}}
+{{- $args := list -}}
+{{- $args = append $args "--webhook" -}}
+{{- with .Values.webhook }}
+{{- range .extraArgs -}}
+{{- $args = append $args . -}}
+{{- end -}}
+{{- end -}}
+{{ join "," $args }}
 {{- end -}}
 
 {{/*
