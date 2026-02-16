@@ -54,8 +54,6 @@ spec:
             {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: LOG_LEVEL
-              value: {{ .Values.image.logLevel }}
             - name: POD_NAME
               valueFrom:
                 fieldRef:
