@@ -2,8 +2,9 @@ nameOverride: ""
 image:
   repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
-  logLevel: info
+
 controller:
+  logLevel: info
   extraArgs: []
 # imagePullSecrets:
 #   - name: myRegistrySecret
@@ -34,6 +35,7 @@ crds:
 webhook:
   extraArgs: []
   enabled: true
+  logLevel: info
   podLabels: {}
   serviceAccount:
     create: true

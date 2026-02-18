@@ -60,7 +60,7 @@ jobs:
       - name: Helm unit tests
         run: |
           helm plugin install https://github.com/helm-unittest/helm-unittest.git --verify=false
-          files=$(find charts/db-operator/tests -name '*.yaml')
+          files=$(find ./charts/db-operator/tests -name '*.yaml')
           for file in $files; do
             helm unittest -f $file ./charts/db-operator
           done
