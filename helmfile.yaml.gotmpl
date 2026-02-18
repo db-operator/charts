@@ -62,15 +62,6 @@ releases:
     needs:
       - monitoring/prometheus-stack
       - cert-manager/cert-manager
-    values:
-      - image:
-          repository: ghcr.io/jack-lull/db-operator-dev
-          tag: 9901bd1982f3c0feb1df6de759b22e0cd21fb776
-          pullPolicy: Always
-      - controller:
-          logLevel: error
-      - webhook:
-          logLevel: error
 
   - name: mariadb-instance
     namespace: databases
