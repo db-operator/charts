@@ -1,6 +1,7 @@
 nameOverride: ""
 image:
-  repository: ghcr.io/db-operator/db-operator
+  repository: ghcr.io/db-operator/db-operator-dev
+  tag: 9eb4a703d8211c39099acab33a56aaad6a75cdd5
   pullPolicy: Always
   logLevel: info
 controller:
