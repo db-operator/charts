@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 2.3.0](https://img.shields.io/badge/Version-2.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.18.0](https://img.shields.io/badge/AppVersion-2.18.0-informational?style=flat-square)
+![Version: 2.5.1](https://img.shields.io/badge/Version-2.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.21.0](https://img.shields.io/badge/AppVersion-2.21.0-informational?style=flat-square)
 
 The DB Operator creates databases and make them available in the cluster via Custom Resource.
 
@@ -93,7 +93,8 @@ We use helm tests feature for testing the chart in CI. Though we know that this 
 | nameOverride | string | `""` |  |
 | image.repository | string | `"ghcr.io/db-operator/db-operator"` |  |
 | image.pullPolicy | string | `"Always"` |  |
-| image.logLevel | string | `"info"` |  |
+| controller.logLevel | string | `"info"` |  |
+| controller.extraArgs | list | `[]` |  |
 | reconcileInterval | string | `"60"` |  |
 | watchNamespace | string | `""` |  |
 | checkForChanges | bool | `false` | ---------------------------------------------------------- |
@@ -102,7 +103,9 @@ We use helm tests feature for testing the chart in CI. Though we know that this 
 | crds.install | bool | `true` |  |
 | crds.keep | bool | `true` |  |
 | crds.annotations | object | `{}` |  |
+| webhook.extraArgs | list | `[]` |  |
 | webhook.enabled | bool | `true` |  |
+| webhook.logLevel | string | `"info"` |  |
 | webhook.podLabels | object | `{}` |  |
 | webhook.serviceAccount.create | bool | `true` |  |
 | webhook.names.mutating | string | `"db-operator-mutating-webhook-configuration"` |  |

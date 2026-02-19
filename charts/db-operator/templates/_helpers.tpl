@@ -91,8 +91,8 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
-{{/* 
-Webhook extra args 
+{{/*
+Webhook extra args
 */}}
 {{- define "webhook.args" -}}
 {{- $args := list -}}
