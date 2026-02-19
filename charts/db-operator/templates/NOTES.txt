@@ -6,7 +6,7 @@
                                (.-.).-.)
   _______________________ooo__(    ^    )___________________________
  /                             '-.___.-'                            \
-| Please read these notes, they might be usefull and we will try to  |
+| Please read these notes, they might be useful and we will try to   |
 | make them as short as possible                                     |
  \________________________________________ooo_______________________/
                                |_  |  _|  jgs
@@ -25,7 +25,7 @@ The Release name {{ .Release.Name }}.
 Breaking changes and migration paths:
 
 From 2.5.0, the .image.logLevel field is no longer used,  and instead
-users should use .controller.logLevel and .webhook.logLevel 
+users should use .controller.logLevel and .webhook.logLevel
 
 From 2.0.0, the "v" prefix will not be
 automatically added to the image tag. If you are overriding the image
