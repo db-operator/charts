@@ -1,0 +1,43 @@
+name: Publish an OCI Artifact
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v3
+      - uses: actions/setup-python@v4
+
+      - name: Push Helm chart to OCI compatible registry (ghcr)
+        run: |
+          export BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          export SHA="+$(git rev-parse --short HEAD)"
+
+          helm registry login ghcr.io \
+            --username ${{ github.actor }} \
+            --password ${{ github.token }}
+
+          for chart in $(find charts -maxdepth 1 -mindepth 1 -type d); do
+            if [ "${BRANCH}" != "main" ]; then
+              yq e -i ".version += env(SHA)" "$chart/Chart.yaml"
+            fi
+            helm dep build $chart
+            helm package $chart -d chart-packages;
+          done
+
+          charts=$(find chart-packages -maxdepth 1 -mindepth 1 -type f)
+          REGISTRY=$(echo oci://ghcr.io/${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+
+          for chart in $charts; do
+            echo ${chart}
+            CHART_NAME=$(helm show chart "${chart}" | yq .name)
+            CHART_VERSION=$(helm show chart "${chart}" | yq .version)
+            if helm pull ${REGISTRY}/${CHART_NAME}:${CHART_VERSION}; then
+              echo "Chart is found in the upstream: ${CHART_NAME}:${CHART_VERSION}"
+              continue;
+            fi
+            helm push "${chart}" "${REGISTRY}"
+          done
