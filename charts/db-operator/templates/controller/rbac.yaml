@@ -24,7 +24,6 @@ rules:
   - configmaps
   - secrets
   - services
-  - events
   verbs:
   - create
   - update
@@ -32,10 +31,20 @@ rules:
   - list
   - watch
 - apiGroups:
+  - "events.k8s.io"
+  resources:
+  - events
+  verbs:
+  - create
+  - update
+  - patch
+  - get
+  - list
+  - watch
+- apiGroups:
   - ""
   resources:
   - services
-  - events
   verbs:
   - patch
 - apiGroups:
