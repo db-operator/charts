@@ -1,0 +1,39 @@
+---
+# -- Quick checks mostly related to the code-related worklow
+name: Repo checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  repo-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v3
+      - uses: actions/setup-go@v6
+      - name: Run the pre-commit hook
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files
+
+      - name: Check CRD generation
+        run: |-
+          make sync-crds
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "Please update CRDs using 'make sync-crds' and push the changes"
+            exit 1
+          fi
+
+      - name: Check docs generation
+        run: |-
+          make gen-docs
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "Please re-generate the docs using 'make gen-docs' and push the changes"
+            exit 1
+          fi
