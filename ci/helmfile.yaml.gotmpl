@@ -68,8 +68,7 @@ releases:
     {{- if (eq .Environment.Name "local-dev") }}
     values:
       - image:
-          registry: localhost
-          repository: my-db-operator
+          repository: localhost/my-db-operator
           tag: v1.0.0-dev
           pullPolicy: Never
     {{- end }}
