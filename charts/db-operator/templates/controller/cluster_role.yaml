@@ -32,13 +32,7 @@ rules:
   - dbusers
   - dbbackups
   verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+  - "*"
 
 - apiGroups:
   - kinda.rocks
@@ -48,8 +42,7 @@ rules:
   - dbusers/finalizers
   - dbbackups/finalizers
   verbs:
-  - get
-  - update
+  - "*"
 
 - apiGroups:
   - kinda.rocks
@@ -59,9 +52,7 @@ rules:
   - dbusers/status
   - dbbackups/status
   verbs:
-  - get
-  - patch
-  - update
+  - "*"
 
 - apiGroups:
   - "rbac.authorization.k8s.io"
