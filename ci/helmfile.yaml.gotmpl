@@ -14,7 +14,8 @@ repositories:
   - name: cloudpirates
     url: registry-1.docker.io/cloudpirates
     oci: true
-
+  - name: minio-standalone
+    url: https://charts.min.io/
 releases:
   - name: cert-manager
     chart: jetstack/cert-manager
@@ -53,6 +54,52 @@ releases:
             ruleSelectorNilUsesHelmValues: false
             serviceMonitorSelector: {}
             serviceMonitorSelectorNilUsesHelmValues: false
+  - name: minio
+    namespace: minio
+    chart: minio-standalone/minio
+    version: 5.4.0
+    createNamespace: true
+    installed: {{ eq .Environment.Name "local-dev" }}
+    values:
+      - rootUser: 'root'
+        rootPassword: 123123!!
+        replicas: 1
+        mode: standalone
+        resources:
+          requests:
+            memory: 512Mi
+        environment:
+          MINIO_SERVER_URL: "http://minio.minio.svc.cluster.local:9000"
+        tls:
+          enabled: false
+        persistence:
+          enabled: true
+          accessMode: ReadWriteOnce
+          size: 1Gi
+        service:
+          type: ClusterIP
+          clusterIP: ~
+          port: '9000'
+        consoleService:
+          type: ClusterIP
+          clusterIP: ~
+          port: '9001'
+        buckets:
+          - name: backups
+            policy: download
+            purge: false
+        policies:
+          - name: backups
+            statements:
+              - resources:
+                  - 'arn:aws:s3:::backups'
+                  - 'arn:aws:s3:::backups/*'
+                actions:
+                  - 's3:*'
+        users:
+          - accessKey: backups
+            secretKey: qwertyu9
+            policy: backups
 
   - name: db-operator
     namespace: db-operator
@@ -135,6 +182,15 @@ releases:
           generic:
             host: postgres-instance.databases.svc.cluster.local
             port: 5432
+          backup:
+            availableSecrets:
+              test:
+                RCLONE_CONFIG_BACKUP_TYPE: s3
+                RCLONE_CONFIG_BACKUP_PROVIDER: Minio
+                RCLONE_CONFIG_BACKUP_ACCESS_KEY_ID: backups
+                RCLONE_CONFIG_BACKUP_SECRET_ACCESS_KEY: qwertyu9
+                RCLONE_CONFIG_BACKUP_ENDPOINT: http://minio.minio.svc.cluster.local:9000
+                BACKUP_BUCKET_NAME: backups
         mariadb:
           serviceMonitor:
             enabled: true
@@ -149,7 +205,15 @@ releases:
           generic:
             host: mariadb-instance.databases.svc.cluster.local
             port: 3306
-
+          backup:
+            availableSecrets:
+              test-mysql:
+                RCLONE_CONFIG_BACKUP_TYPE: s3
+                RCLONE_CONFIG_BACKUP_PROVIDER: Minio
+                RCLONE_CONFIG_BACKUP_ACCESS_KEY_ID: backup
+                RCLONE_CONFIG_BACKUP_SECRET_ACCESS_KEY: qwertyu9
+                RCLONE_CONFIG_BACKUP_ENDPOINT: http://minio.minio.svc.cluster.local:9000
+                BACKUP_BUCKET_NAME: backup
   - name: databases
     namespace: working-namespace
     installed: {{ eq .Environment.Name "local-dev" }}

@@ -22,6 +22,7 @@ rules:
   - create
   - update
   - patch
+  - delete
 
 - apiGroups:
   - kinda.rocks

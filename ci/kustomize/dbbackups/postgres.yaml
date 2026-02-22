@@ -8,3 +8,4 @@ spec:
     registry: localhost
     repository: db-backup-cli
     tag: latest
+  uploadCredentialsSecret: test

@@ -32,7 +32,7 @@ controller:
     watchNamespace: ""
     checkForChanges: false
     # Which namespace should be used for backup pods
-    backupNamespace: "test"
+    backupNamespace: ""
 
 webhook:
   enabled: true
