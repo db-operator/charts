@@ -39,4 +39,3 @@ do
   fi
   sleep "${ATTEMPTS_PAUSE}"
 done
-

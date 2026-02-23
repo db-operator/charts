@@ -40,8 +40,13 @@ Arguments builder
 */}}
 {{- define "db-operator.args" -}}
 {{- $args := list -}}
+{{- $args = append $args (printf "--zap-log-level=%s" .Values.controller.logLevel) -}}
 {{- if .Values.checkForChanges -}}
 {{- $args = append $args "--check-for-changes" -}}
+{{- end -}}
+{{- /* controller-specific extraArgs */ -}}
+{{- range .Values.controller.extraArgs -}}
+{{- $args = append $args . -}}
 {{- end -}}
 {{ join "," $args }}
 {{- end -}}
@@ -84,6 +89,21 @@ Create the name of the service account to use
 {{- else -}}
     {{ default "default" .Values.webhook.serviceAccount.name }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Webhook extra args
+*/}}
+{{- define "webhook.args" -}}
+{{- $args := list -}}
+{{- $args = append $args (printf "--zap-log-level=%s" .Values.webhook.logLevel) -}}
+{{- $args = append $args "--webhook" -}}
+{{- with .Values.webhook }}
+{{- range .extraArgs -}}
+{{- $args = append $args . -}}
+{{- end -}}
+{{- end -}}
+{{ join "," $args }}
 {{- end -}}
 
 {{/*

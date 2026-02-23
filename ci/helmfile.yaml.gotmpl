@@ -1,7 +1,7 @@
 environments:
-  default:
-  instances:
-
+  db-operator:
+  db-instances:
+  tests:
 ---
 repositories:
   - name: jetstack
@@ -26,7 +26,8 @@ releases:
 
   - name: prometheus-stack
     namespace: monitoring
-    version: 80.14.4
+    version: 81.6.9
+    installed: true
     createNamespace: true
     disableValidation: true
     disableOpenAPIValidation: true
@@ -55,7 +56,8 @@ releases:
   - name: db-operator
     namespace: db-operator
     createNamespace: true
-    chart: ./charts/db-operator
+    installed: {{ not (eq .Environment.Name "db-operator") }}
+    chart: ../charts/db-operator
     labels:
       purpose: db-operator
     needs:
@@ -65,9 +67,10 @@ releases:
   - name: mariadb-instance
     namespace: databases
     chart: cloudpirates/mariadb
+    installed: {{ not (eq .Environment.Name "db-operator") }}
     labels:
       test: mysql
-    version: 0.13.4
+    version: 0.14.3
     values:
       - auth:
           rootPassword: 123123!!
@@ -75,6 +78,7 @@ releases:
   - name: mysql-test
     namespace: mysql-test
     chart: ./charts/db-operator-mysql-test/
+    installed: {{ eq .Environment.Name "tests" }}
     labels:
       test: mysql
       purpose: test
@@ -82,7 +86,8 @@ releases:
   - name: postgres-instance
     namespace: databases
     chart: cloudpirates/postgres
-    version: 0.15.2
+    version: 0.15.5
+    installed: {{ not (eq .Environment.Name "db-operator") }}
     labels:
       test: psql
     values:
@@ -92,6 +97,7 @@ releases:
 
   - name: psql-test
     namespace: psql-test
+    installed: {{ eq .Environment.Name "tests" }}
     chart: ./charts/db-operator-psql-test/
     labels:
       test: psql
