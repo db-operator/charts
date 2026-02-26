@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 2.5.2](https://img.shields.io/badge/Version-2.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.21.0](https://img.shields.io/badge/AppVersion-2.21.0-informational?style=flat-square)
+![Version: 2.5.3](https://img.shields.io/badge/Version-2.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.21.0](https://img.shields.io/badge/AppVersion-2.21.0-informational?style=flat-square)
 
 The DB Operator creates databases and make them available in the cluster via Custom Resource.
 
@@ -129,7 +129,7 @@ We use helm tests feature for testing the chart in CI. Though we know that this 
 | config.instance.google.proxy.image | string | `"ghcr.io/db-operator/db-auth-gateway:v0.1.10"` |  |
 | config.instance.google.proxy.metricsPort | int | `9090` |  |
 | config.instance.generic | object | `{}` |  |
-| config.instance.percona.proxy.image | string | `"severalnines/proxysql:2.0"` |  |
+| config.instance.percona.proxy.image | string | `"severalnines/proxysql:2.3"` |  |
 | config.instance.percona.proxy.metricsPort | int | `9090` |  |
 | config.backup.activeDeadlineSeconds | int | `600` |  |
 | config.backup.nodeSelector | object | `{}` |  |
