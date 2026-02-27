@@ -10,16 +10,3 @@ spec:
   postgres: {}
   secretName: postgres-creds
   cleanup: true
----
-apiVersion: kinda.rocks/v1beta1
-kind: Database
-metadata:
-  name: postgres-2
-spec:
-  backup:
-    enable: false
-  deletionProtected: false
-  instance: postgres
-  postgres: {}
-  secretName: postgres-2-creds
-  cleanup: true

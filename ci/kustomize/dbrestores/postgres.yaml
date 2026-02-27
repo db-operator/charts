@@ -1,5 +1,5 @@
 apiVersion: kinda.rocks/v1beta1
-kind: DbBackup
+kind: DbRestore
 metadata:
   name: postgres
 spec:
@@ -9,3 +9,5 @@ spec:
     repository: db-backup-cli
     tag: latest
   uploadCredentialsSecret: test
+  cleanup: true
+  backupPath: working-namespace/postgres

@@ -33,7 +33,14 @@ spec:
   {{- end }}
   {{- if $value.backup }}
   backup:
-    {{ toYaml $value.backup | nindent 4 }}
+    {{- with $value.backup.availableSecrets }}
+    availableSecrets:
+    {{- range $k, $_ := . }}
+      {{ $k }}:
+        Name: {{ $k }}-upload-credentials
+        Namespace: {{ $operatorNs }}
+      {{- end }}
+    {{- end }}
   {{- end }}
   monitoring:
     enabled: {{ $value.monitoring.enabled }}
@@ -94,6 +101,23 @@ type: Opaque
 data:
   user: {{ $value.secrets.adminUser | b64enc }}
   password: {{ $value.secrets.adminPassword | b64enc }}
+{{- end }}
+{{- with ($value.backup).availableSecrets }}
+{{- range $k, $v := .}}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $k }}-upload-credentials
+  namespace: {{ $operatorNs }}
+  labels:
+    {{ include "db-instances.labels" $ | nindent 4 }}
+type: Opaque
+data:
+{{- range $key, $val := $v }}
+  {{ $key }}: {{ $val | b64enc }}
+{{- end }}
+{{- end }}
 {{- end }}
 ---
 apiVersion: v1
