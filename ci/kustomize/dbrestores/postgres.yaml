@@ -1,7 +1,7 @@
 apiVersion: kinda.rocks/v1beta1
 kind: DbRestore
 metadata:
-  name: postgres
+  name: postgres-new
 spec:
   database: postgres
   image:
@@ -10,4 +10,4 @@ spec:
     tag: latest
   uploadCredentialsSecret: test
   cleanup: true
-  backupPath: working-namespace/postgres
+  backupPath: working-namespace/postgres-new

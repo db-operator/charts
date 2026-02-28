@@ -53,6 +53,14 @@ Controller extra args
 {{- if .config.checkForChanges }}
 {{- $args = append $args "--check-for-changes" }}
 {{- end }}
+{{- if .config.restoreNamespace }}
+{{- $args = append $args (printf "--restore-namespace=%s" .config.restoreNamespace) }}
+{{- else }}
+{{- $args = append $args (printf "--restore-namespace=%s" $.Release.Namespace) }}
+{{- end }}
+{{- if .config.devLogging }}
+{{- $args = append $args "--dev-logging" }}
+{{- end }}
 {{- range .extraArgs -}}
 {{- $args = append $args . -}}
 {{- end -}}

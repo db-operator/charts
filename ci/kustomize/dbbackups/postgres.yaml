@@ -1,7 +1,7 @@
 apiVersion: kinda.rocks/v1beta1
 kind: DbBackup
 metadata:
-  name: postgres
+  name: postgres-new
 spec:
   database: postgres
   image:

@@ -121,6 +121,9 @@ releases:
           repository: my-db-operator
           tag: v1.0.0-dev
           pullPolicy: Never
+        controller:
+          config:
+            restoreNamespace: working-namespace
     {{- end }}
 
   - name: mariadb-instance
