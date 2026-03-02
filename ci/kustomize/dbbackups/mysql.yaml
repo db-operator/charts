@@ -4,3 +4,8 @@ metadata:
   name: mysql
 spec:
   database: mysql
+  image:
+    registry: localhost
+    repository: db-backup-cli
+    tag: latest
+  uploadCredentialsSecret: test-mysql

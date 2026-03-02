@@ -15,9 +15,17 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
+    - description: A path to the backup in the external storage.
+      jsonPath: .status.path
+      name: Path
+      type: string
     - description: If database was backed up.
       jsonPath: .status.status
       name: Status
+      type: boolean
+    - description: Is DbBackup locked by the backup pod
+      jsonPath: .status.lockedByBackupJob
+      name: Locked
       type: boolean
     - description: db-operator version of last full reconcile
       jsonPath: .status.operatorVersion
@@ -117,6 +125,9 @@ spec:
                 default: 0
                 format: int64
                 type: integer
+              backupPodId:
+                description: An ID of a last created pod
+                type: string
               backupSize:
                 default: 0
                 format: int64
@@ -191,7 +202,7 @@ spec:
                 - type
                 x-kubernetes-list-type: map
               engine:
-                description: Database engine
+                description: Database engine. It's used by the db-backup-cli
                 type: string
               failedRetries:
                 default: 0

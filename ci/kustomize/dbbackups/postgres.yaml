@@ -1,9 +1,10 @@
 apiVersion: kinda.rocks/v1beta1
 kind: DbBackup
 metadata:
-  name: postgres-new
+  generateName: postgres-
 spec:
   database: postgres
+  debug: true
   image:
     registry: localhost
     repository: db-backup-cli

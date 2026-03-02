@@ -7,7 +7,7 @@ description: This operator lets you manage databases in a Kubernetes native way,
 # All supported k8s versions are in the test:
 # https://github.com/db-operator/charts/blob/main/.github/workflows/integration-test.yaml
 kubeVersion: ">= 1.32-prerelease"
-appVersion: "e94a2f9e285aa79fb559de0a0c822bf0ac7e762c"
+appVersion: "b94b6213bd60076a69bf38b0c4ad216ce0a9cc79"
 home: https://github.com/db-operator
 maintainers:
   - name: Nikolai Rodionov
