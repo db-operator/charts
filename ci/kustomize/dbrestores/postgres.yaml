@@ -1,12 +1,13 @@
 apiVersion: kinda.rocks/v1beta1
-kind: DbBackup
+kind: DbRestore
 metadata:
-  generateName: postgres-
+  name: postgres-new
 spec:
   database: postgres
-  debug: true
   image:
     registry: localhost
     repository: db-backup-cli
     tag: latest
   uploadCredentialsSecret: test
+  cleanup: true
+  backupPath: working-namespace/postgres-new
