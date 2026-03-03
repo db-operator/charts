@@ -120,7 +120,7 @@ metadata:
     "helm.sh/hook-weight": "2"
 type: Opaque
 data:
-  POSTGRES_PASSWORD: {{ "" | b64enc }}
+  POSTGRES_PASSWORD: {{ "test" | b64enc }}
 {{- end }}
 ---
 apiVersion: "kinda.rocks/v1beta1"
