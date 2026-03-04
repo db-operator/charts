@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export PGPASSWORD=$(kubectl get secret postgres-creds -o yaml | yq .data.POSTGRES_PASSWORD | base64 -d)
+export PGDATABASE=$(kubectl get secret postgres-creds -o yaml | yq .data.POSTGRES_DB | base64 -d)
+export PGUSER=$(kubectl get secret postgres-creds -o yaml | yq .data.POSTGRES_USER | base64 -d)
+export PGHOST=localhost
+
+psql "$@"

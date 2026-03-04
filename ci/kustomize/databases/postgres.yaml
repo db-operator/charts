@@ -5,7 +5,7 @@ metadata:
 spec:
   backup:
     enable: true
-    cron: '*/5 * * * *'
+    cron: '*/40 * * * *'
     bucket: backups
     envFromSecret: s3-creds
   deletionProtected: false
