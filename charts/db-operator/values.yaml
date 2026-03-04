@@ -32,7 +32,7 @@ controller:
     create: true
   config:
     backup:
-      activeDeadlineSeconds: 600 # 10m
+      activeDeadlineSeconds: 600
       nodeSelector: {}
       postgres:
         image: "ghcr.io/db-operator/pgdump-rclone:0.1.0"
