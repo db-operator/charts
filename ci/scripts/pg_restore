@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+export PGPASSWORD=$(kubectl get secret -n db-operator postgres-admin-secret -o yaml | yq .data.password | base64 -d)
+export PGDATABASE=postgres
+export PGUSER=$(kubectl get secret -n db-operator postgres-admin-secret -o yaml | yq .data.user | base64 -d)
+export PGHOST=localhost
+export DATABASE=$(kubectl get secret postgres-creds -o yaml | yq .data.POSTGRES_DB | base64 -d)
+export USERNAME=$(kubectl get secret postgres-creds -o yaml | yq .data.POSTGRES_USER | base64 -d)
+
+pg_restore --no-owner --no-privileges -d $DATABASE --role $USERNAME -Fc ~/Downloads/working-namespace-postgres-latest.sql.gz --clean -vvv
