@@ -7,14 +7,4 @@ metadata:
     {{- include "db-operator.controller.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    monitoring:
-    {{- if .Values.config.monitoring.promPushGateway }}
-      promPushGateway: {{ .Values.config.monitoring.promPushGateway }}
-    {{- end }}
-      nodeSelector:
-        {{- toYaml .Values.config.monitoring.nodeSelector | nindent 8 }}
-      postgres:
-        image: {{ .Values.config.monitoring.postgres.image }}
-        queries: |-
-          {{- toYaml .Values.config.monitoring.postgres.queries | nindent 10 }}
-      mysql: {}
+    {{- .Values.controller.config | toYaml | nindent  4 }}

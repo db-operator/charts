@@ -4,7 +4,10 @@ metadata:
   name: mysql
 spec:
   backup:
-    enable: false
+    enable: true
+    cron: '*/5 * * * *'
+    bucket: backups
+    envFromSecret: s3-creds
   deletionProtected: false
   instance: mariadb
   secretName: mysql-creds
