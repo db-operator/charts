@@ -1,43 +1,62 @@
 nameOverride: ""
-image:
-  repository: ghcr.io/db-operator/db-operator
-  pullPolicy: Always
+clusterDomain: cluster.local
 
-controller:
-  logLevel: info
-  extraArgs: []
+image:
+  registry: ghcr.io
+  repository: db-operator/db-operator
+  tag: ""
+  pullPolicy: Always
 # imagePullSecrets:
 #   - name: myRegistrySecret
+# Global metadata, should be applied to each resource
+metadata:
+  labels: {}
+  annotations: {}
 
-reconcileInterval: "60"
-# watchNamespace value is comma-separated list of namespace names. It's necessary to set "" to watch cluster wide.
-watchNamespace: ""
-
-# ------------------------------------------------------------
-# -- If set to true, db-operator will check if Kubernetes
-# -- objects were changed before running database queries.
-# -- It might reduce the amount of queries, because otherwise
-# -- db-operator will try to update databases and users every
-# -- ${RECONCILE_INTERVAL} seconds.
-# ------------------------------------------------------------
-# -- NOTE: Currently, it's only working with Database Users
-# ------------------------------------------------------------
-checkForChanges: false
-
-rbac:
-  create: true
-serviceAccount:
-  create: true
 crds:
   install: true
   keep: true
   annotations: {}
-webhook:
+
+controller:
+  logLevel: info
   extraArgs: []
+  serviceAccount:
+    name: ""
+    create: true
+  rbac:
+    create: true
+  config:
+    backup:
+      activeDeadlineSeconds: 600  # 10m
+      nodeSelector: {}
+      postgres:
+        image: "ghcr.io/db-operator/pgdump-rclone:0.1.0"
+      mysql:
+        image: "ghcr.io/db-operator/mydump-rclone:0.1.0"
+      resources:
+        requests:
+          memory: 64Mi
+          cpu: 0.2
+    monitoring:
+      promPushGateway: ""
+  args:
+    reconcileInterval: "60"
+    # watchNamespace value is comma-separated list of namespace names. It's necessary to set "" to watch cluster wide.
+    watchNamespace: ""
+    checkForChanges: false
+    # Which namespace should be used for backup pods
+    backupNamespace: ""
+
+webhook:
   enabled: true
   logLevel: info
+  extraArgs: []
   podLabels: {}
+  rbac:
+    create: true
   serviceAccount:
+    name: ""
     create: true
   names:
     mutating: db-operator-mutating-webhook-configuration
@@ -89,65 +108,6 @@ annotations: {}
 podLabels: {}
 affinity: {}
 tolerations: []
-config:
-  instance:
-    google:
-      proxy:
-        nodeSelector: {}
-        image: ghcr.io/db-operator/db-auth-gateway:v0.1.10
-        metricsPort: 9090
-    generic: {}
-    percona:
-      proxy:
-        image: severalnines/proxysql:2.0
-        metricsPort: 9090
-  backup:
-    activeDeadlineSeconds: 600  # 10m
-    nodeSelector: {}
-    postgres:
-      image: "kloeckneri/pgdump-gcs:latest"
-    mysql:
-      image: "kloeckneri/mydump-gcs:latest"
-    resources:
-      requests:
-        memory: 64Mi
-        cpu: 0.2
-  monitoring:
-    promPushGateway: ""
-    nodeSelector: {}
-    postgres:
-      image: wrouesnel/postgres_exporter:latest
-      queries:
-        pg_stat_statements:
-          query: "SELECT userid, pgss.dbid, pgdb.datname, queryid, query, calls, total_time, mean_time, rows FROM pg_stat_statements pgss LEFT JOIN (select oid as dbid, datname from pg_database) as pgdb on pgdb.dbid = pgss.dbid WHERE not queryid isnull ORDER BY mean_time desc limit 20"
-          metrics:
-            - userid:
-                usage: "LABEL"
-                description: "User ID"
-            - dbid:
-                usage: "LABEL"
-                description: "database ID"
-            - datname:
-                usage: "LABEL"
-                description: "database NAME"
-            - queryid:
-                usage: "LABEL"
-                description: "Query unique Hash Code"
-            - query:
-                usage: "LABEL"
-                description: "Query class"
-            - calls:
-                usage: "COUNTER"
-                description: "Number of times executed"
-            - total_time:
-                usage: "COUNTER"
-                description: "Total time spent in the statement, in milliseconds"
-            - mean_time:
-                usage: "GAUGE"
-                description: "Mean time spent in the statement, in milliseconds"
-            - rows:
-                usage: "COUNTER"
-                description: "Total number of rows retrieved or affected by the statement"
 secrets:
   gsql: {}
 serviceMonitor:
