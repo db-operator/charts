@@ -201,6 +201,29 @@ entries:
     version: 1.3.0
   db-operator:
   - apiVersion: v2
+    appVersion: 2.28.0
+    created: "2026-04-08T15:43:29.147995193Z"
+    description: This operator lets you manage databases in a Kubernetes native way,
+      even if they are not deployed to Kubernetes
+    digest: b7bdacda8ccb3ff9a69cf4cd83942e85f634cca67a7d2ac11aa7381a4ae4f8d2
+    home: https://github.com/db-operator
+    keywords:
+    - database
+    - mysql
+    - postgres
+    kubeVersion: '>= 1.32-prerelease'
+    maintainers:
+    - email: iam@allanger.xyz
+      name: Nikolai Rodionov
+      url: https://badhouseplants.net
+    name: db-operator
+    sources:
+    - https://github.com/db-operator/db-operator
+    type: application
+    urls:
+    - https://github.com/db-operator/charts/releases/download/db-operator-3.4.0/db-operator-3.4.0.tgz
+    version: 3.4.0
+  - apiVersion: v2
     appVersion: 2.27.0
     created: "2026-04-06T12:24:48.089440148Z"
     description: This operator lets you manage databases in a Kubernetes native way,
@@ -2119,4 +2142,4 @@ entries:
     urls:
     - https://github.com/db-operator/charts/releases/download/db-operator-psql-test-0.1.0/db-operator-psql-test-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-06T12:24:48.089690164Z"
+generated: "2026-04-08T15:43:29.148371624Z"
