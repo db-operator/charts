@@ -107,9 +107,11 @@ metadata:
 spec:
   secretName: {{ template "db-operator-mysql-test.name" . }}-mysql-credentials # where to save db name user, password for application
   instance: {{ template "db-operator-mysql-test.name" . }}-mysql
+  {{- if .Values.features.backup.enabled }}
   backup:
     enable: false
     cron: ""
+  {{- end }}
   deletionProtected: true
   {{- if .Values.features.existingUser.enabled }}
   existingUser: {{ .Values.features.existingUser.username }}
