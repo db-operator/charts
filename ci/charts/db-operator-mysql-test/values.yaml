@@ -3,6 +3,8 @@ features:
     enabled: false
     username: testuser
     password: qwertyu9
+  backup:
+    enabled: true
 
 mysql:
   admin:

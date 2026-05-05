@@ -138,9 +138,11 @@ metadata:
 spec:
   secretName: {{ template "db-operator-psql-test.name" . }}-postgresql-credentials
   instance: {{ template "db-operator-psql-test.name" . }}-postgresql
+  {{- if .Values.features.backup.enabled }}
   backup:
     enable: false
     cron: ""
+  {{- end }}
   deletionProtected: true
   {{- if .Values.features.existingUser.enabled }}
   existingUser: {{ .Values.features.existingUser.username }}
