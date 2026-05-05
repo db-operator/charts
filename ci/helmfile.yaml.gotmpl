@@ -67,6 +67,7 @@ releases:
       - monitoring/prometheus-stack
       - cert-manager/cert-manager
     {{- if (eq .Environment.Name "local-dev") }}
+
     values:
       - image:
           repository: localhost/my-db-operator
