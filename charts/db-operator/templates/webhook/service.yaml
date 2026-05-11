@@ -7,6 +7,9 @@ metadata:
   labels:
     {{- include "db-operator.webhook.labels" . | nindent 4 }}
 spec:
+  {{- with .Values.webhook.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . }}
+  {{- end }}
   ports:
     - port: 443
       protocol: TCP
