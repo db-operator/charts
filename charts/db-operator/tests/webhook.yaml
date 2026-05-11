@@ -50,3 +50,16 @@ tests:
           count: 0
           filterAware: true
         template: webhook/configs/validating_webhook.yaml
+  - it: allows configuring the IP family policy
+    set:
+      webhook:
+        service:
+          ipFamilyPolicy: RequireDualStack
+    documentSelector:
+      path: kind
+      value: Service
+      skipEmptyTemplates: true
+    asserts:
+      - equal:
+          path: spec.ipFamilyPolicy
+          value: RequireDualStack

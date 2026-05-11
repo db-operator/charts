@@ -107,6 +107,8 @@ webhook:
   serviceAccount:
     name: ""
     create: true
+  service:
+    ipFamilyPolicy: ""
   names:
     mutating: db-operator-mutating-webhook-configuration
     validating: db-operator-validating-webhook-configuration
