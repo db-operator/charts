@@ -54,18 +54,18 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Build an image out of object like that:
 image:
   registry: ghcr.io
-  repositoru: db-operator/db-operator
+  repository: db-operator/db-operator
   tag: latest
 Might be used to make it easier to configure mirroring
 */}}
 {{- define "db-operator.imageBootsrap" -}}
 {{- $image := "" }}
-{{- if .image.registry }}
-{{- $image = printf "%s/" .image.registry }}
+{{- if .Values.image.registry }}
+{{- $image = printf "%s/" .Values.image.registry }}
 {{- end }}
 {{- $tag := printf "%s" .chart.AppVersion }}
-{{- if .image.tag }}
-{{- $tag = .image.tag }}
+{{- if .Values.image.tag }}
+{{- $tag = .Values.image.tag }}
 {{- end }}
-{{- printf "%s%s:%s" $image .image.repository $tag }}
+{{- printf "%s%s:%s" $image .Values.image.repository $tag }}
 {{- end }}
