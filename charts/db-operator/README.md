@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 3.10.0](https://img.shields.io/badge/Version-3.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.33.0](https://img.shields.io/badge/AppVersion-2.33.0-informational?style=flat-square)
+![Version: 3.11.0](https://img.shields.io/badge/Version-3.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8b054a0094186274397130bb0888b066e3bdfb9b](https://img.shields.io/badge/AppVersion-8b054a0094186274397130bb0888b066e3bdfb9b-informational?style=flat-square)
 
 This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 
@@ -27,7 +27,7 @@ Kubernetes: `>= 1.32-prerelease`
 | nameOverride | string | `""` |  |
 | clusterDomain | string | `"cluster.local"` |  |
 | image.registry | string | `"ghcr.io"` |  |
-| image.repository | string | `"db-operator/db-operator"` |  |
+| image.repository | string | `"db-operator/db-operator-dev"` |  |
 | image.tag | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | metadata.labels | object | `{}` |  |
@@ -43,44 +43,17 @@ Kubernetes: `>= 1.32-prerelease`
 | controller.serviceAccount.name | string | `""` |  |
 | controller.serviceAccount.create | bool | `true` |  |
 | controller.rbac.create | bool | `true` |  |
+| controller.config.backup.activeDeadlineSeconds | int | `600` |  |
+| controller.config.backup.nodeSelector | object | `{}` |  |
+| controller.config.backup.postgres.image | string | `"ghcr.io/db-operator/pgdump-rclone:0.1.0"` |  |
+| controller.config.backup.mysql.image | string | `"ghcr.io/db-operator/mydump-rclone:0.1.0"` |  |
+| controller.config.backup.resources.requests.memory | string | `"64Mi"` |  |
+| controller.config.backup.resources.requests.cpu | float | `0.2` |  |
+| controller.config.monitoring.promPushGateway | string | `""` |  |
 | controller.args.reconcileInterval | string | `"60"` |  |
 | controller.args.watchNamespace | string | `""` |  |
 | controller.args.checkForChanges | bool | `false` |  |
 | controller.serviceMonitor.enabled | bool | `false` |  |
-| controller.config.instance.google.proxy.nodeSelector | object | `{}` |  |
-| controller.config.instance.google.proxy.image | string | `"ghcr.io/db-operator/db-auth-gateway:v0.1.10"` |  |
-| controller.config.instance.google.proxy.metricsPort | int | `9090` |  |
-| controller.config.instance.generic | object | `{}` |  |
-| controller.config.instance.percona.proxy.image | string | `"severalnines/proxysql:2.0"` |  |
-| controller.config.instance.percona.proxy.metricsPort | int | `9090` |  |
-| controller.config.backup.activeDeadlineSeconds | int | `600` |  |
-| controller.config.backup.nodeSelector | object | `{}` |  |
-| controller.config.backup.postgres.image | string | `"kloeckneri/pgdump-gcs:latest"` |  |
-| controller.config.backup.mysql.image | string | `"kloeckneri/mydump-gcs:latest"` |  |
-| controller.config.backup.resources.requests.memory | string | `"64Mi"` |  |
-| controller.config.backup.resources.requests.cpu | float | `0.2` |  |
-| controller.config.monitoring.promPushGateway | string | `""` |  |
-| controller.config.monitoring.nodeSelector | object | `{}` |  |
-| controller.config.monitoring.postgres.image | string | `"wrouesnel/postgres_exporter:latest"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.query | string | `"SELECT userid, pgss.dbid, pgdb.datname, queryid, query, calls, total_time, mean_time, rows FROM pg_stat_statements pgss LEFT JOIN (select oid as dbid, datname from pg_database) as pgdb on pgdb.dbid = pgss.dbid WHERE not queryid isnull ORDER BY mean_time desc limit 20"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.usage | string | `"LABEL"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[0].userid.description | string | `"User ID"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.usage | string | `"LABEL"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[1].dbid.description | string | `"database ID"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.usage | string | `"LABEL"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[2].datname.description | string | `"database NAME"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.usage | string | `"LABEL"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[3].queryid.description | string | `"Query unique Hash Code"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.usage | string | `"LABEL"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[4].query.description | string | `"Query class"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.usage | string | `"COUNTER"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[5].calls.description | string | `"Number of times executed"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.usage | string | `"COUNTER"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[6].total_time.description | string | `"Total time spent in the statement, in milliseconds"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.usage | string | `"GAUGE"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[7].mean_time.description | string | `"Mean time spent in the statement, in milliseconds"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.usage | string | `"COUNTER"` |  |
-| controller.config.monitoring.postgres.queries.pg_stat_statements.metrics[8].rows.description | string | `"Total number of rows retrieved or affected by the statement"` |  |
 | webhook.enabled | bool | `true` |  |
 | webhook.logLevel | string | `"info"` |  |
 | webhook.extraArgs | list | `[]` |  |
@@ -106,4 +79,6 @@ Kubernetes: `>= 1.32-prerelease`
 | podLabels | object | `{}` |  |
 | affinity | object | `{}` |  |
 | tolerations | list | `[]` |  |
+| secrets.gsql | object | `{}` |  |
+| serviceMonitor.enabled | bool | `false` |  |
 

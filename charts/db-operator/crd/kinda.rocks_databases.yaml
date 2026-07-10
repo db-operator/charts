@@ -372,8 +372,6 @@ spec:
                 description: DatabaseBackup defines the desired state of backup and
                   schedule
                 properties:
-                  bucket:
-                    type: string
                   cron:
                     type: string
                   enable:
