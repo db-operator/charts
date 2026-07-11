@@ -2,16 +2,16 @@
 apiVersion: v2
 type: application
 name: db-operator
-version: 3.10.0
+version: 3.11.0
 description: This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 # All supported k8s versions are in the test:
 # https://github.com/db-operator/charts/blob/main/.github/workflows/integration-test.yaml
 kubeVersion: ">= 1.32-prerelease"
-appVersion: "2.33.0"
+appVersion: "2.34.0"
 home: https://github.com/db-operator
 maintainers:
   - name: Nikolai Rodionov
-    email: iam@allanger.xyz
+    email: allanger@posteo.com
     url: https://badhouseplants.net
 sources:
   - https://github.com/db-operator/db-operator
