@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 3.11.0](https://img.shields.io/badge/Version-3.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8b054a0094186274397130bb0888b066e3bdfb9b](https://img.shields.io/badge/AppVersion-8b054a0094186274397130bb0888b066e3bdfb9b-informational?style=flat-square)
+![Version: 3.11.0](https://img.shields.io/badge/Version-3.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.35.0](https://img.shields.io/badge/AppVersion-2.35.0-informational?style=flat-square)
 
 This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 
@@ -45,8 +45,8 @@ Kubernetes: `>= 1.32-prerelease`
 | controller.rbac.create | bool | `true` |  |
 | controller.config.backup.activeDeadlineSeconds | int | `600` |  |
 | controller.config.backup.nodeSelector | object | `{}` |  |
-| controller.config.backup.postgres.image | string | `"ghcr.io/db-operator/pgdump-rclone:0.1.0"` |  |
-| controller.config.backup.mysql.image | string | `"ghcr.io/db-operator/mydump-rclone:0.1.0"` |  |
+| controller.config.backup.postgres.image | string | `"ghcr.io/db-operator/pgdump-rclone:0.1.1"` |  |
+| controller.config.backup.mysql.image | string | `"ghcr.io/db-operator/mydump-rclone:0.1.1"` |  |
 | controller.config.backup.resources.requests.memory | string | `"64Mi"` |  |
 | controller.config.backup.resources.requests.cpu | float | `0.2` |  |
 | controller.config.monitoring.promPushGateway | string | `""` |  |

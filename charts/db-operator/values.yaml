@@ -35,9 +35,9 @@ controller:
       activeDeadlineSeconds: 600
       nodeSelector: {}
       postgres:
-        image: "ghcr.io/db-operator/pgdump-rclone:0.1.0"
+        image: "ghcr.io/db-operator/pgdump-rclone:0.1.1"
       mysql:
-        image: "ghcr.io/db-operator/mydump-rclone:0.1.0"
+        image: "ghcr.io/db-operator/mydump-rclone:0.1.1"
       resources:
         requests:
           memory: 64Mi
