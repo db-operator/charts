@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 3.11.0](https://img.shields.io/badge/Version-3.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.35.0](https://img.shields.io/badge/AppVersion-2.35.0-informational?style=flat-square)
+![Version: 3.12.0](https://img.shields.io/badge/Version-3.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.35.0](https://img.shields.io/badge/AppVersion-2.35.0-informational?style=flat-square)
 
 This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 
@@ -27,7 +27,7 @@ Kubernetes: `>= 1.32-prerelease`
 | nameOverride | string | `""` |  |
 | clusterDomain | string | `"cluster.local"` |  |
 | image.registry | string | `"ghcr.io"` |  |
-| image.repository | string | `"db-operator/db-operator-dev"` |  |
+| image.repository | string | `"db-operator/db-operator"` |  |
 | image.tag | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | metadata.labels | object | `{}` |  |
