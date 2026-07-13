@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+export DBPASS=$(kubectl get secret mysql-creds -o yaml | yq .data.PASSWORD | base64 -d)
+export DBNAME=$(kubectl get secret mysql-creds -o yaml | yq .data.DB | base64 -d)
+export DBUSER=$(kubectl get secret mysql-creds -o yaml | yq .data.USER | base64 -d)
+
+mysql --host=localhost --port=3306 --user="${DBUSER}" --password="${DBPASS}" --database="${DBNAME}" "$@"
