@@ -22,7 +22,7 @@ releases:
   - name: cert-manager
     chart: jetstack/cert-manager
     namespace: cert-manager
-    version: v1.20.2
+    version: v1.21.0
     createNamespace: true
     values:
       - crds:
@@ -30,7 +30,7 @@ releases:
 
   - name: prometheus-stack
     namespace: monitoring
-    version: 87.10.1
+    version: 87.15.1
     installed: true
     createNamespace: true
     disableValidation: true
@@ -150,7 +150,7 @@ releases:
   - name: postgres-instance
     namespace: databases
     chart: cloudpirates/postgres
-    version: 0.19.5
+    version: 0.19.6
     installed: {{ not (eq .Environment.Name "db-operator") }}
     labels:
       test: psql

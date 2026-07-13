@@ -10,7 +10,7 @@ This operator lets you manage databases in a Kubernetes native way, even if they
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Nikolai Rodionov | <iam@allanger.xyz> | <https://badhouseplants.net> |
+| Nikolai Rodionov | <allanger@posteo.com> | <https://badhouseplants.net> |
 
 ## Source Code
 
