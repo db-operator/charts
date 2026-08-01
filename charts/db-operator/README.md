@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 3.13.0](https://img.shields.io/badge/Version-3.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.36.0](https://img.shields.io/badge/AppVersion-2.36.0-informational?style=flat-square)
+![Version: 3.14.0](https://img.shields.io/badge/Version-3.14.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: cd0dd1a024d7b9d3543554e3a200797c6462831e](https://img.shields.io/badge/AppVersion-cd0dd1a024d7b9d3543554e3a200797c6462831e-informational?style=flat-square)
 
 This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 
@@ -27,7 +27,7 @@ Kubernetes: `>= 1.32-prerelease`
 | nameOverride | string | `""` |  |
 | clusterDomain | string | `"cluster.local"` |  |
 | image.registry | string | `"ghcr.io"` |  |
-| image.repository | string | `"db-operator/db-operator"` |  |
+| image.repository | string | `"db-operator/db-operator-dev"` |  |
 | image.tag | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | metadata.labels | object | `{}` |  |
@@ -50,7 +50,7 @@ Kubernetes: `>= 1.32-prerelease`
 | controller.config.backup.resources.requests.memory | string | `"64Mi"` |  |
 | controller.config.backup.resources.requests.cpu | float | `0.2` |  |
 | controller.config.monitoring.promPushGateway | string | `""` |  |
-| controller.args.reconcileInterval | string | `"60"` |  |
+| controller.args.reconcileInterval | string | `"60s"` |  |
 | controller.args.watchNamespace | string | `""` |  |
 | controller.args.checkForChanges | bool | `false` |  |
 | controller.serviceMonitor.enabled | bool | `false` |  |

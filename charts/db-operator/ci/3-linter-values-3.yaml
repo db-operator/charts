@@ -3,7 +3,7 @@ crds:
 image:
   repository: ghcr.io/db-operator/db-operator
   pullPolicy: Always
-reconcileInterval: "60"
+reconcileInterval: "60s"
 rbac:
   create: true
 serviceAccount:
@@ -32,7 +32,7 @@ config:
         image: severalnines/proxysql:2.0
         metricsPort: 9090
   backup:
-    activeDeadlineSeconds: 600  # 10m
+    activeDeadlineSeconds: 600 # 10m
     postgres:
       image: "kloeckneri/pgdump-gcs:latest"
     mysql:

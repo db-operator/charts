@@ -1,4 +1,4 @@
-reconcileInterval: "10"
+reconcileInterval: "10s"
 crds:
   keep: false
 tests:

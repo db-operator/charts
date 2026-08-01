@@ -48,8 +48,7 @@ Webhook extra args
 */}}
 {{- define "db-operator.webhook.args" -}}
 {{- $args := list -}}
-{{- $args = append $args (printf "--zap-log-level=%s" .Values.webhook.logLevel) -}}
-{{- $args = append $args "--webhook" -}}
+{{- $args = append $args (printf "--log-level=%s" .Values.webhook.logLevel) -}}
 {{- with .Values.webhook }}
 {{- range .extraArgs -}}
 {{- $args = append $args . -}}
