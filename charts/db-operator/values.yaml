@@ -45,7 +45,7 @@ controller:
     monitoring:
       promPushGateway: ""
   args:
-    reconcileInterval: "60s"
+    reconcileInterval: "30s"
     # watchNamespace value is comma-separated list of namespace names. It's necessary to set "" to watch cluster wide.
     watchNamespace: ""
     checkForChanges: false
