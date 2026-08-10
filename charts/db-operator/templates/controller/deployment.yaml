@@ -1,3 +1,6 @@
+{{if (((.Values).controller).args).watchNamespace }}
+{{- fail ".controller.args.watchNamespace is deprecated, please use .controller.args.watchNamespaces instead" }}
+{{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -40,6 +43,7 @@ spec:
             name: metrics
           command:
           - db-operator
+          - controller
           {{- if (include "db-operator.controller.args" . ) }}
           args:
             {{- range include "db-operator.controller.args" $ | split "," }}
@@ -50,16 +54,16 @@ spec:
           env:
             - name: OPERATOR_NAME
               value: "db-operator"
-            - name: WATCH_NAMESPACE
-              value: {{ .Values.controller.args.watchNamespace | quote }}
-            - name: RECONCILE_INTERVAL
+            - name: DBO_WATCH_NAMESPACES
+              value: {{ .Values.controller.args.watchNamespaces | quote }}
+            - name: DBO_RECONCILE_INTERVAL
               value: {{ .Values.controller.args.reconcileInterval | quote }}
             - name: POD_NAME
               valueFrom:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
-            - name: CONFIG_PATH
+            - name: DBO_CONFIG
               value: "/run/config/config.yaml"
           volumeMounts:
           - mountPath: /run/config/

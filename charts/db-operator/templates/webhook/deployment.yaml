@@ -45,6 +45,7 @@ spec:
             protocol: TCP
           command:
           - db-operator
+          - webhook
           args:
             {{- range include "db-operator.webhook.args" $ | split "," }}
             - {{ . }}
