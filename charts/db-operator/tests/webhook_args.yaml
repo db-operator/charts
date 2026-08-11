@@ -9,8 +9,7 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].args
           value:
-            - --zap-log-level=info
-            - --webhook
+            - --log-level=info
   - it: logLevel=debug
     template: webhook/deployment.yaml
     set:
@@ -20,8 +19,7 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].args
           value:
-            - --zap-log-level=debug
-            - --webhook
+            - --log-level=debug
   - it: logLevel=error
     template: webhook/deployment.yaml
     set:
@@ -31,5 +29,4 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].args
           value:
-            - --zap-log-level=error
-            - --webhook
+            - --log-level=error
