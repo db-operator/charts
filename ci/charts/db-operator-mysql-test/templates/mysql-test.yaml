@@ -17,7 +17,7 @@ data:
   user: {{ .Values.mysql.admin.user | b64enc }}
 
 ---
-apiVersion: kinda.rocks/v1beta1
+apiVersion: kinda.rocks/v1
 kind: DbInstance
 metadata:
   name:  {{ template "db-operator-mysql-test.name" . }}-mysql
@@ -30,15 +30,21 @@ metadata:
     {{- end }}
     "helm.sh/hook-weight": "1"
 spec:
-  adminSecretRef:
-    Namespace: {{ .Release.Namespace }}
-    Name:  {{ template "db-operator-mysql-test.name" . }}-mysql-admin-password
+  auth:
+    username:
+      value: root
+    password:
+      valueFrom:
+        secret:
+          namespace: {{ .Release.Namespace }}
+          name: {{ template "db-operator-mysql-test.name" . }}-mysql-admin-password
+          key: password
   engine: mysql
-  generic:
-    host: {{ .Values.mysql.service.name }}.{{ .Values.mysql.service.namespace }}.svc.cluster.local
-    port: 3306
-    publicIp: "1.2.3.4"
-    backupHost: {{ .Values.mysql.service.name }}.{{ .Values.mysql.service.namespace }}.svc.cluster.local
+  endpoint:
+    host:
+     value: {{ .Values.mysql.service.name }}.{{ .Values.mysql.service.namespace }}.svc.cluster.local
+    port:
+      value: '3306'
 
 {{- if .Values.features.existingUser.enabled }}
 ---
