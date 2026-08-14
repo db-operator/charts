@@ -33,7 +33,7 @@ data:
   port: "5432"
   publicIp: "1.2.3.4"
 ---
-apiVersion: kinda.rocks/v1beta1
+apiVersion: kinda.rocks/v1
 kind: DbInstance
 metadata:
   name:  {{ template "db-operator-psql-test.name" . }}-postgresql
@@ -46,27 +46,29 @@ metadata:
     {{- end }}
     "helm.sh/hook-weight": "1"
 spec:
-  adminSecretRef:
-    Namespace: {{ .Release.Namespace }}
-    Name:  {{ template "db-operator-psql-test.name" . }}-postgresql-admin-password
+  auth:
+    username:
+      value: db-operator
+    password:
+      valueFrom:
+        secret:
+          namespace: {{ .Release.Namespace }}
+          name: {{ template "db-operator-psql-test.name" . }}-postgresql-admin-password
+          key: password
   engine: postgres
-  generic:
-    hostFrom:
-      kind: ConfigMap
-      name: {{ template "db-operator-psql-test.name" . }}-postgresql-config
-      namespace: {{ .Release.Namespace }}
-      key: host
-    portFrom:
-      kind: ConfigMap
-      name: {{ template "db-operator-psql-test.name" . }}-postgresql-config
-      namespace: {{ .Release.Namespace }}
-      key: port
-    publicIpFrom:
-      kind: ConfigMap
-      name: {{ template "db-operator-psql-test.name" . }}-postgresql-config
-      namespace: {{ .Release.Namespace }}
-      key: publicIp
-    backupHost: {{ .Values.postgresql.service.name }}.{{ .Values.postgresql.service.namespace }}.svc.cluster.local
+  endpoint:
+    host:
+     valueFrom:
+      configMap:
+        name: {{ template "db-operator-psql-test.name" . }}-postgresql-config
+        namespace: {{ .Release.Namespace }}
+        key: host
+    port:
+      valueFrom:
+        configMap:
+          name: {{ template "db-operator-psql-test.name" . }}-postgresql-config
+          namespace: {{ .Release.Namespace }}
+          key: port
 
 {{- if .Values.features.existingUser.enabled }}
 ---

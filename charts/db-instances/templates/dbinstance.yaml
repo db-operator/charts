@@ -3,7 +3,7 @@
 {{- if .Values.dbinstances }}
 {{- range $name, $value := .Values.dbinstances }}
 ---
-apiVersion: "kinda.rocks/v1beta1"
+apiVersion: "kinda.rocks/v1"
 kind: "DbInstance"
 metadata:
   name: {{ $name }}
@@ -23,64 +23,47 @@ spec:
   {{- end }}
   engine: {{ $value.engine }}
   {{- if $value.existingAdminSecret }}
-  adminSecretRef:
-    Namespace: {{ $value.existingAdminSecret.namespace }}
-    Name: {{ $value.existingAdminSecret.name }}
+  auth:
+    username:
+      valueFrom:
+        secret:
+          namespace: {{ $value.existingAdminSecret.namespace }}
+          name: {{ $value.existingAdminSecret.name }}
+          key: user
+    password:
+      valueFrom:
+        secret:
+          namespace: {{ $value.existingAdminSecret.namespace }}
+          name: {{ $value.existingAdminSecret.name }}
+          key: password
   {{- else }}
-  adminSecretRef:
-    Namespace: {{ $operatorNs }}
-    Name: {{ $name }}-admin-secret
+  auth:
+    username:
+      valueFrom:
+        secret:
+          namespace: {{ $operatorNs }}
+          name: {{ $name }}-admin-secret
+          key: user
+    password:
+      valueFrom:
+        secret:
+          namespace: {{ $operatorNs }}
+          name: {{ $name }}-admin-secret
+          key: password
   {{- end }}
-  {{- if $value.backup }}
-  backup:
-    {{ toYaml $value.backup | nindent 4 }}
-  {{- end }}
-  monitoring:
-    enabled: {{ $value.monitoring.enabled }}
-  {{- if $value.sslConnection }}
-  sslConnection:
-    enabled: {{ $value.sslConnection.enabled }}
-    skip-verify: {{ $value.sslConnection.skipVerify }}
-  {{- end }}
-  {{- with $value.allowExtraGrants }}
-  allowExtraGrants: {{ . }}
-  {{- end }}
-  {{- if $value.google }}
-  google:
-    instance: {{ $value.google.instanceName }}
-    configmapRef:
-      Namespace: {{ $operatorNs }}
-      Name: {{ $name }}-config
-  {{- if $value.google.clientSecret }}
-    clientSecretRef:
-      Namespace: {{ $operatorNs }}
-      Name: {{ $name }}-client-secret
-  {{- end }}
-  {{- end }}
-  {{- if $value.generic }}
-  generic:
-    hostFrom:
-      kind: ConfigMap
-      name: {{ $name }}-config
-      namespace: {{ $.Release.Namespace }}
-      key: host
-    portFrom:
-      kind: ConfigMap
-      name: {{ $name }}-config
-      namespace: {{ $.Release.Namespace }}
-      key: port
-  {{- if $value.generic.publicIp }}
-    publicIpFrom:
-      kind: ConfigMap
-      name: {{ $name }}-config
-      namespace: {{ $.Release.Namespace }}
-      key: publicIp
-  {{- end }}
-
-  {{- if $value.generic.backupHost }}
-    backupHost: {{ $value.generic.backupHost }}
-  {{- end }}
-  {{- end }}
+  endpoint:
+    host:
+      valueFrom:
+        configMap:
+          name: {{ $name }}-config
+          namespace: {{ $operatorNs }}
+          key: host
+    port:
+      valueFrom:
+        configMap:
+          name: {{ $name }}-config
+          namespace: {{ $operatorNs }}
+          key: port
 {{- if not $value.existingAdminSecret }}
 ---
 apiVersion: v1
