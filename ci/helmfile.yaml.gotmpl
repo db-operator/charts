@@ -150,7 +150,7 @@ releases:
   - name: postgres-instance
     namespace: databases
     chart: cloudpirates/postgres
-    version: 0.19.13
+    version: 0.20.1
     installed: {{ not (eq .Environment.Name "db-operator") }}
     labels:
       test: psql
