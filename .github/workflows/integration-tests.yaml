@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v6
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
       - uses: azure/setup-helm@v5.0.1
       - uses: helm/chart-testing-action@v2.8.0
       - name: Create kind cluster
@@ -55,7 +55,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v6
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
       - uses: azure/setup-helm@v5.0.1
       - uses: helm/chart-testing-action@v2.8.0
       - name: Create kind cluster
