@@ -64,6 +64,14 @@ spec:
           name: {{ $name }}-config
           namespace: {{ $operatorNs }}
           key: port
+  {{- with $value.namespaceFilters }}
+  namespaceFilters:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
+  {{- with $value.allowedPriveleges }}
+  allowedPriveleges:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
 {{- if not $value.existingAdminSecret }}
 ---
 apiVersion: v1
