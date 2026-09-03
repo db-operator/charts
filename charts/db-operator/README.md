@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 3.15.0](https://img.shields.io/badge/Version-3.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.39.0](https://img.shields.io/badge/AppVersion-2.39.0-informational?style=flat-square)
+![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 98d47bc8b0033cfcfeef3339a8afa77761a968e4](https://img.shields.io/badge/AppVersion-98d47bc8b0033cfcfeef3339a8afa77761a968e4-informational?style=flat-square)
 
 This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 
@@ -18,7 +18,7 @@ This operator lets you manage databases in a Kubernetes native way, even if they
 
 ## Requirements
 
-Kubernetes: `>= 1.32-prerelease`
+Kubernetes: `>= 1.33`
 
 ## Values
 
@@ -27,7 +27,7 @@ Kubernetes: `>= 1.32-prerelease`
 | nameOverride | string | `""` |  |
 | clusterDomain | string | `"cluster.local"` |  |
 | image.registry | string | `"ghcr.io"` |  |
-| image.repository | string | `"db-operator/db-operator"` |  |
+| image.repository | string | `"db-operator/db-operator-dev"` |  |
 | image.tag | string | `""` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | metadata.labels | object | `{}` |  |

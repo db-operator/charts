@@ -3,7 +3,7 @@ clusterDomain: cluster.local
 
 image:
   registry: ghcr.io
-  repository: db-operator/db-operator
+  repository: db-operator/db-operator-dev
   tag: ""
   pullPolicy: Always
 # imagePullSecrets:
