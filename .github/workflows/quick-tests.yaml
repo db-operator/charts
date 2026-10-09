@@ -19,12 +19,23 @@ jobs:
       - uses: azure/setup-helm@v5.0.1
       - uses: helm/chart-testing-action@v2.8.0
 <<<<<<< HEAD
+<<<<<<< HEAD
 
       - uses: go-task/setup-task@v2
 ||||||| fac95cc
 =======
       - uses: go-task/setup-task@v2
 >>>>>>> temp-branch
+||||||| 2659c71 (Fix conflict: use proper go-task/setup-task action)
+<<<<<<< HEAD
+      - uses: go-task/setup-task@v2
+||||||| fac95cc
+=======
+      - uses: go-task/setup-task@v2
+>>>>>>> temp-branch
+=======
+      - uses: go-task/setup-task@v2
+>>>>>>> parent of 2659c71 (Fix conflict: use proper go-task/setup-task action)
       - name: Lint the charts
         run: task lint
 
