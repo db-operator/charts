@@ -13,7 +13,7 @@ tasks:
   unit:
     desc: "Run helm unittest tests"
     cmds:
-      - bash -c "for file in \$(find charts/db-operator/tests -name '*.yaml'); do helm unittest -f \"$$file\" ./charts/db-operator; done"
+      - bash -lc "for file in \$(find charts/db-operator/tests -name '*.yaml'); do helm unittest -f \"\$file\" ./charts/db-operator; done"
 
   sync-crds:
     desc: "Sync CRDs from the operator repo"
