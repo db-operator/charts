@@ -18,7 +18,12 @@ jobs:
       - uses: actions/setup-go@v7
       - uses: azure/setup-helm@v5.0.1
       - uses: helm/chart-testing-action@v2.8.0
-      - uses: go-task/task-action@v2
+<<<<<<< HEAD
+      - uses: go-task/setup-task@v2
+||||||| fac95cc
+=======
+      - uses: go-task/setup-task@v2
+>>>>>>> temp-branch
       - name: Lint the charts
         run: task lint
 
