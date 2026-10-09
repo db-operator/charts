@@ -34,4 +34,4 @@ jobs:
           helm plugin install https://github.com/helm-unittest/helm-unittest.git \
             --verify=false
       - name: Run the unit tests
-        run: ./scripts/helm_unit_test.sh
+        run: task unit
