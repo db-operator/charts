@@ -18,9 +18,9 @@ jobs:
       - uses: actions/setup-go@v7
       - uses: azure/setup-helm@v5.0.1
       - uses: helm/chart-testing-action@v2.8.0
+      - uses: go-task/task-action@v2
       - name: Lint the charts
-        run: make lint
-
+        run: task lint
 
   unit-tests:
     runs-on: ubuntu-latest
