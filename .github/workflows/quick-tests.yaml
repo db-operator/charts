@@ -19,6 +19,7 @@ jobs:
       - uses: azure/setup-helm@v5.0.1
       - uses: helm/chart-testing-action@v2.8.0
 <<<<<<< HEAD
+
       - uses: go-task/setup-task@v2
 ||||||| fac95cc
 =======
