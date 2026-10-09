@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+vars:
+  LOCALBIN_DIR: "{{.PWD}}/bin"
+
+tasks:
+  lint:
+    desc: "Lint helm charts"
+    cmds:
+      - ct lint --target-branch main --validate-maintainers=false
+
+  unit:
+    desc: "Run helm unittest tests"
+    cmds:
+      - bash -lc "for file in \$(find charts/db-operator/tests -name '*.yaml'); do helm unittest -f \"\$file\" ./charts/db-operator; done"
+
+  sync-crds:
+    desc: "Sync CRDs from the operator repo"
+    cmds:
+      - ./scripts/sync_crds.sh
+
+  gen-docs:
+    desc: "Generate helm documentation"
+    cmds:
+      - test -s ${LOCALBIN_DIR}/helm-docs || GOBIN=${LOCALBIN_DIR} go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
+      - ./bin/helm-docs --template-files=./charts/db-operator/README.md.gotmpl \
+          --sort-values-order file --chart-to-generate=charts/db-operator
+      - ./bin/helm-docs --template-files=./charts/db-isntances/README.md.gotmpl \
+          --sort-values-order file --chart-to-generate=charts/db-instances

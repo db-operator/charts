@@ -1,0 +1,120 @@
+nameOverride: ""
+clusterDomain: cluster.local
+
+image:
+  registry: ghcr.io
+  repository: db-operator/db-operator
+  tag: ""
+  pullPolicy: Always
+# imagePullSecrets:
+#   - name: myRegistrySecret
+# Global metadata, should be applied to each resource
+metadata:
+  labels: {}
+  annotations: {}
+
+crds:
+  install: true
+  keep: true
+  annotations: {}
+
+controller:
+  logLevel: info
+  extraArgs: []
+  service:
+    annotations: {}
+    type: ClusterIP
+    port: 8080
+  serviceAccount:
+    name: ""
+    create: true
+  rbac:
+    create: true
+  config:
+    backup:
+      activeDeadlineSeconds: 600
+      nodeSelector: {}
+      postgres:
+        image: "ghcr.io/db-operator/pgdump-rclone:0.1.1"
+      mysql:
+        image: "ghcr.io/db-operator/mydump-rclone:0.1.1"
+      resources:
+        requests:
+          memory: 64Mi
+          cpu: 0.2
+    monitoring:
+      promPushGateway: ""
+  args:
+    reconcileInterval: "60s"
+    # watchNamespaces value is comma-separated list of namespace names. It's necessary to set "" to watch cluster wide.
+    watchNamespaces: ""
+    checkForChanges: false
+  serviceMonitor:
+    enabled: false
+
+webhook:
+  enabled: true
+  logLevel: info
+  extraArgs: []
+  podLabels: {}
+  rbac:
+    create: true
+  serviceAccount:
+    name: ""
+    create: true
+  service:
+    ipFamilyPolicy: ""
+  names:
+    mutating: db-operator-mutating-webhook-configuration
+    validating: db-operator-validating-webhook-configuration
+  certificate:
+    # --------------------------------------------
+    # -- If you want to use an existing
+    # --  secret for CA injection,
+    # --  provide the secret name
+    # --  and set `certificate.create` to `false`
+    # --------------------------------------------
+    create: true
+    name: db-operator-webhook
+    secretName: db-operator-webhook-cert
+    issuer:
+      create: true
+      name: db-operator-issuer
+      # -----------------------------------------
+      # -- If you choose to create a new issuer
+      # -- the `kind` field would be ignored
+      # -- Use it only to reference an existing
+      # -- ClusterIssuer or Issuer
+      # -----------------------------------------
+      kind: Issuer
+
+# -- Configure the security context for the operator pods
+podSecurityContext:
+  # Default Pod Security Standard for restricted
+  # https://kubernetes.io/docs/concepts/security/pod-security-admission/
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+# runAsUser: 1000
+# fsGroup: 1000
+
+# -- Configure the security context for the operator container
+securityContext:
+  # Default Pod Security Standard for restricted
+  # https://kubernetes.io/docs/concepts/security/pod-security-admission/
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+hostUsers: true
+resources: {}
+nodeSelector: {}
+annotations: {}
+podLabels: {}
+affinity: {}
+tolerations: []
+secrets:
+  gsql: {}
+serviceMonitor:
+  enabled: false

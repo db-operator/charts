@@ -1,0 +1,3 @@
+features:
+  backup:
+    enabled: true

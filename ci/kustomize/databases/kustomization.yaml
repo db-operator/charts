@@ -1,0 +1,4 @@
+resources:
+  - ./mysql.yaml
+  - ./postgres.yaml
+  - ./secret.yaml

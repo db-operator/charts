@@ -1,0 +1,76 @@
+---
+# -- Long tests against the kubernetes API
+name: Integration tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  chart-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        k8s_version:
+          - v1.36.1
+          - v1.35.5
+          - v1.34.8
+          - v1.33.12
+        chart:
+          - db-operator
+          - db-instances
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+      - uses: actions/setup-go@v7
+      - uses: azure/setup-helm@v5.0.1
+      - uses: helm/chart-testing-action@v2.8.0
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.14.0
+        with:
+          node_image: kindest/node:${{ matrix.k8s_version }}
+          config: ./ci/kind-config.yaml
+      - name: Add a helm repo to make "helm repo update" work
+        run: helm repo add traefik https://traefik.github.io/charts
+      - name: Deploy the helmfile
+        uses: helmfile/helmfile-action@v2.4.8
+        with:
+          helm-plugins: ""
+          helmfile-args: sync -e ${{ matrix.chart }} --wait
+          helmfile-workdirectory: ./ci
+      - name: Test the db-operator chart install
+        run: |
+          ct install --target-branch main --charts ./charts/${{ matrix.chart }}
+      - name: Test the db-operator chart upgrade
+        run: |
+          ct install --target-branch main --charts ./charts/${{ matrix.chart }} --upgrade
+
+  logic-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+      - uses: actions/setup-go@v7
+      - uses: azure/setup-helm@v5.0.1
+      - uses: helm/chart-testing-action@v2.8.0
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.14.0
+        with:
+          config: ./ci/kind-config.yaml
+      - name: Add a helm repo to make "helm repo update" work
+        run: helm repo add traefik https://traefik.github.io/charts
+      - name: Deploy the helmfile
+        uses: helmfile/helmfile-action@v2.4.8
+        with:
+          helmfile-auto-init: false
+          helm-plugins: ""
+          helmfile-args: sync -e tests --wait
+          helmfile-workdirectory: ./ci
+      - name: Run end-to-end database tests
+        run: |
+          cd ci && ct install --all

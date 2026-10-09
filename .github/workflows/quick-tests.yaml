@@ -1,0 +1,37 @@
+---
+# -- Quick tests like linters and unit-tests
+name: Quick tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+      - uses: actions/setup-go@v7
+      - uses: azure/setup-helm@v5.0.1
+      - uses: helm/chart-testing-action@v2.8.0
+      - uses: go-task/setup-task@v2
+      - name: Lint the charts
+        run: task lint
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+      - uses: actions/setup-go@v7
+      - uses: azure/setup-helm@v5.0.1
+      - name: Install the helm-unittest plugin
+        run: |-
+          helm plugin install https://github.com/helm-unittest/helm-unittest.git \
+            --verify=false
+      - name: Run the unit tests
+        run: task unit
