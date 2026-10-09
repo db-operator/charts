@@ -20,16 +20,16 @@ jobs:
       - uses: pre-commit/action@v3.0.1
       - name: Check CRD generation
         run: |-
-          make sync-crds
+          task sync-crds
           if [[ -n $(git status --porcelain) ]]; then
-            echo "Please update CRDs using 'make sync-crds' and push the changes"
+            echo "Please update CRDs using 'task sync-crds' and push the changes"
             exit 1
           fi
 
       - name: Check docs generation
         run: |-
-          make gen-docs
+          task gen-docs
           if [[ -n $(git status --porcelain) ]]; then
-            echo "Please re-generate the docs using 'make gen-docs' and push the changes"
+            echo "Please re-generate the docs using 'task gen-docs' and push the changes"
             exit 1
           fi
