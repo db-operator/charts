@@ -39,6 +39,7 @@ jobs:
         uses: helmfile/helmfile-action@v2.4.8
         with:
           helmfile-auto-init: true
+          helm-plugins: ""
           helmfile-args: sync -e ${{ matrix.chart }} --wait
           helmfile-workdirectory: ./ci
       - name: Test the db-operator chart install
@@ -68,6 +69,7 @@ jobs:
         uses: helmfile/helmfile-action@v2.4.8
         with:
           helmfile-auto-init: true
+          helm-plugins: ""
           helmfile-args: sync -e tests --wait
           helmfile-workdirectory: ./ci
       - name: Run end-to-end database tests
