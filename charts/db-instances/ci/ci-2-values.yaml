@@ -1,0 +1,19 @@
+dbinstances:
+  instance1:
+    serviceMonitor:
+      enabled: true
+    podMonitor:
+      enabled: true
+    engine: postgres
+    monitoring:
+      enabled: true
+    secrets:
+      adminUser: admin
+      adminPassword: IamAdmin
+    instanceVars:
+      TEST: TEST
+    allowedPriveleges:
+      - test
+      - test2
+    namespaceFilters:
+      - "test-*"
