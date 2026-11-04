@@ -1,6 +1,6 @@
 # db-operator
 
-![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.45.1](https://img.shields.io/badge/AppVersion-2.45.1-informational?style=flat-square)
+![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 40794d2f9ac898e8eb24c31a05fe0188f7420cc4](https://img.shields.io/badge/AppVersion-40794d2f9ac898e8eb24c31a05fe0188f7420cc4-informational?style=flat-square)
 
 This operator lets you manage databases in a Kubernetes native way, even if they are not deployed to Kubernetes
 

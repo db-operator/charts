@@ -115,6 +115,9 @@ releases:
     needs:
       - monitoring/prometheus-stack
       - cert-manager/cert-manager
+    values:
+      - image:
+          repository: db-operator/db-operator-dev
     {{- if (eq .Environment.Name "local-dev") }}
 
     values:
