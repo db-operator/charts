@@ -53,24 +53,4 @@ webhooks:
     resources:
     - dbinstances
   sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: {{ include "db-operator.webhook.name" . }}
-      namespace: {{ .Release.Namespace }}
-      path: /mutate-kinda-rocks-v1beta1-dbinstance
-  failurePolicy: Fail
-  name: mdbinstance-v1beta1.kb.io
-  rules:
-  - apiGroups:
-    - kinda.rocks
-    apiVersions:
-    - v1beta1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - dbinstances
-  sideEffects: None
 {{- end }}
