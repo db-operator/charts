@@ -31,7 +31,6 @@ metadata:
 spec:
 {{- if (or
     (eq $manifest.metadata.name "databases.kinda.rocks")
-    (eq $manifest.metadata.name "dbinstances.kinda.rocks")
   )
 }}
 {{- if $.Values.webhook.enabled }}

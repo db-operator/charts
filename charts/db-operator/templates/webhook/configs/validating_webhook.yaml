@@ -21,7 +21,7 @@ webhooks:
       namespace: {{ .Release.Namespace }}
       path: /validate-kinda-rocks-v1beta1-database
   failurePolicy: Fail
-  name: vdatabase.kb.io
+  name: vdatabase-v1beta1.kb.io
   rules:
   - apiGroups:
     - kinda.rocks
@@ -39,14 +39,14 @@ webhooks:
     service:
       name: {{ include "db-operator.webhook.name" . }}
       namespace: {{ .Release.Namespace }}
-      path: /validate-kinda-rocks-v1beta1-dbinstance
+      path: /validate-kinda-rocks-v1-dbinstance
   failurePolicy: Fail
-  name: vdbinstance.kb.io
+  name: vdbinstance-v1.kb.io
   rules:
   - apiGroups:
     - kinda.rocks
     apiVersions:
-    - v1beta1
+    - v1
     operations:
     - CREATE
     - UPDATE
@@ -61,7 +61,7 @@ webhooks:
       namespace: {{ .Release.Namespace }}
       path: /validate-kinda-rocks-v1beta1-dbuser
   failurePolicy: Fail
-  name: vdbuser.kb.io
+  name: vdbuser-v1beta1.kb.io
   rules:
   - apiGroups:
     - kinda.rocks
