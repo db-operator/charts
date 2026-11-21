@@ -2,7 +2,7 @@
 
 ## Migration to the db-operator v4
 
-Version `4.0.0` brings new `DbInstances` API. Old API is not removed but is not reconciled by the operator anymore. Since the new version brings a lot of changes, there will be no conversion webhook it.
+Version `4.0.0` brings new `DbInstances` API. Old API is not removed but is not reconciled by the operator anymore. Since the new version is not backwards compatible with the `v1beta1`, there will be no conversion webhook for it.
 
 The `db-instances` chart, version `3.0.0`, is supposed to deliver the new API for the `DbInstances` without breaking changes. It does not yet introduce all the new features in order to maintain compatibility.
 
