@@ -6,13 +6,12 @@ The Release name {{ .Release.Name }}.
 -----------------------------------------------------------------------
 Breaking changes and migration paths:
 
-Version `3.0.0` contains breaking changes for ones using the google cloudsql instances. It doesn't mean that the operator will not work with them anymore, but users will have to use **generic** DbInsances and prepare the infrasturture using other tools.
+Version `4.0.0` brings a new DbInstance API. Old API (v1beta1) is not reconciled by the operator anymore.
+It's is not remobed from the CRD yet, but there will be no conversion webhook, so older version will not
+be migrated automacially.
 
-Other changes that might require migration:
-
-- Pod names were changed, now instead of `db-operator-` and `db-operator-webhook`, we have `db-opetator-controller` and `db-operator-webhook`
-- RBAC separation: the controller and webhook now use different ClusterRoles. The configuration has been moved to .controller.rbac and .webhook.rbac accordingly.
-- Pre-defined DB Operator flags are now set under `controller.args`
+Users of the `db-instances` helm chart should update the chart version to `3.0.0` with the same config,
+new features, that are now supported by the instances will be delivered to the chart later.
 
 {{- if not .Values.crds.install }}
 -----------------------------------------------------------------------

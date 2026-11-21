@@ -1,5 +1,13 @@
 ## Charts for deploying DB Operator
 
+## Migration to the db-operator v4
+
+Version `4.0.0` brings new `DbInstances` API. Old API is not removed but is not reconciled by the operator anymore. Since the new version is not backwards compatible with the `v1beta1`, there will be no conversion webhook for it.
+
+The `db-instances` chart, version `3.0.0`, is supposed to deliver the new API for the `DbInstances` without breaking changes. It does not yet introduce all the new features in order to maintain compatibility.
+
+When updating the release, please don't use `server-side` apply, as it introduces issues with the webhook deployment. If not using it is not an option, it should be also possible to remove the validating and mutating db-operator webhooks from the cluster and remove the conversion item from the  `DbInstance` custom resource definition.
+
 ## Migration to the db-operator v3
 
 Version `3.0.0` contains breaking changes for ones using the google cloudsql instances. It doesn't mean that the operator will not work with them anymore, but users will have to use **generic** DbInsances and prepare the infrasturture using other tools.

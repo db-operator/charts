@@ -12,6 +12,9 @@ dbinstances:
       adminPassword: IamAdmin
     instanceVars:
       TEST: TEST
+    generic:
+      host: postgres-instance.databases.svc.cluster.local
+      port: 5432
   instance2:
     engine: mysql
     monitoring:
@@ -19,3 +22,6 @@ dbinstances:
     secrets:
       adminUser: adminUser
       adminPassword: adminAdmin
+    generic:
+      host: mariadb-instance.databases.svc.cluster.local
+      port: 3306
