@@ -17,3 +17,17 @@ dbinstances:
       - test2
     namespaceFilters:
       - "test-*"
+  instance2:
+    engine: clickhouse
+    monitoring:
+      enabled: false
+    secrets:
+      adminUser: admin
+      adminPassword: IamAdmin
+    instanceVars:
+      TEST: TEST
+    allowedPrivileges:
+      - test
+      - test2
+    namespaceFilters:
+      - "test-*"
